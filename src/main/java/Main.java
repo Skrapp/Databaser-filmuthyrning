@@ -1,6 +1,9 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -14,6 +17,10 @@ import javax.persistence.Persistence;
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
+    final ObservableList olCategory = FXCollections.observableArrayList();
+    final ObservableList olLanguages = FXCollections.observableArrayList();
+    final ObservableList olStaff = FXCollections.observableArrayList();
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -23,17 +30,17 @@ public class Main extends Application {
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
 
+        // Combobox
+        ComboBox cbCategory = new ComboBox(olCategory);
+        ComboBox cbLanguages = new ComboBox(olLanguages);
+        ComboBox cbStaff = new ComboBox(olStaff);
+
         //Boxes
         VBox vBoxLeft = new VBox();
         VBox vBoxRight = new VBox();
 
         HBox hBoxTop= new HBox();
-        /*VBox vBoxSearch = new VBox();
-        VBox vBoxSearch = new VBox();
-        VBox vBoxSearch = new VBox();
-        VBox vBoxSearch = new VBox();
-        VBox vBoxSearch = new VBox();
-        VBox vBoxSearch = new VBox();*/
+
 
         //Labels
         Label lSearch = new Label("Sök");
@@ -55,9 +62,12 @@ public class Main extends Application {
         TextField tfCustomerCity = new TextField();
 
 
+
+
         //Add to Hbox
-        vBoxLeft.getChildren().addAll(lSearch, tfSearch, lActor, tfActor, lReleaseDate, tfReleaseDate);
-        vBoxRight.getChildren().addAll(lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail);
+        vBoxLeft.getChildren().addAll(lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages);
+        vBoxRight.getChildren().addAll(cbStaff, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail);
+
 
         //Add to VBox
         //hBoxTop.getChildren().addAll(vBoxLeft, vBoxRight);
