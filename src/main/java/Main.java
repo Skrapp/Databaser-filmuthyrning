@@ -45,8 +45,8 @@ public class Main extends Application {
 
 
         //Boxes
-        VBox vBoxLeft = new VBox();
-        vBoxLeft.setPadding(new Insets(10));
+        VBox vBoxUpLeft = new VBox();
+        vBoxUpLeft.setPadding(new Insets(10));
         VBox vBoxUpRight = new VBox();
         vBoxUpRight.setPadding(new Insets(10));
         VBox vBoxCenter = new VBox();
@@ -55,6 +55,9 @@ public class Main extends Application {
         vBoxDownRight.setPadding(new Insets(10));
         VBox vBoxRight = new VBox();
         vBoxRight.setPadding(new Insets(10));
+        VBox vBoxDownLeft = new VBox();
+        vBoxDownLeft.setPadding(new Insets(10));
+        VBox vBoxLeft = new VBox();
 
         HBox hBoxTop= new HBox(); // jag menade hbox.
         HBox hBoxRight = new HBox(); //Ja, det kan bli jättefel.
@@ -109,17 +112,42 @@ public class Main extends Application {
         TextField tfCustomerInfoActive = new TextField();
         TextField tfCustomerInfoUpdate = new TextField();
 
+        //Txtfields movies
+        TextField tfMovieInfoId = new TextField();
+        TextField tfMovieInfoTitle = new TextField();
+        TextField tfMovieInfoDescription = new TextField();
+        TextField tfMovieInfoActors = new TextField();
+        TextField tfMovieInfoCategory = new TextField();
+        TextField tfMovieInfoLanguage = new TextField();
+        TextField tfMovieInfoOriginalLanguage = new TextField();
+        TextField tfMovieInfoLength = new TextField();
+        TextField tfMovieInfoRating = new TextField();
+        TextField tfMovieInfoRentalCost = new TextField();
+        TextField tfMovieInfoReplacementCost = new TextField();
+        TextField tfMovieInfoInStore = new TextField();
+        TextField tfMovieInfoSpecialFeatures = new TextField();
+        TextField tfMovieInfoRentalDuration = new TextField();
+        TextField tfMovieInfoLastUpdate = new TextField();
 
-        //Add to Hbox
-        vBoxLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages, bCreateMovie,bSearchMovie);
-        vBoxUpRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
-        vBoxCenter.getChildren().addAll(lvSearchResults);
-        vBoxDownRight.getChildren().addAll(tfCustomerInfoId, tfCustomerInfoName, tfCustomerInfoAddress, tfCustomerInfoCity, tfCustomerInfoPhone, tfCustomerInfoEmail, tfCustomerInfoRegistered, tfCustomerInfoActive, tfCustomerInfoUpdate, tfCustomerInfoStoreId);
+        //Add to Vbox
+        vBoxUpLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate,
+                tfReleaseDate, cbLanguages, bCreateMovie,bSearchMovie);
+        vBoxUpRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
+                tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
+                vBoxCenter.getChildren().addAll(lvSearchResults);
+        vBoxDownLeft.getChildren().addAll(tfMovieInfoId, tfMovieInfoTitle,tfMovieInfoCategory, tfMovieInfoDescription,
+                tfMovieInfoLength, tfMovieInfoRating, tfMovieInfoOriginalLanguage, tfMovieInfoLanguage, tfMovieInfoActors,
+                tfMovieInfoSpecialFeatures, tfMovieInfoRentalCost, tfMovieInfoRentalDuration, tfMovieInfoReplacementCost,
+                tfMovieInfoInStore, tfMovieInfoLastUpdate );
+        vBoxDownRight.getChildren().addAll(tfCustomerInfoId, tfCustomerInfoName, tfCustomerInfoAddress, tfCustomerInfoCity,
+                tfCustomerInfoPhone, tfCustomerInfoEmail, tfCustomerInfoRegistered, tfCustomerInfoActive, tfCustomerInfoUpdate, tfCustomerInfoStoreId);
         vBoxRight.getChildren().addAll(vBoxUpRight, vBoxDownRight);
-        //Add to VBox
-        //hBoxTop.getChildren().addAll(vBoxLeft, vBoxUpRight);
+        vBoxLeft.getChildren().addAll(vBoxUpLeft, vBoxDownLeft);
+        //Add to HBox
+
+        //hBoxTop.getChildren().addAll(vBoxUpLeft, vBoxUpRight);
         vBoxUpRight.setAlignment(Pos.TOP_RIGHT);
-        vBoxLeft.setAlignment(Pos.TOP_LEFT);
+        vBoxUpLeft.setAlignment(Pos.TOP_LEFT);
 
         //Add to borderPane
         borderPane.setLeft(vBoxLeft);
