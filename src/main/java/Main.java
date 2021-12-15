@@ -83,7 +83,32 @@ public class Main extends Application {
         lCustomerHeader.setFont(new Font(40));
 
 
+        Label lCustomerInfoId = new Label("KundId");
+        Label lCustomerInfoName = new Label("Namn");
+        Label lCustomerInfoEmail = new Label("Email");
+        Label lCustomerInfoCity = new Label("Stad");
+        Label lCustomerInfoStoreId = new Label("ButikId");
+        Label lCustomerInfoAddress = new Label("Adress");
+        Label lCustomerInfoPhone = new Label("Telefonnummer");
+        Label lCustomerInfoRegistered = new Label("Registrerad");
+        Label lCustomerInfoActive = new Label("Aktiv");
+        Label lCustomerInfoUpdate = new Label("Uppdaterad");
 
+        Label lMovieInfoId = new Label("FilmId");
+        Label lMovieInfoTitle = new Label("Titel");
+        Label lMovieInfoDescription = new Label("Beskrivning");
+        Label lMovieInfoActors = new Label("Skådespelare");
+        Label lMovieInfoCategory = new Label("Kategori");
+        Label lMovieInfoLanguage = new Label("Språk");
+        Label lMovieInfoOriginalLanguage = new Label("OrginalSpråk");
+        Label lMovieInfoLength = new Label("Längd");
+        Label lMovieInfoRating = new Label("Betyg");
+        Label lMovieInfoRentalCost = new Label("HyrKostnad");
+        Label lMovieInfoReplacementCost = new Label("ErsättningsKostnad");
+        Label lMovieInfoInStore = new Label("Tillgänglighet");
+        Label lMovieInfoSpecialFeatures = new Label("ExtraMaterial");
+        Label lMovieInfoRentalDuration = new Label("Hyrtid");
+        Label lMovieInfoLastUpdate = new Label("SenastUppdaterad");
         //Textfields
         TextField tfSearch = new TextField();
         tfSearch.setPromptText("Sök");
@@ -135,12 +160,12 @@ public class Main extends Application {
         vBoxUpRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
                 tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
                 vBoxCenter.getChildren().addAll(lvSearchResults);
-        vBoxDownLeft.getChildren().addAll(tfMovieInfoId, tfMovieInfoTitle,tfMovieInfoCategory, tfMovieInfoDescription,
-                tfMovieInfoLength, tfMovieInfoRating, tfMovieInfoOriginalLanguage, tfMovieInfoLanguage, tfMovieInfoActors,
-                tfMovieInfoSpecialFeatures, tfMovieInfoRentalCost, tfMovieInfoRentalDuration, tfMovieInfoReplacementCost,
-                tfMovieInfoInStore, tfMovieInfoLastUpdate );
-        vBoxDownRight.getChildren().addAll(tfCustomerInfoId, tfCustomerInfoName, tfCustomerInfoAddress, tfCustomerInfoCity,
-                tfCustomerInfoPhone, tfCustomerInfoEmail, tfCustomerInfoRegistered, tfCustomerInfoActive, tfCustomerInfoUpdate, tfCustomerInfoStoreId);
+        vBoxDownLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
+                lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage,tfMovieInfoOriginalLanguage, lMovieInfoLanguage,tfMovieInfoLanguage, lMovieInfoActors,tfMovieInfoActors,
+                lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures, lMovieInfoRentalCost,tfMovieInfoRentalCost, lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
+                lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate );
+        vBoxDownRight.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName, lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
+                lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail, lCustomerInfoRegistered,tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate, lCustomerInfoStoreId,tfCustomerInfoStoreId);
         vBoxRight.getChildren().addAll(vBoxUpRight, vBoxDownRight);
         vBoxLeft.getChildren().addAll(vBoxUpLeft, vBoxDownLeft);
         //Add to HBox
