@@ -3,10 +3,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,6 +19,7 @@ public class Main extends Application {
     final ObservableList olCategory = FXCollections.observableArrayList();
     final ObservableList olLanguages = FXCollections.observableArrayList();
     final ObservableList olStaff = FXCollections.observableArrayList();
+    final ObservableList olSearchResults = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
         launch(args);
@@ -34,12 +32,21 @@ public class Main extends Application {
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
+        cbCategory.setPromptText("Kategori");
         ComboBox cbLanguages = new ComboBox(olLanguages);
+        cbLanguages.setPromptText("Språk");
         ComboBox cbStaff = new ComboBox(olStaff);
+        cbStaff.setPromptText("Anställda");
+
+
+        // Lists
+        ListView lvSearchResults = new ListView(olSearchResults);
+
 
         //Boxes
         VBox vBoxLeft = new VBox();
         VBox vBoxRight = new VBox();
+        VBox vBoxCenter = new VBox();
 
         HBox hBoxTop= new HBox();
 
@@ -57,22 +64,29 @@ public class Main extends Application {
         Label lCustomerName = new Label("Kundnamn");
         Label lCustomerId = new Label("KundId");
         Label lCustomerEmail = new Label("Kundmail");
-        Label lCustomerCity = new Label("Kundstad");
+        Label lCustomerCity = new Label("Stad");
         Label lMovieHeader = new Label("Filmsektion");
-        lMovieHeader.setFont(new Font(50));
+        lMovieHeader.setFont(new Font(40));
         Label lCustomerHeader = new Label("Kundsektion");
-        lCustomerHeader.setFont(new Font(50));
+        lCustomerHeader.setFont(new Font(40));
 
 
 
         //Textfields
         TextField tfSearch = new TextField();
+        tfSearch.setPromptText("Sök");
         TextField tfActor = new TextField();
+        tfActor.setPromptText("Skådespelare");
         TextField tfReleaseDate = new TextField();
+        tfReleaseDate.setPromptText("yyyy-mm-dd");
         TextField tfCustomerName = new TextField();
+        tfCustomerName.setPromptText("Kundnamn");
         TextField tfCustomerId = new TextField();
+        tfCustomerId.setPromptText("KundId");
         TextField tfCustomerEmail = new TextField();
+        tfCustomerEmail.setPromptText("KundMail");
         TextField tfCustomerCity = new TextField();
+        tfCustomerCity.setPromptText("Stad");
 
 
 
@@ -80,7 +94,7 @@ public class Main extends Application {
         //Add to Hbox
         vBoxLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages, bCreateMovie,bSearchMovie);
         vBoxRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
-
+        vBoxCenter.getChildren().addAll(lvSearchResults);
 
         //Add to VBox
         //hBoxTop.getChildren().addAll(vBoxLeft, vBoxRight);
@@ -88,9 +102,11 @@ public class Main extends Application {
         vBoxRight.setAlignment(Pos.TOP_RIGHT);
         vBoxLeft.setAlignment(Pos.TOP_LEFT);
 
+
         //Add to borderPane
         borderPane.setLeft(vBoxLeft);
         borderPane.setRight(vBoxRight);
+        borderPane.setCenter(vBoxCenter);
 
         Scene scene = new Scene(borderPane,1200,900);
         primaryStage.setScene(scene);
