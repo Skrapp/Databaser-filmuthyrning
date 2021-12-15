@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -45,10 +46,18 @@ public class Main extends Application {
 
         //Boxes
         VBox vBoxLeft = new VBox();
-        VBox vBoxRight = new VBox();
+        vBoxLeft.setPadding(new Insets(10));
+        VBox vBoxUpRight = new VBox();
+        vBoxUpRight.setPadding(new Insets(10));
         VBox vBoxCenter = new VBox();
+        vBoxCenter.setPadding(new Insets(10));
+        VBox vBoxDownRight = new VBox();
+        vBoxDownRight.setPadding(new Insets(10));
+        VBox vBoxRight = new VBox();
+        vBoxRight.setPadding(new Insets(10));
 
-        HBox hBoxTop= new HBox();
+        HBox hBoxTop= new HBox(); // jag menade hbox.
+        HBox hBoxRight = new HBox(); //Ja, det kan bli jättefel.
 
         //Buttons
         Button bSearchMovie = new Button("Sök");
@@ -88,20 +97,29 @@ public class Main extends Application {
         TextField tfCustomerCity = new TextField();
         tfCustomerCity.setPromptText("Stad");
 
-
+        //Textfields kund
+        TextField tfCustomerInfoId = new TextField();
+        TextField tfCustomerInfoName = new TextField();
+        TextField tfCustomerInfoEmail = new TextField();
+        TextField tfCustomerInfoCity = new TextField();
+        TextField tfCustomerInfoStoreId = new TextField();
+        TextField tfCustomerInfoAddress = new TextField();
+        TextField tfCustomerInfoPhone = new TextField();
+        TextField tfCustomerInfoRegistered = new TextField();
+        TextField tfCustomerInfoActive = new TextField();
+        TextField tfCustomerInfoUpdate = new TextField();
 
 
         //Add to Hbox
         vBoxLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages, bCreateMovie,bSearchMovie);
-        vBoxRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
+        vBoxUpRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
         vBoxCenter.getChildren().addAll(lvSearchResults);
-
+        vBoxDownRight.getChildren().addAll(tfCustomerInfoId, tfCustomerInfoName, tfCustomerInfoAddress, tfCustomerInfoCity, tfCustomerInfoPhone, tfCustomerInfoEmail, tfCustomerInfoRegistered, tfCustomerInfoActive, tfCustomerInfoUpdate, tfCustomerInfoStoreId);
+        vBoxRight.getChildren().addAll(vBoxUpRight, vBoxDownRight);
         //Add to VBox
-        //hBoxTop.getChildren().addAll(vBoxLeft, vBoxRight);
-
-        vBoxRight.setAlignment(Pos.TOP_RIGHT);
+        //hBoxTop.getChildren().addAll(vBoxLeft, vBoxUpRight);
+        vBoxUpRight.setAlignment(Pos.TOP_RIGHT);
         vBoxLeft.setAlignment(Pos.TOP_LEFT);
-
 
         //Add to borderPane
         borderPane.setLeft(vBoxLeft);
