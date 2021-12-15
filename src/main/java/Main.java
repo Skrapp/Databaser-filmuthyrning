@@ -3,12 +3,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
@@ -41,6 +43,12 @@ public class Main extends Application {
 
         HBox hBoxTop= new HBox();
 
+        //Buttons
+        Button bSearchMovie = new Button("Sök");
+        Button bSearchCustomer = new Button("Sök");
+        Button bCreateMovie = new Button("Lägg till");
+        Button bCreateCustomer = new Button("Lägg till");
+
 
         //Labels
         Label lSearch = new Label("Sök");
@@ -50,6 +58,11 @@ public class Main extends Application {
         Label lCustomerId = new Label("KundId");
         Label lCustomerEmail = new Label("Kundmail");
         Label lCustomerCity = new Label("Kundstad");
+        Label lMovieHeader = new Label("Filmsektion");
+        lMovieHeader.setFont(new Font(50));
+        Label lCustomerHeader = new Label("Kundsektion");
+        lCustomerHeader.setFont(new Font(50));
+
 
 
         //Textfields
@@ -65,8 +78,8 @@ public class Main extends Application {
 
 
         //Add to Hbox
-        vBoxLeft.getChildren().addAll(lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages);
-        vBoxRight.getChildren().addAll(cbStaff, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail);
+        vBoxLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate, tfReleaseDate, cbLanguages, bCreateMovie,bSearchMovie);
+        vBoxRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity, tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bCreateCustomer,bSearchCustomer);
 
 
         //Add to VBox
