@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-213.5744.223">
+  <component name="dataSourceStorageLocal" created-in="IU-212.5457.46">
     <data-source name="sakila@localhost" uuid="ec062466-350e-4acd-8c9d-38e49865f1ea">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
       <schema-mapping />

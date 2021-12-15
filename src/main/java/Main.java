@@ -51,22 +51,23 @@ public class Main extends Application {
         vBoxCustomerSearch.setPadding(new Insets(10));
         VBox vBoxCenter = new VBox();
         vBoxCenter.setPadding(new Insets(10));
-        VBox vBoxCustomerInfo = new VBox();
-        vBoxCustomerInfo.setPadding(new Insets(10));
         VBox vBoxRight = new VBox();
         vBoxRight.setPadding(new Insets(10));
-        VBox vBoxMovieInfo = new VBox();
-        vBoxMovieInfo.setPadding(new Insets(10));
 
+        HBox hBoxMovieInfo = new HBox();
+        hBoxMovieInfo.setPadding(new Insets(10));
+        HBox hBoxCustomerInfo = new HBox();
+        hBoxCustomerInfo.setPadding(new Insets(10));
+        VBox vBoxCustomerInfoLeft = new VBox();
+        vBoxCustomerInfoLeft.setPadding(new Insets(0,5,0,0));
+        VBox vBoxCustomerInfoRight = new VBox();
         VBox vBoxMovieInfoLeft = new VBox();
+        vBoxMovieInfoLeft.setPadding(new Insets(0,5,0,0));
         VBox vBoxMovieInfoRight = new VBox();
+
 
         VBox vBoxLeft = new VBox();
 
-
-
-        HBox hBoxTop= new HBox();
-        HBox hBoxRight = new HBox();
 
         //Buttons
         Button bSearchMovie = new Button("Sök");
@@ -175,14 +176,12 @@ public class Main extends Application {
         vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
                 tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bSearchCustomer);
                 vBoxCenter.getChildren().addAll(lvSearchResults);
-        vBoxMovieInfo.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
-        vBoxCustomerInfo.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
+        hBoxMovieInfo.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
+        vBoxCustomerInfoLeft.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
                 lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
-                lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail, lCustomerInfoRegistered,
-                tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate,
-                lCustomerInfoStoreId,tfCustomerInfoStoreId,bCreateCustomer, bUpdateCustomer);
-        vBoxRight.getChildren().addAll(vBoxCustomerSearch, vBoxCustomerInfo);
-        vBoxLeft.getChildren().addAll(vBoxMovieSearch, vBoxMovieInfo);
+                lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail);
+        vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxCustomerInfo);
+        vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxMovieInfo);
         vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,
                 tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
                 lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage, tfMovieInfoOriginalLanguage, bCreateMovie);
@@ -190,7 +189,10 @@ public class Main extends Application {
                 lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures, lMovieInfoRentalCost,tfMovieInfoRentalCost,
                 lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
                 lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate,bUpdateMovie);
-
+        vBoxCustomerInfoRight.getChildren().addAll(lCustomerInfoRegistered,
+                tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate,
+                lCustomerInfoStoreId,tfCustomerInfoStoreId,bCreateCustomer, bUpdateCustomer);
+        hBoxCustomerInfo.getChildren().addAll(vBoxCustomerInfoLeft,vBoxCustomerInfoRight);
 
 
 
