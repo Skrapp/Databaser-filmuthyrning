@@ -42,7 +42,8 @@ public class Main extends Application {
         cbLanguages.setPromptText("Språk");
         ComboBox cbStaff = new ComboBox(olStaff);
         cbStaff.setPromptText("Anställda");
-        fetch.addToComboList(cbCategory, ENTITY_MANAGER_FACTORY);
+        fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
+        fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
 
