@@ -17,7 +17,10 @@ import javax.persistence.Persistence;
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
-    final ObservableList olCategory = FXCollections.observableArrayList();
+    final ObservableList olCategory = FXCollections.observableArrayList(
+            "Här",
+            "och här" //Om vi ska lägga in dom manuellt alltså.
+    );
     final ObservableList olLanguages = FXCollections.observableArrayList();
     final ObservableList olStaff = FXCollections.observableArrayList();
     final ObservableList olSearchResults = FXCollections.observableArrayList();
@@ -30,8 +33,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
-
-
+        Fetch fetch = new Fetch();
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
@@ -40,7 +42,7 @@ public class Main extends Application {
         cbLanguages.setPromptText("Språk");
         ComboBox cbStaff = new ComboBox(olStaff);
         cbStaff.setPromptText("Anställda");
-
+        fetch.addToComboList(cbCategory, ENTITY_MANAGER_FACTORY);
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
 
