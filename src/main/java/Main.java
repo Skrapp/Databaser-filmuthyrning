@@ -31,6 +31,8 @@ public class Main extends Application {
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
 
+
+
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
         cbCategory.setPromptText("Kategori");
@@ -43,19 +45,25 @@ public class Main extends Application {
         ListView lvSearchResults = new ListView(olSearchResults);
 
         //Boxes
-        VBox vBoxUpLeft = new VBox();
-        vBoxUpLeft.setPadding(new Insets(10));
-        VBox vBoxUpRight = new VBox();
-        vBoxUpRight.setPadding(new Insets(10));
+        VBox vBoxMovieSearch = new VBox();
+        vBoxMovieSearch.setPadding(new Insets(10));
+        VBox vBoxCustomerSearch = new VBox();
+        vBoxCustomerSearch.setPadding(new Insets(10));
         VBox vBoxCenter = new VBox();
         vBoxCenter.setPadding(new Insets(10));
-        VBox vBoxDownRight = new VBox();
-        vBoxDownRight.setPadding(new Insets(10));
+        VBox vBoxCustomerInfo = new VBox();
+        vBoxCustomerInfo.setPadding(new Insets(10));
         VBox vBoxRight = new VBox();
         vBoxRight.setPadding(new Insets(10));
-        VBox vBoxDownLeft = new VBox();
-        vBoxDownLeft.setPadding(new Insets(10));
+        VBox vBoxMovieInfo = new VBox();
+        vBoxMovieInfo.setPadding(new Insets(10));
+
+        VBox vBoxMovieInfoLeft = new VBox();
+        VBox vBoxMovieInfoRight = new VBox();
+
         VBox vBoxLeft = new VBox();
+
+
 
         HBox hBoxTop= new HBox();
         HBox hBoxRight = new HBox();
@@ -162,25 +170,31 @@ public class Main extends Application {
         //Add to HBox
 
         //Add to Vbox
-        vBoxUpLeft.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate,
+        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate,
                 tfReleaseDate, cbLanguages,bSearchMovie);
-        vBoxUpRight.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
+        vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
                 tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bSearchCustomer);
                 vBoxCenter.getChildren().addAll(lvSearchResults);
-        vBoxDownLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,
-                tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
-                lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage,
-                tfMovieInfoOriginalLanguage, lMovieInfoLanguage,tfMovieInfoLanguage, lMovieInfoActors,tfMovieInfoActors,
-                lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures, lMovieInfoRentalCost,tfMovieInfoRentalCost,
-                lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
-                lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate, bCreateMovie, bUpdateMovie );
-        vBoxDownRight.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
+        vBoxMovieInfo.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
+        vBoxCustomerInfo.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
                 lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
                 lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail, lCustomerInfoRegistered,
                 tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate,
                 lCustomerInfoStoreId,tfCustomerInfoStoreId,bCreateCustomer, bUpdateCustomer);
-        vBoxRight.getChildren().addAll(vBoxUpRight, vBoxDownRight);
-        vBoxLeft.getChildren().addAll(vBoxUpLeft, vBoxDownLeft);
+        vBoxRight.getChildren().addAll(vBoxCustomerSearch, vBoxCustomerInfo);
+        vBoxLeft.getChildren().addAll(vBoxMovieSearch, vBoxMovieInfo);
+        vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,
+                tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
+                lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage, tfMovieInfoOriginalLanguage, bCreateMovie);
+        vBoxMovieInfoRight.getChildren().addAll( lMovieInfoLanguage,tfMovieInfoLanguage, lMovieInfoActors,tfMovieInfoActors,
+                lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures, lMovieInfoRentalCost,tfMovieInfoRentalCost,
+                lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
+                lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate,bUpdateMovie);
+
+
+
+
+
 
         //Add to borderPane
         borderPane.setLeft(vBoxLeft);
