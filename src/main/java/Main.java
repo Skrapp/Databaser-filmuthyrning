@@ -111,37 +111,37 @@ public class Main extends Application {
         //Movie
         Label lMovieHeader = new Label("Filmsektion");
         lMovieHeader.setFont(new Font(40));
-        Label lSearch = new Label("Sök");
+        Label lSearchTitle = new Label("Sök titel");
         Label lActor = new Label("Skådespelare");
         Label lReleaseDate = new Label("Utgivningsdatum");
-        Label lMovieInfoId = new Label("FilmId");
+        Label lMovieInfoId = new Label("FilmID");
         Label lMovieInfoTitle = new Label("Titel");
         Label lMovieInfoDescription = new Label("Beskrivning");
         Label lMovieInfoActors = new Label("Skådespelare");
         Label lMovieInfoCategory = new Label("Kategori");
         Label lMovieInfoLanguage = new Label("Språk");
-        Label lMovieInfoOriginalLanguage = new Label("OrginalSpråk");
+        Label lMovieInfoOriginalLanguage = new Label("Originalspråk");
         Label lMovieInfoLength = new Label("Längd");
         Label lMovieInfoRating = new Label("Betyg");
-        Label lMovieInfoRentalCost = new Label("HyrKostnad");
-        Label lMovieInfoReplacementCost = new Label("ErsättningsKostnad");
+        Label lMovieInfoRentalCost = new Label("Hyreskostnad");
+        Label lMovieInfoReplacementCost = new Label("Ersättningskostnad");
         Label lMovieInfoInStore = new Label("Tillgänglighet");
-        Label lMovieInfoSpecialFeatures = new Label("ExtraMaterial");
-        Label lMovieInfoRentalDuration = new Label("Hyrtid");
-        Label lMovieInfoLastUpdate = new Label("SenastUppdaterad");
+        Label lMovieInfoSpecialFeatures = new Label("Extramaterial");
+        Label lMovieInfoRentalDuration = new Label("Hyrestid");
+        Label lMovieInfoLastUpdate = new Label("Senast uppdaterad");
 
         //Customer
         Label lCustomerHeader = new Label("Kundsektion");
         lCustomerHeader.setFont(new Font(40));
         Label lCustomerName = new Label("Kundnamn");
-        Label lCustomerId = new Label("KundId");
+        Label lCustomerId = new Label("KundID");
         Label lCustomerEmail = new Label("Kundmail");
         Label lCustomerCity = new Label("Stad");
-        Label lCustomerInfoId = new Label("KundId");
+        Label lCustomerInfoId = new Label("KundID");
         Label lCustomerInfoName = new Label("Namn");
         Label lCustomerInfoEmail = new Label("Email");
         Label lCustomerInfoCity = new Label("Stad");
-        Label lCustomerInfoStoreId = new Label("ButikId");
+        Label lCustomerInfoStoreId = new Label("ButikID");
         Label lCustomerInfoAddress = new Label("Adress");
         Label lCustomerInfoPhone = new Label("Telefonnummer");
         Label lCustomerInfoRegistered = new Label("Registrerad");
@@ -161,9 +161,9 @@ public class Main extends Application {
         TextField tfCustomerName = new TextField();
         tfCustomerName.setPromptText("Kundnamn");
         TextField tfCustomerId = new TextField();
-        tfCustomerId.setPromptText("KundId");
+        tfCustomerId.setPromptText("KundID");
         TextField tfCustomerEmail = new TextField();
-        tfCustomerEmail.setPromptText("KundMail");
+        tfCustomerEmail.setPromptText("Kundmail");
         TextField tfCustomerCity = new TextField();
         tfCustomerCity.setPromptText("Stad");
 
@@ -199,12 +199,14 @@ public class Main extends Application {
         //Add to HBox
 
         //Add to Vbox
-        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate,
-                tfReleaseDate, cbLanguages,bAdvancedSearchMovies,bSearchMovie);
-        vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
-                tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
-                vBoxCenter.getChildren().addAll(lvSearchResults);
+        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearchTitle, tfSearch,lMovieInfoRentalCost,tfMovieInfoRentalCost, cbCategory, bAdvancedSearchMovies,bSearchMovie);
+
+        vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName,lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
+
+        vBoxCenter.getChildren().addAll(lvSearchResults);
+
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
+
         vBoxCustomerInfoLeft.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
                 lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
                 lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail);
@@ -213,8 +215,8 @@ public class Main extends Application {
         vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,
                 tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
                 lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage, tfMovieInfoOriginalLanguage, bCreateMovie);
-        vBoxMovieInfoRight.getChildren().addAll( lMovieInfoLanguage,tfMovieInfoLanguage, lMovieInfoActors,tfMovieInfoActors,
-                lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures, lMovieInfoRentalCost,tfMovieInfoRentalCost,
+        vBoxMovieInfoRight.getChildren().addAll( cbLanguages, lMovieInfoActors,tfMovieInfoActors,
+                lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures,
                 lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
                 lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate,bUpdateMovie);
         vBoxCustomerInfoRight.getChildren().addAll(lCustomerInfoRegistered,
