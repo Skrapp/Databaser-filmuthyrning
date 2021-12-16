@@ -57,16 +57,21 @@ public class Main extends Application {
         VBox vBoxRight = new VBox();
         vBoxRight.setPadding(new Insets(10));
 
-        HBox hBoxMovieInfo = new HBox();
-        hBoxMovieInfo.setPadding(new Insets(10));
-        HBox hBoxCustomerInfo = new HBox();
-        hBoxCustomerInfo.setPadding(new Insets(10));
+        HBox hBoxAdvancedSearchMovies = new HBox();
+        hBoxAdvancedSearchMovies.setPadding(new Insets(10));
+        hBoxAdvancedSearchMovies.setVisible(false);
+        HBox hBoxAdvancedSearchCustomer = new HBox();
+        hBoxAdvancedSearchCustomer.setPadding(new Insets(10));
+        hBoxAdvancedSearchCustomer.setVisible(false);
         VBox vBoxCustomerInfoLeft = new VBox();
         vBoxCustomerInfoLeft.setPadding(new Insets(0,5,0,0));
         VBox vBoxCustomerInfoRight = new VBox();
         VBox vBoxMovieInfoLeft = new VBox();
         vBoxMovieInfoLeft.setPadding(new Insets(0,5,0,0));
         VBox vBoxMovieInfoRight = new VBox();
+
+        VBox vBoxAdvancedSearchMovies = new VBox();
+        VBox vBoxAdvancedSearchCustomer = new VBox();
 
 
         VBox vBoxLeft = new VBox();
@@ -81,6 +86,26 @@ public class Main extends Application {
         Button bUpdateMovie = new Button("Redigera");
         Button bRentMovie = new Button("Hyra");
         Button bReturnMovie = new Button("Lämna tillbaka");
+        Button bAdvancedSearchMovies = new Button("Avancerad sökning");
+        Button bAdvancedSearchCustomer = new Button("Avancerad sökning");
+
+        bAdvancedSearchCustomer.setOnAction(event -> {
+            if (hBoxAdvancedSearchCustomer.isVisible()) {
+                hBoxAdvancedSearchCustomer.setVisible(false);
+            }
+            else {
+                hBoxAdvancedSearchCustomer.setVisible(true);
+            }
+        });
+        bAdvancedSearchMovies.setOnAction(event -> {
+            if (hBoxAdvancedSearchMovies.isVisible()) {
+                hBoxAdvancedSearchMovies.setVisible(false);
+            }
+            else{
+                hBoxAdvancedSearchMovies.setVisible(true);
+            }
+        });
+
 
         //Labels
         //Movie
@@ -175,16 +200,16 @@ public class Main extends Application {
 
         //Add to Vbox
         vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearch, tfSearch, lActor, tfActor, cbCategory, lReleaseDate,
-                tfReleaseDate, cbLanguages,bSearchMovie);
+                tfReleaseDate, cbLanguages,bAdvancedSearchMovies,bSearchMovie);
         vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName, lCustomerCity,
-                tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail, bSearchCustomer);
+                tfCustomerCity, lCustomerId, tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
                 vBoxCenter.getChildren().addAll(lvSearchResults);
-        hBoxMovieInfo.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
+        hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
         vBoxCustomerInfoLeft.getChildren().addAll(lCustomerInfoId,tfCustomerInfoId, lCustomerInfoName,tfCustomerInfoName,
                 lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
                 lCustomerInfoPhone,tfCustomerInfoPhone, lCustomerInfoEmail,tfCustomerInfoEmail);
-        vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxCustomerInfo);
-        vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxMovieInfo);
+        vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
+        vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies);
         vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoTitle,tfMovieInfoTitle,lMovieInfoCategory,
                 tfMovieInfoCategory, lMovieInfoDescription,tfMovieInfoDescription,
                 lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage, tfMovieInfoOriginalLanguage, bCreateMovie);
@@ -195,7 +220,7 @@ public class Main extends Application {
         vBoxCustomerInfoRight.getChildren().addAll(lCustomerInfoRegistered,
                 tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate,
                 lCustomerInfoStoreId,tfCustomerInfoStoreId,bCreateCustomer, bUpdateCustomer);
-        hBoxCustomerInfo.getChildren().addAll(vBoxCustomerInfoLeft,vBoxCustomerInfoRight);
+        hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerInfoLeft,vBoxCustomerInfoRight);
 
 
 
