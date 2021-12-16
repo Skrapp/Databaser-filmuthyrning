@@ -7,8 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
@@ -99,7 +101,7 @@ public class Main extends Application {
                 hBoxAdvancedSearchMovies.setVisible(true);
             }
         });
-
+        //Meny
         MenuBar menuBar = new MenuBar();
         Menu mbFile = new Menu("Arkiv");
             MenuItem miFileLogOut = new MenuItem("Byt användare");
@@ -133,35 +135,14 @@ public class Main extends Application {
         mbHelp.getItems().addAll(miHelpInstructions, miHelpMovieOfTheDay, miHelpContactSupport, miHelpAboutTheService);
 
         menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
-        //Menubar
-        /*
-        * Menyalternativ:
-        * Arkiv
-        *   Options
-        *       Ställ in storlek på font
-        *       Shortcuts
-        *   Exit
-        *   Print
-        * Kund
-        *   Lägg till
-        *   Redigera
-        *   Se de som hyr
-        *   Portade
-        * Anställd
-        *   Lägg till
-        *   Redigera
-        *   Ta bort
-        *   Logga ut
-        * Film
-        *   Lägg till
-        *   Redigera
-        *   Ta bort
-        * Hjälp
-        *   Instruktioner
-        *   Dagens filmtips
-        *   Kontakta kundsupport
-        *   Om tjänsten
-        * */
+
+
+
+
+
+
+
+
 
         //Labels
         //Movie
@@ -180,6 +161,7 @@ public class Main extends Application {
         Label lMovieInfoSpecialFeatures = new Label("Extramaterial");
         Label lMovieInfoRentalDuration = new Label("Hyrestid");
         Label lMovieInfoLastUpdate = new Label("Senast uppdaterad");
+
 
         //Customer
         Label lCustomerHeader = new Label("Kundsektion");
@@ -236,6 +218,18 @@ public class Main extends Application {
         TextField tfMovieInfoSpecialFeatures = new TextField();
         TextField tfMovieInfoRentalDuration = new TextField();
         TextField tfMovieInfoLastUpdate = new TextField();
+
+        //Popup
+        Stage stage = new Stage();
+        TilePane tilePane = new TilePane();
+        Popup p = new Popup();
+        Scene scene2 = new Scene(tilePane, 200, 200);
+        p.getContent().addAll(lSearchTitle);
+        miHelpInstructions.setOnAction(event -> {p.show((stage));stage.setScene(scene2) ;
+        stage.show();
+        });
+
+
 
         //Add to boxes
         vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
