@@ -40,8 +40,6 @@ public class Main extends Application {
         cbCategory.setPromptText("Kategori");
         ComboBox cbLanguages = new ComboBox(olLanguages);
         cbLanguages.setPromptText("Språk");
-        ComboBox cbStaff = new ComboBox(olStaff);
-        cbStaff.setPromptText("Anställda");
         fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
         fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
         // Lists
@@ -102,6 +100,39 @@ public class Main extends Application {
             }
         });
 
+        MenuBar menuBar = new MenuBar();
+        Menu mbFile = new Menu("Arkiv");
+            MenuItem miFileLogOut = new MenuItem("Byt användare");
+            MenuItem miFileOptions = new MenuItem("Alternativ");
+            MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
+            MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
+            MenuItem miFilePrint = new MenuItem("Skriv ut");
+            MenuItem miFileExit = new MenuItem("Avsluta");
+        mbFile.getItems().addAll(miFileLogOut, miFileOptions,miFileOptionsFontsize,miFileOptionsShortcut, miFilePrint, miFileExit);
+        Menu mbStaff = new Menu("Anställda");
+            MenuItem miStaffAdd = new MenuItem("Lägg till");
+            MenuItem miStaffEdit = new MenuItem("Redigera");
+            MenuItem miStaffDelete = new MenuItem("Ta bort");
+        mbStaff.getItems().addAll(miStaffAdd, miStaffEdit, miStaffDelete);
+        Menu mbCustomer = new Menu("Kund");
+            MenuItem miCustomerAdd = new MenuItem("Lägg till");
+            MenuItem miCustomerEdit = new MenuItem("Redigera");
+            MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
+            MenuItem miCustomerLockedOut = new MenuItem("Portad");
+        mbCustomer.getItems().addAll(miCustomerAdd, miCustomerEdit, miCustomerRentedBy, miCustomerLockedOut);
+        Menu mbFilm = new Menu("Film");
+            MenuItem miFilmAdd = new MenuItem("Lägg till");
+            MenuItem miFilmEdit = new MenuItem("Redigera");
+            MenuItem miFilmDelete = new MenuItem("Ta bort");
+        mbFilm.getItems().addAll(miFilmAdd, miFilmEdit, miFilmDelete);
+        Menu mbHelp = new Menu("Hjälp");
+            MenuItem miHelpInstructions = new MenuItem("Instruktioner");
+            MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
+            MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
+            MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
+        mbHelp.getItems().addAll(miHelpInstructions, miHelpMovieOfTheDay, miHelpContactSupport, miHelpAboutTheService);
+
+        menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
         //Menubar
         /*
         * Menyalternativ:
@@ -228,7 +259,7 @@ public class Main extends Application {
                 lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate);
 
         //Customer
-        vBoxCustomerSearch.getChildren().addAll(cbStaff,lCustomerHeader, lCustomerName, tfCustomerName,lCustomerId,
+        vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerName, tfCustomerName,lCustomerId,
                 tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
 
         hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerInfoLeft,vBoxCustomerInfoRight);
@@ -241,6 +272,7 @@ public class Main extends Application {
                 lCustomerInfoStoreId,tfCustomerInfoStoreId);
 
         //Add to borderPane
+        borderPane.setTop(menuBar);
         borderPane.setLeft(vBoxLeft);
         borderPane.setRight(vBoxRight);
         borderPane.setCenter(vBoxCenter);
