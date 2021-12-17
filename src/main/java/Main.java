@@ -91,23 +91,7 @@ public class Main extends Application {
         Button bRentMovie = new Button("Hyra");
         Button bReturnMovie = new Button("Lämna tillbaka");
 
-        //Add button function
-        bAdvancedSearchCustomer.setOnAction(event -> {
-            if (hBoxAdvancedSearchCustomer.isVisible()) {
-                hBoxAdvancedSearchCustomer.setVisible(false);
-            }
-            else {
-                hBoxAdvancedSearchCustomer.setVisible(true);
-            }
-        });
-        bAdvancedSearchMovies.setOnAction(event -> {
-            if (hBoxAdvancedSearchMovies.isVisible()) {
-                hBoxAdvancedSearchMovies.setVisible(false);
-            }
-            else{
-                hBoxAdvancedSearchMovies.setVisible(true);
-            }
-        });
+
 
         //Meny
         MenuBar menuBar = new MenuBar();
@@ -265,6 +249,27 @@ public class Main extends Application {
             fxBuilder.createPopUp(hboxTest);
         });
 
+        //Add button function
+        bAdvancedSearchCustomer.setOnAction(event -> {
+            if (hBoxAdvancedSearchCustomer.isVisible()) {
+                hBoxAdvancedSearchCustomer.setVisible(false);
+            }
+            else {
+                hBoxAdvancedSearchCustomer.setVisible(true);
+            }
+        });
+        bAdvancedSearchMovies.setOnAction(event -> {
+            if (hBoxAdvancedSearchMovies.isVisible()) {
+                hBoxAdvancedSearchMovies.setVisible(false);
+            }
+            else{
+                hBoxAdvancedSearchMovies.setVisible(true);
+            }
+        });
+
+        bSearchMovie.setOnAction(event -> {
+            fetch.searchFromMovies(tfSearch,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+        });
 
         //Add to boxes
         vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
