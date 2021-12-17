@@ -1,5 +1,4 @@
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
@@ -31,7 +30,7 @@ public class Fetch {
 
     }
 
-    public void searchFromMovies (TextField tf, ObservableList ol, EntityManagerFactory em, String column, String table){
+    public void searchFromDatabase(TextField tf, ObservableList ol, EntityManagerFactory em, String column, String table){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
 
@@ -39,7 +38,7 @@ public class Fetch {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Query query = entityManager.createNativeQuery("SELECT " + column + " FROM " + table + " WHERE title LIKE '%" +  tf.getText().toString() + "%';" );
+            Query query = entityManager.createNativeQuery("SELECT " + column + " FROM " + table + " WHERE " + column + " LIKE '%" +  tf.getText().toString() + "%';" );
             List<String>list = query.getResultList();
             ol.clear();
             for(String s : list){
@@ -56,6 +55,10 @@ public class Fetch {
         }
     }
 
-
-
+    public void createSearchCriteria (VBox vBox) {
+        String searchCriteria = "";
+        for (int i = 0; i < vBox.getChildren().size(); i++) {
+            searchCriteria = searchCriteria + "AND first_name = '" + vBox.getChildren().get(i) + "'";
+        }
+    }
 }

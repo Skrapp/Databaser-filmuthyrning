@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Lagt till listview center, la till div prompttexter">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
@@ -85,6 +87,7 @@
       <workItem from="1639653840288" duration="1012000" />
       <workItem from="1639657035788" duration="1189000" />
       <workItem from="1639744081885" duration="2067000" />
+      <workItem from="1639748664077" duration="1172000" />
     </task>
     <servers />
   </component>
@@ -101,6 +104,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

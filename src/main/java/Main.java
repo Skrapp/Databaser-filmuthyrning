@@ -2,15 +2,12 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
@@ -268,7 +265,7 @@ public class Main extends Application {
         });
 
         bSearchMovie.setOnAction(event -> {
-            fetch.searchFromMovies(tfSearch,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+            fetch.searchFromDatabase(tfSearch,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
 
         //Add to boxes
