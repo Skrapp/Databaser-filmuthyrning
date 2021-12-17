@@ -36,6 +36,7 @@ public class Main extends Application {
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
         Fetch fetch = new Fetch();
+        FXBuilder fxBuilder = new FXBuilder();
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
@@ -101,6 +102,7 @@ public class Main extends Application {
                 hBoxAdvancedSearchMovies.setVisible(true);
             }
         });
+
         //Meny
         MenuBar menuBar = new MenuBar();
         Menu mbFile = new Menu("Arkiv");
@@ -136,14 +138,6 @@ public class Main extends Application {
 
         menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
 
-
-
-
-
-
-
-
-
         //Labels
         //Movie
         Label lMovieHeader = new Label("Filmsektion");
@@ -162,7 +156,6 @@ public class Main extends Application {
         Label lMovieInfoRentalDuration = new Label("Hyrestid");
         Label lMovieInfoLastUpdate = new Label("Senast uppdaterad");
 
-
         //Customer
         Label lCustomerHeader = new Label("Kundsektion");
         lCustomerHeader.setFont(new Font(40));
@@ -176,6 +169,7 @@ public class Main extends Application {
         Label lCustomerInfoRegistered = new Label("Registrerad");
         Label lCustomerInfoActive = new Label("Aktiv");
         Label lCustomerInfoUpdate = new Label("Uppdaterad");
+        Label lTest = new Label("Funka då!");
 
         //Textfields
         //Movie
@@ -218,17 +212,22 @@ public class Main extends Application {
         TextField tfMovieInfoSpecialFeatures = new TextField();
         TextField tfMovieInfoRentalDuration = new TextField();
         TextField tfMovieInfoLastUpdate = new TextField();
+        TextField tfMovieInfoTest = new TextField();
+
+        VBox vboxTest = new VBox();
+        vboxTest.getChildren().addAll(lTest);
+        HBox hboxTest = new HBox();
+        hboxTest.getChildren().addAll(tfMovieInfoTest);
 
         //Popup
-        Stage stage = new Stage();
-        TilePane tilePane = new TilePane();
-        Popup p = new Popup();
-        Scene scene2 = new Scene(tilePane, 200, 200);
-        p.getContent().addAll(lSearchTitle);
-        miHelpInstructions.setOnAction(event -> {p.show((stage));stage.setScene(scene2) ;
-        stage.show();
+        //Movie - Add
+        miFilmAdd.setOnAction(event -> {
+            fxBuilder.createPopUp(vboxTest);
         });
 
+        miCustomerAdd.setOnAction(event -> {
+            fxBuilder.createPopUp(hboxTest);
+        });
 
 
         //Add to boxes
