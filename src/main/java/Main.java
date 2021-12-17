@@ -125,6 +125,7 @@ public class Main extends Application {
 
         menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
 
+
         //Labels
         //Movie
         Label lMovieHeader = new Label("Filmsektion");
@@ -171,6 +172,7 @@ public class Main extends Application {
         Label lCustomerInfoActive = new Label("Aktiv");
         Label lCustomerInfoUpdate = new Label("Uppdaterad");
         Label lTest = new Label("Funka då!");
+
 
         //Textfields
         //Movie
@@ -230,6 +232,22 @@ public class Main extends Application {
         TextField tfMovieAddLastUpdate = new TextField();
         TextField tfMovieAddTest = new TextField();
 
+        tfSearch.setId("title");
+        tfMovieInfoRentalCost.setId("rental_rate");
+        tfMovieInfoId.setId("film.film_id");
+        tfMovieInfoDescription.setId("description");
+        tfMovieInfoActors.setId("a.first_name"); //Hur ska man få in både för- och efternamn på en och samma?
+        tfMovieInfoOriginalLanguage.setId("l.name");
+        tfMovieInfoLength.setId("length");
+        tfMovieInfoRating.setId("rating");
+        tfMovieInfoRentalCost.setId("rental_rate");
+        tfMovieInfoReplacementCost.setId("replacement_cost");
+        tfMovieInfoInStore.setId("title");
+        tfMovieInfoSpecialFeatures.setId("special_features");
+        tfMovieInfoRentalDuration.setId("rental_duration");
+        tfMovieInfoLastUpdate.setId("film.last_update"); //
+        tfMovieInfoTest.setId("test");
+        cbCategory.setId("category");
 
         VBox vboxTest = new VBox();
         vboxTest.getChildren().addAll(lTest);
@@ -265,7 +283,7 @@ public class Main extends Application {
         });
 
         bSearchMovie.setOnAction(event -> {
-            fetch.searchFromDatabase(tfSearch,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+            fetch.searchFromDatabase(vBoxMovieInfoLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
 
         //Add to boxes
