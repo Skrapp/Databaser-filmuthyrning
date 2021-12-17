@@ -45,9 +45,9 @@ public class Main extends Application {
         cbLanguages.setPromptText("Språk");
 
         ComboBox cbAddCategory = new ComboBox(olCategory);
-        cbCategory.setPromptText("Kategori");
+        cbAddCategory.setPromptText("Kategori");
         ComboBox cbAddLanguages = new ComboBox(olLanguages);
-        cbLanguages.setPromptText("Språk");
+        cbAddLanguages.setPromptText("Språk");
         fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
         fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
         // Lists
@@ -149,7 +149,6 @@ public class Main extends Application {
         Label lMovieHeader = new Label("Filmsektion");
         lMovieHeader.setFont(new Font(40));
         Label lSearchTitle = new Label("Sök titel");
-        Label lAddTitle = new Label("Sök titel");
         Label lMovieInfoId = new Label("FilmID");
         Label lMovieInfoDescription = new Label("Beskrivning");
         Label lMovieInfoActors = new Label("Skådespelare");
@@ -163,6 +162,7 @@ public class Main extends Application {
         Label lMovieInfoRentalDuration = new Label("Hyrestid");
         Label lMovieInfoLastUpdate = new Label("Senast uppdaterad");
 
+        Label lAddTitle = new Label("Titel");
         Label lMovieAddId = new Label("FilmID");
         Label lMovieAddDescription = new Label("Beskrivning");
         Label lMovieAddActors = new Label("Skådespelare");
@@ -234,6 +234,7 @@ public class Main extends Application {
         TextField tfMovieInfoLastUpdate = new TextField();
         TextField tfMovieInfoTest = new TextField();
 
+        TextField tfAddTitle = new TextField();
         TextField tfMovieAddId = new TextField();
         TextField tfMovieAddDescription = new TextField();
         TextField tfMovieAddActors = new TextField();
@@ -272,12 +273,12 @@ public class Main extends Application {
 
         vBoxCenter.getChildren().addAll(lvSearchResults);
 
-        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lAddTitle, tfSearch,lMovieInfoRentalCost,tfMovieInfoRentalCost,
-                cbCategory,lMovieAddDescription,tfMovieAddDescription,
+        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lAddTitle,tfAddTitle,lMovieAddRentalCost,tfMovieAddRentalCost,
+                cbAddCategory,lMovieAddDescription,tfMovieAddDescription,
                 lMovieAddLength,tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
                 tfMovieAddOriginalLanguage, cbAddLanguages,lMovieAddActors,tfMovieAddActors,lMovieAddSpecialFeatures,tfMovieAddSpecialFeatures,
                 lMovieAddRentalDuration,tfMovieAddRentalDuration, lMovieAddReplacementCost,tfMovieAddReplacementCost,
-                lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate);
+                lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate, bCreateMovie);
 
 
         //Movie
