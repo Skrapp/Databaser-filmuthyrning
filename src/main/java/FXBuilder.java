@@ -8,7 +8,7 @@ public class FXBuilder {
     public void createPopUp(VBox vBox){
         Stage stage = new Stage();
         Popup p = new Popup();
-        Scene scene2 = new Scene(vBox, 200, 200);
+        Scene scene2 = new Scene(vBox);
         p.show(stage);
         stage.setScene(scene2);
         stage.show();
@@ -17,7 +17,7 @@ public class FXBuilder {
     public void createPopUp(HBox hBox){
         Stage stage = new Stage();
         Popup p = new Popup();
-        Scene scene2 = new Scene(hBox, 200, 200);
+        Scene scene2 = new Scene(hBox);
         p.show(stage);
         stage.setScene(scene2);
         stage.show();
