@@ -18,7 +18,7 @@ public class Fetch {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Query query = entityManager.createNativeQuery("SELECT "+ column +" FROM "+ table +";");
+            Query query = entityManager.createNativeQuery("SELECT "+ column +" FROM "+ table +" GROUP BY " + column + ";");
             List<String>list = query.getResultList();
             for (String p : list){
                 ol.add(p);
@@ -106,6 +106,7 @@ public class Fetch {
      * @param sSearchCriteria string to add search criteria
      * @return search criteria
      */
+    //
     public String createSearchCriteria (Pane box, String sSearchCriteria) {
         for (int i = 0; i < box.getChildren().size(); i++) {
             if (box.getChildren().get(i) instanceof Pane)
@@ -146,7 +147,6 @@ public class Fetch {
                             .concat(sSelectedItem).concat("'");
                 }
             }
-
             System.out.println(sSearchCriteria); //Debug
         }
         return sSearchCriteria;

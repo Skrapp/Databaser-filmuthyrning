@@ -23,6 +23,7 @@ public class Main extends Application {
     final ObservableList olLanguages = FXCollections.observableArrayList();
     final ObservableList olStaff = FXCollections.observableArrayList();
     final ObservableList olSearchResults = FXCollections.observableArrayList();
+    final ObservableList olRating = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
         launch(args);
@@ -36,17 +37,27 @@ public class Main extends Application {
         FXBuilder fxBuilder = new FXBuilder();
 
         // Combobox
-        ComboBox cbCategory = new ComboBox(olCategory);
-        cbCategory.setPromptText("Kategori");
-        ComboBox cbLanguages = new ComboBox(olLanguages);
-        cbLanguages.setPromptText("Språk");
+        //Movie search
+        ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
+        cbMovieSearchCategory.setPromptText("Kategori");
+        ComboBox cbMovieSearchLanguages = new ComboBox(olLanguages);
+        cbMovieSearchLanguages.setPromptText("Språk");
+        ComboBox cbMovieSearchRating = new ComboBox(olRating);
+        cbMovieSearchRating.setPromptText("Betyg");
+        ComboBox cbMovieSearchOriginalLanguage = new ComboBox(olLanguages);
+        cbMovieSearchOriginalLanguage.setPromptText("Originalspråk");
 
-        ComboBox cbAddCategory = new ComboBox(olCategory);
-        cbAddCategory.setPromptText("Kategori");
-        ComboBox cbAddLanguages = new ComboBox(olLanguages);
-        cbAddLanguages.setPromptText("Språk");
+        //Movie add
+        ComboBox cbMovieAddCategory = new ComboBox(olCategory);
+        cbMovieAddCategory.setPromptText("Kategori");
+        ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
+        cbMovieAddLanguages.setPromptText("Språk");
+
+        //Add data to observable lists
         fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
         fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
+        fetch.addToComboList(olRating, ENTITY_MANAGER_FACTORY,"rating","film");
+
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
 
@@ -130,7 +141,7 @@ public class Main extends Application {
         //Movie
         Label lMovieHeader = new Label("Filmsektion");
         lMovieHeader.setFont(new Font(40));
-        Label lSearchTitle = new Label("Sök titel");
+        Label lMovieSearchTitle = new Label("Sök titel");
         Label lMovieSearchId = new Label("FilmID");
         Label lMovieSearchDescription = new Label("Beskrivning");
         Label lMovieSearchActors = new Label("Skådespelare");
@@ -143,8 +154,9 @@ public class Main extends Application {
         Label lMovieSearchSpecialFeatures = new Label("Extramaterial");
         Label lMovieSearchRentalDuration = new Label("Hyrestid");
         Label lMovieSearchLastUpdate = new Label("Senast uppdaterad");
+        Label lMovieSearchReleaseDate = new Label("Utgivningsdatum");
 
-        Label lAddTitle = new Label("Titel");
+        Label lMovieAddTitle = new Label("Titel");
         Label lMovieAddId = new Label("FilmID");
         Label lMovieAddDescription = new Label("Beskrivning");
         Label lMovieAddActors = new Label("Skådespelare");
@@ -161,9 +173,9 @@ public class Main extends Application {
         //Customer
         Label lCustomerHeader = new Label("Kundsektion");
         lCustomerHeader.setFont(new Font(40));
-        Label lCustomerName = new Label("Kundnamn");
-        Label lCustomerId = new Label("KundID");
-        Label lCustomerEmail = new Label("Kundmail");
+        Label lCustomerSearchName = new Label("Kundnamn");
+        Label lCustomerSearchId = new Label("KundID");
+        Label lCustomerSearchEmail = new Label("Kundmail");
         Label lCustomerSearchCity = new Label("Stad");
         Label lCustomerSearchStoreId = new Label("ButikID");
         Label lCustomerSearchAddress = new Label("Adress");
@@ -171,7 +183,14 @@ public class Main extends Application {
         Label lCustomerSearchRegistered = new Label("Registrerad");
         Label lCustomerSearchActive = new Label("Aktiv");
         Label lCustomerSearchUpdate = new Label("Uppdaterad");
-        Label lTest = new Label("Funka då!");
+
+        //-----------------------------
+        //Checkboxes
+        //SpecialFeatures and InStore
+
+        //-----------------------------
+        //Slides
+        //RentalRate, Length, rentalDuration and ReplacementCost
 
 
         //Textfields
@@ -185,9 +204,7 @@ public class Main extends Application {
         TextField tfMovieSearchId = new TextField();
         TextField tfMovieSearchDescription = new TextField();
         TextField tfMovieSearchActors = new TextField();
-        TextField tfMovieSearchOriginalLanguage = new TextField();
         TextField tfMovieSearchLength = new TextField();
-        TextField tfMovieSearchRating = new TextField();
         TextField tfMovieSearchRentalCost = new TextField();
         TextField tfMovieSearchReplacementCost = new TextField();
         TextField tfMovieSearchInStore = new TextField();
@@ -212,17 +229,14 @@ public class Main extends Application {
         TextField tfMovieAddLastUpdate = new TextField();
 
         //Customer
-        TextField tfCustomerName = new TextField();
-        tfCustomerName.setPromptText("Kundnamn");
-        TextField tfCustomerId = new TextField();
-        tfCustomerId.setPromptText("KundID");
-        TextField tfCustomerEmail = new TextField();
-        tfCustomerEmail.setPromptText("Kundmail");
-        TextField tfCustomerCity = new TextField();
-        tfCustomerCity.setPromptText("Stad");
-
-        //Text fields customer
+        TextField tfCustomerSearchName = new TextField();
+        tfCustomerSearchName.setPromptText("Kundnamn");
+        TextField tfCustomerSearchId = new TextField();
+        tfCustomerSearchId.setPromptText("KundID");
+        TextField tfCustomerSearchEmail = new TextField();
+        tfCustomerSearchEmail.setPromptText("Kundmail");
         TextField tfCustomerSearchCity = new TextField();
+        tfCustomerSearchCity.setPromptText("Stad");
         TextField tfCustomerSearchStoreId = new TextField();
         TextField tfCustomerSearchAddress = new TextField();
         TextField tfCustomerSearchPhone = new TextField();
@@ -230,16 +244,17 @@ public class Main extends Application {
         TextField tfCustomerSearchActive = new TextField();
         TextField tfCustomerSearchUpdate = new TextField();
 
-
-
+        //Add ID to text fields
+        //Movie
         tfMovieSearchTitle.setId("title");
         tfMovieSearchRentalCost.setId("rental_rate");
         tfMovieSearchId.setId("film.film_id");
         tfMovieSearchDescription.setId("description");
         tfMovieSearchActors.setId("a.first_name"); //Hur ska man få in både för- och efternamn på en och samma?
-        tfMovieSearchOriginalLanguage.setId("l.name");
+        cbMovieSearchOriginalLanguage.setId("l.name");
+        cbMovieSearchLanguages.setId("l.name");
         tfMovieSearchLength.setId("length");
-        tfMovieSearchRating.setId("rating");
+        cbMovieSearchRating.setId("rating");
         tfMovieSearchRentalCost.setId("rental_rate");
         tfMovieSearchReplacementCost.setId("replacement_cost");
         tfMovieSearchInStore.setId("title");
@@ -247,11 +262,20 @@ public class Main extends Application {
         tfMovieSearchRentalDuration.setId("rental_duration");
         tfMovieSearchLastUpdate.setId("film.last_update"); //
         tfMovieSearchTest.setId("test");
-        cbCategory.setId("category");
-        cbLanguages.setId("l.name");
+        cbMovieSearchCategory.setId("category");
 
-        VBox vboxTest = new VBox();
-        vboxTest.getChildren().addAll(lTest);
+        //Customer
+        tfCustomerSearchName.setId("customer.first_name");
+        tfCustomerSearchId.setId("customer.customer_id");
+        tfCustomerSearchEmail.setId("customer.email");
+        tfCustomerSearchCity.setId("city.city");
+        tfCustomerSearchStoreId.setId("customer.store_id");
+        tfCustomerSearchAddress.setId("a.address");
+        tfCustomerSearchPhone.setId("a.phone");
+        tfCustomerSearchRegistered.setId("customer.create_date");
+        tfCustomerSearchActive.setId("customer.active");
+        tfCustomerSearchUpdate.setId("customer.last_update");
+
         HBox hboxTest = new HBox();
         hboxTest.getChildren().addAll(tfMovieSearchTest);
 
@@ -294,31 +318,31 @@ public class Main extends Application {
 
         vBoxCenter.getChildren().addAll(lvSearchResults);
 
-        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lAddTitle,tfAddTitle,lMovieAddRentalCost,tfMovieAddRentalCost,
-                cbAddCategory,lMovieAddDescription,tfMovieAddDescription,
+        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,tfAddTitle,lMovieAddRentalCost,tfMovieAddRentalCost,
+                cbMovieAddCategory,lMovieAddDescription,tfMovieAddDescription,
                 lMovieAddLength,tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
-                tfMovieAddOriginalLanguage, cbAddLanguages,lMovieAddActors,tfMovieAddActors,lMovieAddSpecialFeatures,tfMovieAddSpecialFeatures,
+                tfMovieAddOriginalLanguage, cbMovieAddLanguages,lMovieAddActors,tfMovieAddActors,lMovieAddSpecialFeatures,tfMovieAddSpecialFeatures,
                 lMovieAddRentalDuration,tfMovieAddRentalDuration, lMovieAddReplacementCost,tfMovieAddReplacementCost,
                 lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate, bCreateMovie);
 
 
         //Movie
-        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearchTitle, tfMovieSearchTitle,lMovieSearchRentalCost,tfMovieSearchRentalCost,
-                cbCategory, bAdvancedSearchMovies,bSearchMovie);
+        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lMovieSearchTitle, tfMovieSearchTitle,lMovieSearchRentalCost,
+                tfMovieSearchRentalCost,cbMovieSearchCategory, bAdvancedSearchMovies,bSearchMovie);
 
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieSearchLeft, vBoxMovieSearchRight);
 
-        vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId, lMovieSearchDescription,tfMovieSearchDescription,
-                lMovieSearchLength,tfMovieSearchLength, lMovieSearchRating,tfMovieSearchRating, lMovieSearchOriginalLanguage,
-                tfMovieSearchOriginalLanguage, cbLanguages);
+        vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId,lMovieSearchDescription,tfMovieSearchDescription,
+                lMovieSearchLength,tfMovieSearchLength,cbMovieSearchRating,cbMovieSearchOriginalLanguage,
+                lMovieSearchReleaseDate,tfMovieSearchReleaseDate,cbMovieSearchLanguages);
 
         vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,tfMovieSearchSpecialFeatures,
                 lMovieSearchRentalDuration,tfMovieSearchRentalDuration, lMovieSearchReplacementCost,tfMovieSearchReplacementCost,
                 lMovieSearchInStore,tfMovieSearchInStore, lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
         //Customer
-        vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerName, tfCustomerName,lCustomerId,
-                tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
+        vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerSearchName, tfCustomerSearchName,lCustomerSearchId,
+                tfCustomerSearchId, lCustomerSearchEmail, tfCustomerSearchEmail,bAdvancedSearchCustomer, bSearchCustomer);
 
         hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerSearchLeft,vBoxCustomerSearchRight);
 
