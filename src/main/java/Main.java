@@ -10,11 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Optional;
 
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -37,6 +39,8 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         Fetch fetch = new Fetch();
         FXBuilder fxBuilder = new FXBuilder();
+        Login login = new Login();
+
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
@@ -48,8 +52,8 @@ public class Main extends Application {
         cbAddCategory.setPromptText("Kategori");
         ComboBox cbAddLanguages = new ComboBox(olLanguages);
         cbAddLanguages.setPromptText("Språk");
-        fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
-        fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
+        fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY, "name", "category");
+        fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY, "name", "language");
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
 
@@ -71,10 +75,10 @@ public class Main extends Application {
         hBoxAdvancedSearchCustomer.setPadding(new Insets(10));
         hBoxAdvancedSearchCustomer.setVisible(false);
         VBox vBoxCustomerInfoLeft = new VBox();
-        vBoxCustomerInfoLeft.setPadding(new Insets(0,5,0,0));
+        vBoxCustomerInfoLeft.setPadding(new Insets(0, 5, 0, 0));
         VBox vBoxCustomerInfoRight = new VBox();
         VBox vBoxMovieInfoLeft = new VBox();
-        vBoxMovieInfoLeft.setPadding(new Insets(0,5,0,0));
+        vBoxMovieInfoLeft.setPadding(new Insets(0, 5, 0, 0));
         VBox vBoxMovieInfoRight = new VBox();
 
         VBox vBoxLeft = new VBox();
@@ -92,38 +96,37 @@ public class Main extends Application {
         Button bReturnMovie = new Button("Lämna tillbaka");
 
 
-
         //Meny
         MenuBar menuBar = new MenuBar();
         Menu mbFile = new Menu("Arkiv");
-            MenuItem miFileLogOut = new MenuItem("Byt användare");
-            MenuItem miFileOptions = new MenuItem("Alternativ");
-            MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
-            MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
-            MenuItem miFilePrint = new MenuItem("Skriv ut");
-            MenuItem miFileExit = new MenuItem("Avsluta");
-        mbFile.getItems().addAll(miFileLogOut, miFileOptions,miFileOptionsFontsize,miFileOptionsShortcut, miFilePrint, miFileExit);
+        MenuItem miFileLogOut = new MenuItem("Byt användare");
+        MenuItem miFileOptions = new MenuItem("Alternativ");
+        MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
+        MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
+        MenuItem miFilePrint = new MenuItem("Skriv ut");
+        MenuItem miFileExit = new MenuItem("Avsluta");
+        mbFile.getItems().addAll(miFileLogOut, miFileOptions, miFileOptionsFontsize, miFileOptionsShortcut, miFilePrint, miFileExit);
         Menu mbStaff = new Menu("Anställda");
-            MenuItem miStaffAdd = new MenuItem("Lägg till");
-            MenuItem miStaffEdit = new MenuItem("Redigera");
-            MenuItem miStaffDelete = new MenuItem("Ta bort");
+        MenuItem miStaffAdd = new MenuItem("Lägg till");
+        MenuItem miStaffEdit = new MenuItem("Redigera");
+        MenuItem miStaffDelete = new MenuItem("Ta bort");
         mbStaff.getItems().addAll(miStaffAdd, miStaffEdit, miStaffDelete);
         Menu mbCustomer = new Menu("Kund");
-            MenuItem miCustomerAdd = new MenuItem("Lägg till");
-            MenuItem miCustomerEdit = new MenuItem("Redigera");
-            MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
-            MenuItem miCustomerLockedOut = new MenuItem("Portad");
+        MenuItem miCustomerAdd = new MenuItem("Lägg till");
+        MenuItem miCustomerEdit = new MenuItem("Redigera");
+        MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
+        MenuItem miCustomerLockedOut = new MenuItem("Portad");
         mbCustomer.getItems().addAll(miCustomerAdd, miCustomerEdit, miCustomerRentedBy, miCustomerLockedOut);
         Menu mbFilm = new Menu("Film");
-            MenuItem miFilmAdd = new MenuItem("Lägg till");
-            MenuItem miFilmEdit = new MenuItem("Redigera");
-            MenuItem miFilmDelete = new MenuItem("Ta bort");
+        MenuItem miFilmAdd = new MenuItem("Lägg till");
+        MenuItem miFilmEdit = new MenuItem("Redigera");
+        MenuItem miFilmDelete = new MenuItem("Ta bort");
         mbFilm.getItems().addAll(miFilmAdd, miFilmEdit, miFilmDelete);
         Menu mbHelp = new Menu("Hjälp");
-            MenuItem miHelpInstructions = new MenuItem("Instruktioner");
-            MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
-            MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
-            MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
+        MenuItem miHelpInstructions = new MenuItem("Instruktioner");
+        MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
+        MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
+        MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
         mbHelp.getItems().addAll(miHelpInstructions, miHelpMovieOfTheDay, miHelpContactSupport, miHelpAboutTheService);
 
         menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
@@ -249,26 +252,43 @@ public class Main extends Application {
             fxBuilder.createPopUp(hboxTest);
         });
 
+        //Exit Menu
+        miFileExit.setOnAction(event -> {
+            Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            exitAlert.show();
+            Optional<ButtonType> result = exitAlert.showAndWait();
+            if(!result.isPresent() || result.get() != ButtonType.OK) {
+                //return false;
+            } else {
+                primaryStage.close();
+                //return true;
+            }
+
+            /* {
+                primaryStage.close();
+            } else {
+                System.out.println("hej");
+            }*/
+        });
+
         //Add button function
         bAdvancedSearchCustomer.setOnAction(event -> {
             if (hBoxAdvancedSearchCustomer.isVisible()) {
                 hBoxAdvancedSearchCustomer.setVisible(false);
-            }
-            else {
+            } else {
                 hBoxAdvancedSearchCustomer.setVisible(true);
             }
         });
         bAdvancedSearchMovies.setOnAction(event -> {
             if (hBoxAdvancedSearchMovies.isVisible()) {
                 hBoxAdvancedSearchMovies.setVisible(false);
-            }
-            else{
+            } else {
                 hBoxAdvancedSearchMovies.setVisible(true);
             }
         });
 
         bSearchMovie.setOnAction(event -> {
-            fetch.searchFromMovies(tfSearch,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+            fetch.searchFromMovies(tfSearch, olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
 
         //Add to boxes
@@ -278,40 +298,40 @@ public class Main extends Application {
 
         vBoxCenter.getChildren().addAll(lvSearchResults);
 
-        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lAddTitle,tfAddTitle,lMovieAddRentalCost,tfMovieAddRentalCost,
-                cbAddCategory,lMovieAddDescription,tfMovieAddDescription,
-                lMovieAddLength,tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
-                tfMovieAddOriginalLanguage, cbAddLanguages,lMovieAddActors,tfMovieAddActors,lMovieAddSpecialFeatures,tfMovieAddSpecialFeatures,
-                lMovieAddRentalDuration,tfMovieAddRentalDuration, lMovieAddReplacementCost,tfMovieAddReplacementCost,
-                lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate, bCreateMovie);
+        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lAddTitle, tfAddTitle, lMovieAddRentalCost, tfMovieAddRentalCost,
+                cbAddCategory, lMovieAddDescription, tfMovieAddDescription,
+                lMovieAddLength, tfMovieAddLength, lMovieAddRating, tfMovieAddRating, lMovieAddOriginalLanguage,
+                tfMovieAddOriginalLanguage, cbAddLanguages, lMovieAddActors, tfMovieAddActors, lMovieAddSpecialFeatures, tfMovieAddSpecialFeatures,
+                lMovieAddRentalDuration, tfMovieAddRentalDuration, lMovieAddReplacementCost, tfMovieAddReplacementCost,
+                lMovieAddInStore, tfMovieAddInStore, lMovieAddLastUpdate, tfMovieAddLastUpdate, bCreateMovie);
 
 
         //Movie
-        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearchTitle, tfSearch,lMovieInfoRentalCost,tfMovieInfoRentalCost,
-                cbCategory, bAdvancedSearchMovies,bSearchMovie);
+        vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearchTitle, tfSearch, lMovieInfoRentalCost, tfMovieInfoRentalCost,
+                cbCategory, bAdvancedSearchMovies, bSearchMovie);
 
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieInfoLeft, vBoxMovieInfoRight);
 
-        vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId,tfMovieInfoId, lMovieInfoDescription,tfMovieInfoDescription,
-                lMovieInfoLength,tfMovieInfoLength, lMovieInfoRating,tfMovieInfoRating, lMovieInfoOriginalLanguage,
+        vBoxMovieInfoLeft.getChildren().addAll(lMovieInfoId, tfMovieInfoId, lMovieInfoDescription, tfMovieInfoDescription,
+                lMovieInfoLength, tfMovieInfoLength, lMovieInfoRating, tfMovieInfoRating, lMovieInfoOriginalLanguage,
                 tfMovieInfoOriginalLanguage, cbLanguages);
 
-        vBoxMovieInfoRight.getChildren().addAll(lMovieInfoActors,tfMovieInfoActors,lMovieInfoSpecialFeatures,tfMovieInfoSpecialFeatures,
-                lMovieInfoRentalDuration,tfMovieInfoRentalDuration, lMovieInfoReplacementCost,tfMovieInfoReplacementCost,
-                lMovieInfoInStore,tfMovieInfoInStore, lMovieInfoLastUpdate,tfMovieInfoLastUpdate);
+        vBoxMovieInfoRight.getChildren().addAll(lMovieInfoActors, tfMovieInfoActors, lMovieInfoSpecialFeatures, tfMovieInfoSpecialFeatures,
+                lMovieInfoRentalDuration, tfMovieInfoRentalDuration, lMovieInfoReplacementCost, tfMovieInfoReplacementCost,
+                lMovieInfoInStore, tfMovieInfoInStore, lMovieInfoLastUpdate, tfMovieInfoLastUpdate);
 
         //Customer
-        vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerName, tfCustomerName,lCustomerId,
-                tfCustomerId, lCustomerEmail, tfCustomerEmail,bAdvancedSearchCustomer, bSearchCustomer);
+        vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerName, tfCustomerName, lCustomerId,
+                tfCustomerId, lCustomerEmail, tfCustomerEmail, bAdvancedSearchCustomer, bSearchCustomer);
 
-        hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerInfoLeft,vBoxCustomerInfoRight);
+        hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerInfoLeft, vBoxCustomerInfoRight);
 
-        vBoxCustomerInfoLeft.getChildren().addAll(lCustomerInfoAddress,tfCustomerInfoAddress, lCustomerInfoCity,tfCustomerInfoCity,
-                lCustomerInfoPhone,tfCustomerInfoPhone);
+        vBoxCustomerInfoLeft.getChildren().addAll(lCustomerInfoAddress, tfCustomerInfoAddress, lCustomerInfoCity, tfCustomerInfoCity,
+                lCustomerInfoPhone, tfCustomerInfoPhone);
 
         vBoxCustomerInfoRight.getChildren().addAll(lCustomerInfoRegistered,
-                tfCustomerInfoRegistered, lCustomerInfoActive,tfCustomerInfoActive, lCustomerInfoUpdate,tfCustomerInfoUpdate,
-                lCustomerInfoStoreId,tfCustomerInfoStoreId);
+                tfCustomerInfoRegistered, lCustomerInfoActive, tfCustomerInfoActive, lCustomerInfoUpdate, tfCustomerInfoUpdate,
+                lCustomerInfoStoreId, tfCustomerInfoStoreId);
 
         //Add to borderPane
         borderPane.setTop(menuBar);
@@ -319,8 +339,77 @@ public class Main extends Application {
         borderPane.setRight(vBoxRight);
         borderPane.setCenter(vBoxCenter);
 
-        Scene scene = new Scene(borderPane,1200,900);
+        //TEEEEEEST--------------------------------------------------------------------------
+
+
+        Stage loginStage = new Stage();
+        loginStage.setTitle("Logga in");
+
+        BorderPane borderPaneLogin = new BorderPane();
+        Scene loginScen = new Scene(borderPaneLogin,400,400);
+        borderPaneLogin.setPadding(new Insets(20));
+
+
+        //TextFeilds
+        TextField tfUsername = new TextField();
+        tfUsername.setPromptText("Användarnamn");
+        TextField tfPassword = new PasswordField();
+        tfPassword.setPromptText("Lösenord");
+
+        //Text
+        Label tWelcome = new Label("Välkommen");
+        tWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
+        tWelcome.setPadding(new Insets(0, 0, 30, 0));
+        //Labels
+        Label lUsername = new Label("Användarnamn");
+        lUsername.setFont(Font.font(18));
+        Label lPassword = new Label("Lösenord");
+        lPassword.setFont(Font.font(18));
+
+        //Button
+        Button bLogin = new Button("Logga in");
+        Button bCancel = new Button("Avbryt");
+
+        //Boxjävlar
+        VBox vBoxtfLogin = new VBox(tfUsername,tfPassword);
+        VBox vBoxLLogin = new VBox(lUsername,lPassword);
+        vBoxLLogin.setPadding(new Insets(10));
+        vBoxtfLogin.setPadding(new Insets(10));
+
+        HBox hBoxButtons = new HBox(bLogin,bCancel);
+        hBoxButtons.setSpacing(10);
+        hBoxButtons.setPadding(new Insets(10, 0, 0, 95));
+
+        HBox hBoxLogin = new HBox(vBoxLLogin,vBoxtfLogin);
+
+        VBox vBoxAllOfLogin = new VBox(tWelcome,hBoxLogin,hBoxButtons);
+
+        //Buttons action
+        bCancel.setOnAction(event -> {
+            tfUsername.clear();
+            tfPassword.clear();
+        });
+        bLogin.setOnAction(event -> {
+            login.login(tfUsername,tfPassword,primaryStage,loginStage);
+            tfPassword.clear();
+            tfUsername.clear();
+        });
+
+        //Position of boxes
+        hBoxButtons.setAlignment(Pos.CENTER_LEFT);
+        hBoxButtons.setAlignment(Pos.BOTTOM_CENTER);
+        borderPaneLogin.setCenter(vBoxAllOfLogin);
+        vBoxAllOfLogin.setAlignment(Pos.CENTER);
+
+
+        loginStage.setScene(loginScen);
+        loginStage.show();
+
+
+        ///---------------------------------------------------------------------------------------
+        Scene scene = new Scene(borderPane, 1200, 900);
         primaryStage.setScene(scene);
-        primaryStage.show();
+        //primaryStage.show();
+
     }
 }
