@@ -2,6 +2,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javax.persistence.*;
@@ -81,7 +82,7 @@ public class Fetch {
                     " JOIN language l ON film.language_id = l.language_id" +
                     " JOIN film_actor fa ON film.film_id = fa.film_id" +
                     " JOIN actor a ON fa.actor_id = a.actor_id" +
-                    createSearchCriteria(vBox) +
+                    createSearchCriteria(vBox, "") +
                     " GROUP BY film.film_id;" );
             List<String>list = query.getResultList();
             ol.clear();
@@ -100,31 +101,27 @@ public class Fetch {
     }
 
     /**
-     * Searches all data in children to a VBox and returns a string with searchCriteria for sql
-     * @param box Vbox containing information
+     * Searches all data in children to a Pane and returns a string with searchCriteria formatted for sql
+     * @param box Pane (parent to VBox and HBox) containing the searchable information
+     * @param sSearchCriteria string to add search criteria
      * @return search criteria
      */
-    public String createSearchCriteria (VBox box) {
-        String sSearchCriteria ="";
-
+    public String createSearchCriteria (Pane box, String sSearchCriteria) {
         for (int i = 0; i < box.getChildren().size(); i++) {
-            if (box.getChildren().get(i) instanceof VBox || box.getChildren().get(i) instanceof HBox)
+            if (box.getChildren().get(i) instanceof Pane)
             {
-                //Enter box to find children there
-                //searchCriteria += createSearchCriteria(box.getChildren().get(i)); //-ish
+                sSearchCriteria = createSearchCriteria((Pane) box.getChildren().get(i), sSearchCriteria);
             }
             //See if object is a textfield
             if(box.getChildren().get(i) instanceof TextField){
                 String sTextField = ((TextField) box.getChildren().get(i)).getText().trim();
 
-                if(sTextField.equals("")) {
-                    System.out.println("Nothing here");
-                }
-                else {
+                if(!sTextField.equals("")) {
                     if (sSearchCriteria.equals(""))
                         sSearchCriteria += " WHERE ";
                     else
                         sSearchCriteria += " AND ";
+
                     //exact search and not surrounded by '' (int and date)
                     if (box.getChildren().get(i).getId().contains("id") || box.getChildren().get(i).getId().contains("update"))
                         sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")

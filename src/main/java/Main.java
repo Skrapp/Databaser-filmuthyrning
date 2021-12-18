@@ -284,7 +284,7 @@ public class Main extends Application {
         });
 
         bSearchMovie.setOnAction(event -> {
-            fetch.searchFromDatabase(vBoxMovieInfoLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+            fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
 
         //Add to boxes
