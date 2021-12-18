@@ -1,4 +1,5 @@
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -80,7 +81,7 @@ public class Fetch {
                     " JOIN language l ON film.language_id = l.language_id" +
                     " JOIN film_actor fa ON film.film_id = fa.film_id" +
                     " JOIN actor a ON fa.actor_id = a.actor_id" +
-                    " WHERE " + createSearchCriteria(vBox) +
+                    createSearchCriteria(vBox) +
                     " GROUP BY film.film_id;" );
             List<String>list = query.getResultList();
             ol.clear();
@@ -104,7 +105,7 @@ public class Fetch {
      * @return search criteria
      */
     public String createSearchCriteria (VBox box) {
-        String searchCriteriaS ="";
+        String sSearchCriteria ="";
 
         for (int i = 0; i < box.getChildren().size(); i++) {
             if (box.getChildren().get(i) instanceof VBox || box.getChildren().get(i) instanceof HBox)
@@ -112,21 +113,45 @@ public class Fetch {
                 //Enter box to find children there
                 //searchCriteria += createSearchCriteria(box.getChildren().get(i)); //-ish
             }
-            //Se if object is a textfield
+            //See if object is a textfield
             if(box.getChildren().get(i) instanceof TextField){
-                if (searchCriteriaS != "")
-                    searchCriteriaS += " AND ";
-                //exact search and not surrounded by '' (int and date)
-                if ( box.getChildren().get(i).getId().equals("film.film_id") || box.getChildren().get(i).getId().equals("film.last_update"))
-                    searchCriteriaS += box.getChildren().get(i).getId().concat(" = ")
-                            .concat(((TextField) box.getChildren().get(i)).getText().trim());
+                String sTextField = ((TextField) box.getChildren().get(i)).getText().trim();
 
-                else
-                searchCriteriaS += box.getChildren().get(i).getId().concat(" like '%")
-                        .concat(((TextField) box.getChildren().get(i)).getText().trim()).concat("%'");
+                if(sTextField.equals("")) {
+                    System.out.println("Nothing here");
+                }
+                else {
+                    if (sSearchCriteria.equals(""))
+                        sSearchCriteria += " WHERE ";
+                    else
+                        sSearchCriteria += " AND ";
+                    //exact search and not surrounded by '' (int and date)
+                    if (box.getChildren().get(i).getId().contains("id") || box.getChildren().get(i).getId().contains("update"))
+                        sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
+                                .concat(sTextField);
+                    //Search with "like '% %'"
+                    else
+                        sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")
+                                .concat(sTextField).concat("%'");
+                }
             }
-            System.out.println(searchCriteriaS); //Debug
+            //See if object is combobox
+            if(box.getChildren().get(i) instanceof ComboBox){
+                String sSelectedItem = (String) ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem();
+                System.out.println(sSelectedItem);
+                if (sSelectedItem != null) {
+                    if (sSearchCriteria.equals(""))
+                        sSearchCriteria += " WHERE ";
+                    else
+                        sSearchCriteria += " AND ";
+                    //exact search and surrounded by ''
+                    sSearchCriteria += box.getChildren().get(i).getId().concat(" = '")
+                            .concat(sSelectedItem).concat("'");
+                }
+            }
+
+            System.out.println(sSearchCriteria); //Debug
         }
-        return searchCriteriaS;
+        return sSearchCriteria;
     }
 }

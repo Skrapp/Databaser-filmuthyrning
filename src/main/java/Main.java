@@ -248,6 +248,7 @@ public class Main extends Application {
         tfMovieInfoLastUpdate.setId("film.last_update"); //
         tfMovieInfoTest.setId("test");
         cbCategory.setId("category");
+        cbLanguages.setId("l.name");
 
         VBox vboxTest = new VBox();
         vboxTest.getChildren().addAll(lTest);
