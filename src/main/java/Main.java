@@ -17,13 +17,13 @@ public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
     final ObservableList olCategory = FXCollections.observableArrayList(
-            "Här",
-            "och här" //Om vi ska lägga in dom manuellt alltså.
+            "","Här",
+            "och här" //Om vi ska lägga in dom manuellt
     );
-    final ObservableList olLanguages = FXCollections.observableArrayList();
+    final ObservableList olLanguages = FXCollections.observableArrayList("");
     final ObservableList olStaff = FXCollections.observableArrayList();
-    final ObservableList olSearchResults = FXCollections.observableArrayList();
-    final ObservableList olRating = FXCollections.observableArrayList();
+    final ObservableList olSearchResults = FXCollections.observableArrayList("");
+    final ObservableList olRating = FXCollections.observableArrayList("");
 
     public static void main(String[] args) {
         launch(args);
@@ -187,7 +187,8 @@ public class Main extends Application {
         //-----------------------------
         //Checkboxes
         //SpecialFeatures and InStore
-
+        CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
+        CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
         //-----------------------------
         //Slides
         //RentalRate, Length, rentalDuration and ReplacementCost
@@ -251,10 +252,7 @@ public class Main extends Application {
         tfMovieSearchId.setId("film.film_id");
         tfMovieSearchDescription.setId("description");
         tfMovieSearchActors.setId("a.first_name"); //Hur ska man få in både för- och efternamn på en och samma?
-        cbMovieSearchOriginalLanguage.setId("l.name");
-        cbMovieSearchLanguages.setId("l.name");
         tfMovieSearchLength.setId("length");
-        cbMovieSearchRating.setId("rating");
         tfMovieSearchRentalCost.setId("rental_rate");
         tfMovieSearchReplacementCost.setId("replacement_cost");
         tfMovieSearchInStore.setId("title");
@@ -262,7 +260,12 @@ public class Main extends Application {
         tfMovieSearchRentalDuration.setId("rental_duration");
         tfMovieSearchLastUpdate.setId("film.last_update"); //
         tfMovieSearchTest.setId("test");
-        cbMovieSearchCategory.setId("category");
+        cbMovieSearchRating.setId("rating");
+        cbMovieSearchOriginalLanguage.setId("l.name");
+        cbMovieSearchLanguages.setId("l.name");
+        cbMovieSearchCategory.setId("c.name");
+        chbMovieSearchSFTrailers.setId("film.special_features,trailers");
+        chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
 
         //Customer
         tfCustomerSearchName.setId("customer.first_name");
@@ -278,6 +281,7 @@ public class Main extends Application {
 
         HBox hboxTest = new HBox();
         hboxTest.getChildren().addAll(tfMovieSearchTest);
+
 
         //Popup
         //Movie - Add
@@ -307,6 +311,7 @@ public class Main extends Application {
             }
         });
 
+
         bSearchMovie.setOnAction(event -> {
             fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
@@ -326,9 +331,9 @@ public class Main extends Application {
                 lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate, bCreateMovie);
 
 
-        //Movie
+        //Movie Search
         vBoxMovieSearch.getChildren().addAll(lMovieHeader, lMovieSearchTitle, tfMovieSearchTitle,lMovieSearchRentalCost,
-                tfMovieSearchRentalCost,cbMovieSearchCategory, bAdvancedSearchMovies,bSearchMovie);
+                tfMovieSearchRentalCost,cbMovieSearchCategory, chbMovieSearchInStore, bAdvancedSearchMovies,bSearchMovie);
 
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieSearchLeft, vBoxMovieSearchRight);
 
@@ -336,18 +341,18 @@ public class Main extends Application {
                 lMovieSearchLength,tfMovieSearchLength,cbMovieSearchRating,cbMovieSearchOriginalLanguage,
                 lMovieSearchReleaseDate,tfMovieSearchReleaseDate,cbMovieSearchLanguages);
 
-        vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,tfMovieSearchSpecialFeatures,
+        vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,tfMovieSearchSpecialFeatures,
                 lMovieSearchRentalDuration,tfMovieSearchRentalDuration, lMovieSearchReplacementCost,tfMovieSearchReplacementCost,
                 lMovieSearchInStore,tfMovieSearchInStore, lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
-        //Customer
+        //Customer Search
         vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerSearchName, tfCustomerSearchName,lCustomerSearchId,
                 tfCustomerSearchId, lCustomerSearchEmail, tfCustomerSearchEmail,bAdvancedSearchCustomer, bSearchCustomer);
 
         hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerSearchLeft,vBoxCustomerSearchRight);
 
-        vBoxCustomerSearchLeft.getChildren().addAll(lCustomerSearchAddress,tfCustomerSearchAddress, lCustomerSearchCity,tfCustomerSearchCity,
-                lCustomerSearchPhone,tfCustomerSearchPhone);
+        vBoxCustomerSearchLeft.getChildren().addAll(lCustomerSearchAddress,tfCustomerSearchAddress, lCustomerSearchCity,
+                tfCustomerSearchCity, lCustomerSearchPhone,tfCustomerSearchPhone);
 
         vBoxCustomerSearchRight.getChildren().addAll(lCustomerSearchRegistered,
                 tfCustomerSearchRegistered, lCustomerSearchActive,tfCustomerSearchActive, lCustomerSearchUpdate,tfCustomerSearchUpdate,
