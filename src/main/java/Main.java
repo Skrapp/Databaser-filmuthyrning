@@ -39,8 +39,6 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         Fetch fetch = new Fetch();
         FXBuilder fxBuilder = new FXBuilder();
-        Login login = new Login();
-
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
@@ -422,7 +420,7 @@ public class Main extends Application {
             tfPassword.clear();
         });
         bLogin.setOnAction(event -> {
-            login.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
+            fetch.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
             tfPassword.clear();
             tfUsername.clear();
         });
