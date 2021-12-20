@@ -18,8 +18,8 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery("SELECT "+ column +" FROM "+ table +" GROUP BY " + column + ";");
-            List<String>list = query.getResultList();
-            for (String p : list){
+            List<Object>list = query.getResultList();
+            for (Object p : list){
                 ol.add(p);
             }
             transaction.commit();
@@ -60,13 +60,13 @@ public class Fetch {
     }
 
     /**
-     * @param vBox vBox containing searchable data
+     * @param box vBox containing searchable data
      * @param ol where data is saved
      * @param em entity manager factory
      * @param column what column in table to show in search results
      * @param table what table in database to use
      */
-    public void searchFromDatabase(VBox vBox, ObservableList ol, EntityManagerFactory em, String column, String table){
+    public void searchFromDatabase(Pane box, ObservableList ol, EntityManagerFactory em, String column, String table, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
 
@@ -78,16 +78,12 @@ public class Fetch {
             Query query = entityManager.createNativeQuery(
                     "SELECT " + column +
                     " FROM " + table +
-                    " JOIN language l ON film.language_id = l.language_id" +
-                    " JOIN film_actor fa ON film.film_id = fa.film_id" +
-                    " JOIN actor a ON fa.actor_id = a.actor_id" +
-                    " JOIN film_category fc ON film.film_id = fc.film_id" +
-                    " JOIN category c ON fc.category_id = c.category_id" +
-                    " JOIN inventory i ON film.film_id = i.film_id" +
-                    " JOIN rental r ON i.inventory_id = r.inventory_id" +
-                    createSearchCriteria(vBox, "") +
-                    " GROUP BY film.film_id" +
-                    " ORDER BY " + table + "." + column +";");
+                    join +
+                    createSearchCriteria(box, "") +
+                    " GROUP BY " + table + "." + table + "_id" +
+                    " ORDER BY " + table + "." + column +";"
+            );
+
             List<String>list = query.getResultList();
             ol.clear();
             for(String s : list){
@@ -149,9 +145,9 @@ public class Fetch {
             }
             //See if object is combobox
             if(box.getChildren().get(i) instanceof ComboBox){
-                String sSelectedItem = (String) ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem();
-                System.out.println(sSelectedItem);
-                if (sSelectedItem != null) {
+                if (((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem() != null) {
+                    String sSelectedItem = ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem().toString();
+
                     if (sSearchCriteria.equals(""))
                         sSearchCriteria += " WHERE ";
                     else

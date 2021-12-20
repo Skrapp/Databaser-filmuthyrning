@@ -12,18 +12,20 @@ import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.Optional;
 
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
     final ObservableList olCategory = FXCollections.observableArrayList(
-            "","Här",
+            "Här",
             "och här" //Om vi ska lägga in dom manuellt
     );
-    final ObservableList olLanguages = FXCollections.observableArrayList("");
+    final ObservableList olLanguages = FXCollections.observableArrayList();
     final ObservableList olStaff = FXCollections.observableArrayList();
-    final ObservableList olSearchResults = FXCollections.observableArrayList("");
-    final ObservableList olRating = FXCollections.observableArrayList("");
+    final ObservableList olSearchResults = FXCollections.observableArrayList();
+    final ObservableList olRating = FXCollections.observableArrayList();
+    final ObservableList olStores = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
         launch(args);
@@ -47,6 +49,10 @@ public class Main extends Application {
         ComboBox cbMovieSearchOriginalLanguage = new ComboBox(olLanguages);
         cbMovieSearchOriginalLanguage.setPromptText("Originalspråk");
 
+        //Customer Search
+        ComboBox cbCustomerSearchStoreId = new ComboBox(olStores);
+        cbMovieSearchOriginalLanguage.setPromptText("Butik ID");
+
         //Movie add
         ComboBox cbMovieAddCategory = new ComboBox(olCategory);
         cbMovieAddCategory.setPromptText("Kategori");
@@ -57,6 +63,7 @@ public class Main extends Application {
         fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
         fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
         fetch.addToComboList(olRating, ENTITY_MANAGER_FACTORY,"rating","film");
+        fetch.addToComboList(olStores, ENTITY_MANAGER_FACTORY,"store_id","store");
 
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
@@ -189,9 +196,9 @@ public class Main extends Application {
         //SpecialFeatures and InStore
         CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
         CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
+        CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
         //-----------------------------
-        //Slides
-        //RentalRate, Length, rentalDuration and ReplacementCost
+
 
 
         //Textfields
@@ -254,11 +261,9 @@ public class Main extends Application {
         tfCustomerSearchEmail.setPromptText("Kundmail");
         TextField tfCustomerSearchCity = new TextField();
         tfCustomerSearchCity.setPromptText("Stad");
-        TextField tfCustomerSearchStoreId = new TextField();
         TextField tfCustomerSearchAddress = new TextField();
         TextField tfCustomerSearchPhone = new TextField();
         TextField tfCustomerSearchRegistered = new TextField();
-        TextField tfCustomerSearchActive = new TextField();
         TextField tfCustomerSearchUpdate = new TextField();
 
         //Add ID to text fields
@@ -276,10 +281,12 @@ public class Main extends Application {
         tfMovieSearchRentalCostMax.setId("film.rental_rate,max_value");
         tfMovieSearchRentalCostMin.setId("film.rental_rate,min_value");
         tfMovieSearchLastUpdate.setId("film.last_update"); //
+
         cbMovieSearchRating.setId("film.rating");
         cbMovieSearchOriginalLanguage.setId("l.name");
         cbMovieSearchLanguages.setId("l.name");
         cbMovieSearchCategory.setId("c.name");
+
         chbMovieSearchSFTrailers.setId("film.special_features,trailers");
         chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
 
@@ -289,17 +296,33 @@ public class Main extends Application {
         tfCustomerSearchName.setId("customer.first_name");
         tfCustomerSearchId.setId("customer.customer_id");
         tfCustomerSearchEmail.setId("customer.email");
-        tfCustomerSearchCity.setId("city.city");
-        tfCustomerSearchStoreId.setId("customer.store_id");
+        tfCustomerSearchCity.setId("ci.city");
         tfCustomerSearchAddress.setId("a.address");
         tfCustomerSearchPhone.setId("a.phone");
         tfCustomerSearchRegistered.setId("customer.create_date");
-        tfCustomerSearchActive.setId("customer.active");
         tfCustomerSearchUpdate.setId("customer.last_update");
+
+        cbCustomerSearchStoreId.setId("customer.store_id");
+
+        chbCustomerSearchActive.setId("customer.active,1");
 
         HBox hboxTest = new HBox();
         hboxTest.getChildren().addAll(tfTest);
 
+        //Join text for mySQL for search
+        String sMovieJoin =
+                " JOIN language l ON film.language_id = l.language_id" +
+                " JOIN film_actor fa ON film.film_id = fa.film_id" +
+                " JOIN actor a ON fa.actor_id = a.actor_id" +
+                " JOIN film_category fc ON film.film_id = fc.film_id" +
+                " JOIN category c ON fc.category_id = c.category_id" +
+                " JOIN inventory i ON film.film_id = i.film_id" +
+                " JOIN rental r ON i.inventory_id = r.inventory_id";
+
+        String sCustomerJoin =
+                " JOIN address a ON customer.address_id = a.address_id"+
+                " JOIN city ci ON ci.city_id = a.city_id"
+                ;
 
         //Popup
         //Movie - Add
@@ -331,8 +354,12 @@ public class Main extends Application {
 
 
         bSearchMovie.setOnAction(event -> {
-            fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
+            fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film", sMovieJoin);
         });
+
+        bSearchCustomer.setOnAction(event -> {
+                fetch.searchFromDatabase(vBoxRight,olSearchResults,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
+    });
 
         //Add to boxes
         vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
@@ -361,8 +388,8 @@ public class Main extends Application {
                 lMovieSearchReleaseDate,tfMovieSearchReleaseDate);
 
         vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
-                lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,tfMovieSearchReplacementCostMin,
-                tfMovieSearchReplacementCostMax,lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
+                lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,
+                tfMovieSearchReplacementCostMin,tfMovieSearchReplacementCostMax,lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
         //Customer Search
         vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerSearchName, tfCustomerSearchName,lCustomerSearchId,
@@ -371,11 +398,11 @@ public class Main extends Application {
         hBoxAdvancedSearchCustomer.getChildren().addAll(vBoxCustomerSearchLeft,vBoxCustomerSearchRight);
 
         vBoxCustomerSearchLeft.getChildren().addAll(lCustomerSearchAddress,tfCustomerSearchAddress, lCustomerSearchCity,
-                tfCustomerSearchCity, lCustomerSearchPhone,tfCustomerSearchPhone);
+                tfCustomerSearchCity, lCustomerSearchPhone,tfCustomerSearchPhone, chbCustomerSearchActive);
 
-        vBoxCustomerSearchRight.getChildren().addAll(lCustomerSearchRegistered,
-                tfCustomerSearchRegistered, lCustomerSearchActive,tfCustomerSearchActive, lCustomerSearchUpdate,tfCustomerSearchUpdate,
-                lCustomerSearchStoreId,tfCustomerSearchStoreId);
+        vBoxCustomerSearchRight.getChildren().addAll(lCustomerSearchRegistered,tfCustomerSearchRegistered, lCustomerSearchUpdate,
+                tfCustomerSearchUpdate,lCustomerSearchStoreId,cbCustomerSearchStoreId);
+
 
         //Add to borderPane
         borderPane.setTop(menuBar);
