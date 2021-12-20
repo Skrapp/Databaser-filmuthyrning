@@ -7,17 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.Current;
+
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Optional;
+
 
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -36,7 +33,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Stage loginStage = new Stage();
+        Stage loginStage = new Stage(); //To login
 
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
@@ -86,11 +83,11 @@ public class Main extends Application {
 
         VBox vBoxLeft = new VBox();
 
-        //NYA Logout och EXIT
+        //Logout och EXIT
         VBox vBoxExit = new VBox();
-        vBoxExit.setPadding(new Insets(40));
+        vBoxExit.setPadding(new Insets(10));
         VBox vBoxLogout = new VBox();
-        vBoxLogout.setPadding(new Insets(40));
+        vBoxLogout.setPadding(new Insets(10));
         HBox hBoxLogout = new HBox();
         hBoxLogout.setSpacing(10);
         hBoxLogout.setPadding(new Insets(10, 0, 0, 0));
@@ -120,7 +117,7 @@ public class Main extends Application {
         //Meny
         MenuBar menuBar = new MenuBar();
         Menu mbFile = new Menu("Arkiv");
-        MenuItem miFileLogOut = new MenuItem("Byt användare");
+        MenuItem miFileLogOut = new MenuItem("Logga ut");
         MenuItem miFileOptions = new MenuItem("Alternativ");
         MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
         MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
@@ -199,7 +196,7 @@ public class Main extends Application {
         Label lCustomerInfoUpdate = new Label("Uppdaterad");
         Label lTest = new Label("Funka då!");
 
-        // NYA
+        //File
         Label lConfirmLogout = new Label("Är du säker?");
         Label lConfirmExit = new Label("Är du säker?");
 
@@ -278,7 +275,7 @@ public class Main extends Application {
             fxBuilder.createPopUp(hboxTest);
         });
 
-        //Arkiv
+        //Menu - File
         miFileLogOut.setOnAction(event -> {
             fxBuilder.createPopUp(vBoxLogout);
         });
@@ -342,16 +339,12 @@ public class Main extends Application {
                 lMovieAddInStore, tfMovieAddInStore, lMovieAddLastUpdate, tfMovieAddLastUpdate, bCreateMovie);
 
         //Logout
-
         hBoxLogout.getChildren().addAll(bConfirmLogout,bCancelLogout);
         vBoxLogout.getChildren().addAll(lConfirmLogout,hBoxLogout);
 
         //Exit
-
         hBoxExit.getChildren().addAll(bConfirmExit,bCancelExit);
         vBoxExit.getChildren().addAll(lConfirmExit,hBoxExit);
-
-
 
         //Movie
         vBoxMovieSearch.getChildren().addAll(lMovieHeader, lSearchTitle, tfSearch, lMovieInfoRentalCost, tfMovieInfoRentalCost,
@@ -386,28 +379,23 @@ public class Main extends Application {
         borderPane.setRight(vBoxRight);
         borderPane.setCenter(vBoxCenter);
 
-        //TEEEEEEST--------------------------------------------------------------------------
-
-
+        //Test Login--------------------------------------------------------------------
 
         loginStage.setTitle("Logga in");
-
         BorderPane borderPaneLogin = new BorderPane();
         Scene loginScen = new Scene(borderPaneLogin,400,400);
         borderPaneLogin.setPadding(new Insets(20));
 
-
-        //TextFeilds
+        //TextFields
         TextField tfUsername = new TextField();
         tfUsername.setPromptText("Användarnamn");
         TextField tfPassword = new PasswordField();
         tfPassword.setPromptText("Lösenord");
 
-        //Text
-        Label tWelcome = new Label("Välkommen");
-        tWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
-        tWelcome.setPadding(new Insets(0, 0, 30, 0));
         //Labels
+        Label lWelcome = new Label("Välkommen");
+        lWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
+        lWelcome.setPadding(new Insets(0, 0, 30, 0));
         Label lUsername = new Label("Användarnamn");
         lUsername.setFont(Font.font(18));
         Label lPassword = new Label("Lösenord");
@@ -417,19 +405,16 @@ public class Main extends Application {
         Button bLogin = new Button("Logga in");
         Button bCancel = new Button("Avbryt");
 
-        //Boxjävlar
+        //Boxes
         VBox vBoxtfLogin = new VBox(tfUsername,tfPassword);
         VBox vBoxLLogin = new VBox(lUsername,lPassword);
         vBoxLLogin.setPadding(new Insets(10));
         vBoxtfLogin.setPadding(new Insets(10));
-
         HBox hBoxButtons = new HBox(bLogin,bCancel);
         hBoxButtons.setSpacing(10);
         hBoxButtons.setPadding(new Insets(10, 0, 0, 95));
-
         HBox hBoxLogin = new HBox(vBoxLLogin,vBoxtfLogin);
-
-        VBox vBoxAllOfLogin = new VBox(tWelcome,hBoxLogin,hBoxButtons);
+        VBox vBoxAllOfLogin = new VBox(lWelcome,hBoxLogin,hBoxButtons);
 
         //Buttons action
         bCancel.setOnAction(event -> {
@@ -437,7 +422,7 @@ public class Main extends Application {
             tfPassword.clear();
         });
         bLogin.setOnAction(event -> {
-            login.login(tfUsername,tfPassword,primaryStage,loginStage);
+            login.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
             tfPassword.clear();
             tfUsername.clear();
         });
@@ -447,7 +432,6 @@ public class Main extends Application {
         hBoxButtons.setAlignment(Pos.BOTTOM_CENTER);
         borderPaneLogin.setCenter(vBoxAllOfLogin);
         vBoxAllOfLogin.setAlignment(Pos.CENTER);
-
 
         loginStage.setScene(loginScen);
         loginStage.show();

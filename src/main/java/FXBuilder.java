@@ -7,7 +7,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class FXBuilder {
-    public Popup createPopUp(VBox vBox){
+    public void createPopUp(VBox vBox){
         Stage stage = new Stage();
         Popup p = new Popup();
             vBox.setPadding(new Insets(10));
@@ -20,7 +20,6 @@ public class FXBuilder {
             p.setOnCloseRequest(e -> stage.close());
 
 
-        return p;
     }
 
     public void createPopUp(HBox hBox){
