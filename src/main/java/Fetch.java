@@ -131,6 +131,16 @@ public class Fetch {
                     if (box.getChildren().get(i).getId().contains("id") || box.getChildren().get(i).getId().contains("update"))
                         sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
                                 .concat(sTextField);
+                    //Max search
+                    else if(box.getChildren().get(i).getId().contains("max_value")){
+                        sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" <= ")
+                                .concat(sTextField);
+                    }
+                    //Min search
+                    else if(box.getChildren().get(i).getId().contains("min_value")){
+                        sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" >= ")
+                                .concat(sTextField);
+                    }
                     //Search with "like '% %'"
                     else
                         sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")

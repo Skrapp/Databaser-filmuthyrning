@@ -203,16 +203,26 @@ public class Main extends Application {
         TextField tfMovieSearchReleaseDate = new TextField();
         tfMovieSearchReleaseDate.setPromptText("yyyy-mm-dd");
         TextField tfMovieSearchId = new TextField();
+        tfMovieSearchId.setPromptText("Film ID");
         TextField tfMovieSearchDescription = new TextField();
+        tfMovieSearchDescription.setPromptText("Beskrivning");
         TextField tfMovieSearchActors = new TextField();
+        tfMovieSearchActors.setPromptText("Skådespelare förnamn");
         TextField tfMovieSearchLength = new TextField();
-        TextField tfMovieSearchRentalCost = new TextField();
-        TextField tfMovieSearchReplacementCost = new TextField();
-        TextField tfMovieSearchInStore = new TextField();
-        TextField tfMovieSearchSpecialFeatures = new TextField();
-        TextField tfMovieSearchRentalDuration = new TextField();
+        tfMovieSearchLength.setPromptText("Spellängd");
+        TextField tfMovieSearchRentalCostMin = new TextField();
+        tfMovieSearchRentalCostMin.setPromptText("Minsta hyreskostnaden");
+        TextField tfMovieSearchReplacementCostMin = new TextField();
+        tfMovieSearchReplacementCostMin.setPromptText("Minsta ersättningskostnaden");
+        TextField tfMovieSearchRentalDurationMin = new TextField();
+        tfMovieSearchRentalDurationMin.setPromptText("Kortaste hyrestiden");
+        TextField tfMovieSearchRentalDurationMax = new TextField();
+        tfMovieSearchRentalDurationMax.setPromptText("Längsta hyrestiden");
         TextField tfMovieSearchLastUpdate = new TextField();
-        TextField tfMovieSearchTest = new TextField();
+        tfMovieSearchLastUpdate.setPromptText("yyyy-mm-dd");
+
+        TextField tfTest = new TextField();
+
 
         //Movie add
         TextField tfAddTitle = new TextField();
@@ -248,24 +258,26 @@ public class Main extends Application {
         //Add ID to text fields
         //Movie
         tfMovieSearchTitle.setId("title");
-        tfMovieSearchRentalCost.setId("rental_rate");
+        tfMovieSearchRentalCostMin.setId("rental_rate");
         tfMovieSearchId.setId("film.film_id");
         tfMovieSearchDescription.setId("description");
         tfMovieSearchActors.setId("a.first_name"); //Hur ska man få in både för- och efternamn på en och samma?
         tfMovieSearchLength.setId("length");
-        tfMovieSearchRentalCost.setId("rental_rate");
-        tfMovieSearchReplacementCost.setId("replacement_cost");
-        tfMovieSearchInStore.setId("title");
-        tfMovieSearchSpecialFeatures.setId("special_features");
-        tfMovieSearchRentalDuration.setId("rental_duration");
+        tfMovieSearchRentalCostMin.setId("rental_rate");
+        tfMovieSearchReplacementCostMin.setId("replacement_cost");
+        tfMovieSearchRentalDurationMin.setId("rental_duration,min_value");
+        tfMovieSearchRentalDurationMax.setId("rental_duration,max_value");
         tfMovieSearchLastUpdate.setId("film.last_update"); //
-        tfMovieSearchTest.setId("test");
+        tfTest.setId("test");
         cbMovieSearchRating.setId("rating");
         cbMovieSearchOriginalLanguage.setId("l.name");
         cbMovieSearchLanguages.setId("l.name");
         cbMovieSearchCategory.setId("c.name");
         chbMovieSearchSFTrailers.setId("film.special_features,trailers");
         chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
+        tfMovieSearchRentalDurationMax.setId("rental_duration,max_value");
+        tfMovieSearchRentalDurationMin.setId("rental_duration,min_value");
+
 
         //Customer
         tfCustomerSearchName.setId("customer.first_name");
@@ -280,7 +292,7 @@ public class Main extends Application {
         tfCustomerSearchUpdate.setId("customer.last_update");
 
         HBox hboxTest = new HBox();
-        hboxTest.getChildren().addAll(tfMovieSearchTest);
+        hboxTest.getChildren().addAll(tfTest);
 
 
         //Popup
@@ -333,7 +345,7 @@ public class Main extends Application {
 
         //Movie Search
         vBoxMovieSearch.getChildren().addAll(lMovieHeader, lMovieSearchTitle, tfMovieSearchTitle,lMovieSearchRentalCost,
-                tfMovieSearchRentalCost,cbMovieSearchCategory, chbMovieSearchInStore, bAdvancedSearchMovies,bSearchMovie);
+                tfMovieSearchRentalCostMin,cbMovieSearchCategory, chbMovieSearchInStore, bAdvancedSearchMovies,bSearchMovie);
 
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieSearchLeft, vBoxMovieSearchRight);
 
@@ -341,9 +353,9 @@ public class Main extends Application {
                 lMovieSearchLength,tfMovieSearchLength,cbMovieSearchRating,cbMovieSearchOriginalLanguage,
                 lMovieSearchReleaseDate,tfMovieSearchReleaseDate,cbMovieSearchLanguages);
 
-        vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,tfMovieSearchSpecialFeatures,
-                lMovieSearchRentalDuration,tfMovieSearchRentalDuration, lMovieSearchReplacementCost,tfMovieSearchReplacementCost,
-                lMovieSearchInStore,tfMovieSearchInStore, lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
+        vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
+                lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,tfMovieSearchReplacementCostMin,
+                lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
         //Customer Search
         vBoxCustomerSearch.getChildren().addAll(lCustomerHeader, lCustomerSearchName, tfCustomerSearchName,lCustomerSearchId,
