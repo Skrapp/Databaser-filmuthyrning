@@ -33,6 +33,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        olCategory.add(0,null);
+
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
         Fetch fetch = new Fetch();
@@ -105,8 +107,8 @@ public class Main extends Application {
         Button bUpdateMovie = new Button("Redigera");
         Button bRentMovie = new Button("Hyra");
         Button bReturnMovie = new Button("Lämna tillbaka");
-
-
+        Button bCustomerSearchClear= new Button("Töm sökning");
+        Button bMovieSearchClear= new Button("Töm sökning");
 
         //Meny
         MenuBar menuBar = new MenuBar();
@@ -207,8 +209,8 @@ public class Main extends Application {
         tfMovieSearchTitle.setPromptText("Sök");
         TextField tfMovieSearchActor = new TextField();
         tfMovieSearchActor.setPromptText("Skådespelare");
-        TextField tfMovieSearchReleaseDate = new TextField();
-        tfMovieSearchReleaseDate.setPromptText("yyyy-mm-dd");
+        TextField tfMovieSearchReleaseYear = new TextField();
+        tfMovieSearchReleaseYear.setPromptText("yyyy");
         TextField tfMovieSearchId = new TextField();
         tfMovieSearchId.setPromptText("Film ID");
         TextField tfMovieSearchDescription = new TextField();
@@ -281,6 +283,7 @@ public class Main extends Application {
         tfMovieSearchRentalCostMax.setId("film.rental_rate,max_value");
         tfMovieSearchRentalCostMin.setId("film.rental_rate,min_value");
         tfMovieSearchLastUpdate.setId("film.last_update"); //
+        tfMovieSearchReleaseYear.setId("film.release_year"); //
 
         cbMovieSearchRating.setId("film.rating");
         cbMovieSearchOriginalLanguage.setId("l.name");
@@ -358,13 +361,21 @@ public class Main extends Application {
         });
 
         bSearchCustomer.setOnAction(event -> {
-                fetch.searchFromDatabase(vBoxRight,olSearchResults,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
-    });
+            fetch.searchFromDatabase(vBoxRight,olSearchResults,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
+        });
+
+        bMovieSearchClear.setOnAction(event -> {
+            fxBuilder.clearFields(vBoxLeft);
+        });
+
+        bCustomerSearchClear.setOnAction(event -> {
+            fxBuilder.clearFields(vBoxRight);
+        });
 
         //Add to boxes
-        vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
+        vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer,bCustomerSearchClear);
 
-        vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies);
+        vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies,bMovieSearchClear);
 
         vBoxCenter.getChildren().addAll(lvSearchResults);
 
@@ -385,7 +396,7 @@ public class Main extends Application {
 
         vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId,lMovieSearchDescription,tfMovieSearchDescription,
                 lMovieSearchLength,tfMovieSearchLengthMin,tfMovieSearchLengthMax,cbMovieSearchRating,cbMovieSearchLanguages,cbMovieSearchOriginalLanguage,
-                lMovieSearchReleaseDate,tfMovieSearchReleaseDate);
+                lMovieSearchReleaseDate,tfMovieSearchReleaseYear);
 
         vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
                 lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,

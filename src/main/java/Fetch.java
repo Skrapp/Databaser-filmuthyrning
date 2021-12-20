@@ -124,7 +124,11 @@ public class Fetch {
                         sSearchCriteria += " AND ";
 
                     //exact search and not surrounded by '' (int and date)
-                    if (box.getChildren().get(i).getId().contains("id") || box.getChildren().get(i).getId().contains("update"))
+                    if (box.getChildren().get(i).getId().contains("id") ||
+                        box.getChildren().get(i).getId().contains("update") ||
+                        box.getChildren().get(i).getId().contains("release_year") ||
+                        box.getChildren().get(i).getId().contains("create_date"))
+
                         sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
                                 .concat(sTextField);
                     //Max search
