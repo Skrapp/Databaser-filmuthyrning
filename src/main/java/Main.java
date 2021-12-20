@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.Current;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,6 +35,8 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        Stage loginStage = new Stage();
 
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
@@ -83,6 +86,19 @@ public class Main extends Application {
 
         VBox vBoxLeft = new VBox();
 
+        //NYA Logout och EXIT
+        VBox vBoxExit = new VBox();
+        vBoxExit.setPadding(new Insets(40));
+        VBox vBoxLogout = new VBox();
+        vBoxLogout.setPadding(new Insets(40));
+        HBox hBoxLogout = new HBox();
+        hBoxLogout.setSpacing(10);
+        hBoxLogout.setPadding(new Insets(10, 0, 0, 0));
+        HBox hBoxExit = new HBox();
+        hBoxExit.setSpacing(10);
+        hBoxExit.setPadding(new Insets(10, 0, 0, 0));
+
+
         //Buttons
         Button bSearchMovie = new Button("Sök");
         Button bSearchCustomer = new Button("Sök");
@@ -95,6 +111,11 @@ public class Main extends Application {
         Button bRentMovie = new Button("Hyra");
         Button bReturnMovie = new Button("Lämna tillbaka");
 
+        //Logout buttons
+        Button bConfirmLogout = new Button("Logga ut");
+        Button bCancelLogout = new Button("Avbryt");
+        Button bConfirmExit = new Button("Avsluta");
+        Button bCancelExit = new Button("Avbryt");
 
         //Meny
         MenuBar menuBar = new MenuBar();
@@ -178,6 +199,11 @@ public class Main extends Application {
         Label lCustomerInfoUpdate = new Label("Uppdaterad");
         Label lTest = new Label("Funka då!");
 
+        // NYA
+        Label lConfirmLogout = new Label("Är du säker?");
+        Label lConfirmExit = new Label("Är du säker?");
+
+
         //Textfields
         //Movie
         TextField tfSearch = new TextField();
@@ -252,24 +278,14 @@ public class Main extends Application {
             fxBuilder.createPopUp(hboxTest);
         });
 
-        //Exit Menu
-        miFileExit.setOnAction(event -> {
-            Alert exitAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            exitAlert.show();
-            Optional<ButtonType> result = exitAlert.showAndWait();
-            if(!result.isPresent() || result.get() != ButtonType.OK) {
-                //return false;
-            } else {
-                primaryStage.close();
-                //return true;
-            }
-
-            /* {
-                primaryStage.close();
-            } else {
-                System.out.println("hej");
-            }*/
+        //Arkiv
+        miFileLogOut.setOnAction(event -> {
+            fxBuilder.createPopUp(vBoxLogout);
         });
+        miFileExit.setOnAction(event -> {
+            fxBuilder.createPopUp(vBoxExit);
+        });
+
 
         //Add button function
         bAdvancedSearchCustomer.setOnAction(event -> {
@@ -291,6 +307,26 @@ public class Main extends Application {
             fetch.searchFromMovies(tfSearch, olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film");
         });
 
+        bConfirmLogout.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            primaryStage.close();
+            loginStage.show();
+        });
+
+        bCancelLogout.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+        bConfirmExit.setOnAction(event -> {
+            primaryStage.close();
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+        bCancelExit.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+
         //Add to boxes
         vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer);
 
@@ -304,6 +340,17 @@ public class Main extends Application {
                 tfMovieAddOriginalLanguage, cbAddLanguages, lMovieAddActors, tfMovieAddActors, lMovieAddSpecialFeatures, tfMovieAddSpecialFeatures,
                 lMovieAddRentalDuration, tfMovieAddRentalDuration, lMovieAddReplacementCost, tfMovieAddReplacementCost,
                 lMovieAddInStore, tfMovieAddInStore, lMovieAddLastUpdate, tfMovieAddLastUpdate, bCreateMovie);
+
+        //Logout
+
+        hBoxLogout.getChildren().addAll(bConfirmLogout,bCancelLogout);
+        vBoxLogout.getChildren().addAll(lConfirmLogout,hBoxLogout);
+
+        //Exit
+
+        hBoxExit.getChildren().addAll(bConfirmExit,bCancelExit);
+        vBoxExit.getChildren().addAll(lConfirmExit,hBoxExit);
+
 
 
         //Movie
@@ -342,7 +389,7 @@ public class Main extends Application {
         //TEEEEEEST--------------------------------------------------------------------------
 
 
-        Stage loginStage = new Stage();
+
         loginStage.setTitle("Logga in");
 
         BorderPane borderPaneLogin = new BorderPane();

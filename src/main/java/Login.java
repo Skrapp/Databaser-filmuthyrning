@@ -110,6 +110,10 @@ import java.util.List;
                     List<String> listPass = queryPassword.getResultList();
                     String p = listPass.get(0);
 
+                    if (p == null) {
+                        p = "";
+                    }
+
                     if (password.equals(p)) {
                         tfPassword.clear();
                         tfUsername.clear();
