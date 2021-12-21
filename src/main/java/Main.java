@@ -39,8 +39,6 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         Fetch fetch = new Fetch();
         FXBuilder fxBuilder = new FXBuilder();
-        Login login = new Login();
-
 
         // Combobox
         ComboBox cbCategory = new ComboBox(olCategory);
@@ -80,6 +78,8 @@ public class Main extends Application {
         VBox vBoxMovieInfoLeft = new VBox();
         vBoxMovieInfoLeft.setPadding(new Insets(0, 5, 0, 0));
         VBox vBoxMovieInfoRight = new VBox();
+
+        VBox vBoxAddCustomer = new VBox();
 
         VBox vBoxLeft = new VBox();
 
@@ -196,6 +196,23 @@ public class Main extends Application {
         Label lCustomerInfoUpdate = new Label("Uppdaterad");
         Label lTest = new Label("Funka då!");
 
+        //Customer add
+        Label lAddCustomerFirstName = new Label("Förnamn");
+        Label lAddCustomerLastName = new Label("Efternamn");
+        Label lAddCustomerEmail = new Label("Kundmail");
+        Label lAddCustomerStoreId = new Label("ButikID");
+        Label lAddCustomerRegistered = new Label("Registrerad");
+        Label lAddCustomerActive = new Label("Aktiv");
+
+        Label lAddCustomerAddress = new Label("Adress");
+        Label lAddCustomerPostalCode = new Label("Postkod");
+        Label lAddCustomerDistrict = new Label("Distrikt");
+        Label lAddCustomerPhone = new Label("Telefonnummer");
+        Label lAddCustomerCity = new Label("Stad");
+        Label lAddCustomerCountry = new Label("Land");
+
+        Label lAddCustomerInfoUpdate = new Label("Uppdaterad");
+
         //File
         Label lConfirmLogout = new Label("Är du säker?");
         Label lConfirmExit = new Label("Är du säker?");
@@ -228,6 +245,34 @@ public class Main extends Application {
         TextField tfCustomerInfoRegistered = new TextField();
         TextField tfCustomerInfoActive = new TextField();
         TextField tfCustomerInfoUpdate = new TextField();
+
+        //Text fields add customer
+        TextField tfAddCustomerFirstName = new TextField();
+        tfAddCustomerFirstName.setPromptText("Förnamn");
+        TextField tfAddCustomerLastName = new TextField();
+        tfAddCustomerLastName.setPromptText("Efternamn");
+        TextField tfAddCustomerEmail = new TextField();
+        tfAddCustomerEmail.setPromptText("Mailadress");
+        TextField tfAddCustomerStoreId = new TextField();
+        tfAddCustomerStoreId.setPromptText("Butiksid");
+        TextField tfAddCustomerRegistered = new TextField();
+        tfAddCustomerRegistered.setPromptText("Registreringsdatum?");
+        TextField tfAddCustomerActive = new TextField();
+        tfAddCustomerActive.setPromptText("Aktiv?");
+
+        TextField tfAddCustomerAddress = new TextField();
+        tfAddCustomerAddress.setPromptText("Adress");
+        TextField tfAddCustomerPostalCode = new TextField();
+        tfAddCustomerPostalCode.setPromptText("Postkod");
+        TextField tfAddCustomerDistrict = new TextField();
+        tfAddCustomerDistrict.setPromptText("Distrikt");
+        TextField tfAddCustomerPhone = new TextField();
+        tfAddCustomerPhone.setPromptText("Telefonnummer");
+        TextField tfAddCustomerCity = new TextField();
+        tfAddCustomerCity.setPromptText("Stad");
+        TextField tfAddCustomerCountrys = new TextField();
+        tfAddCustomerCountrys.setPromptText("Land");
+
 
         //Text fields movies
         TextField tfMovieInfoId = new TextField();
@@ -271,8 +316,9 @@ public class Main extends Application {
             fxBuilder.createPopUp(vBoxMovieAdd);
         });
 
+        //customer
         miCustomerAdd.setOnAction(event -> {
-            fxBuilder.createPopUp(hboxTest);
+            fxBuilder.createPopUp(vBoxAddCustomer);
         });
 
         //Menu - File
@@ -373,6 +419,12 @@ public class Main extends Application {
                 tfCustomerInfoRegistered, lCustomerInfoActive, tfCustomerInfoActive, lCustomerInfoUpdate, tfCustomerInfoUpdate,
                 lCustomerInfoStoreId, tfCustomerInfoStoreId);
 
+        //Add cutomer
+        vBoxAddCustomer.getChildren().addAll(lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName, tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail,
+                lAddCustomerStoreId, tfAddCustomerStoreId, lAddCustomerRegistered, tfAddCustomerRegistered, lAddCustomerActive, tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress,
+                lAddCustomerPostalCode,tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone, tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity,
+                lAddCustomerCountry, tfAddCustomerCountrys, bCreateCustomer);
+
         //Add to borderPane
         borderPane.setTop(menuBar);
         borderPane.setLeft(vBoxLeft);
@@ -422,7 +474,7 @@ public class Main extends Application {
             tfPassword.clear();
         });
         bLogin.setOnAction(event -> {
-            login.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
+            fetch.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
             tfPassword.clear();
             tfUsername.clear();
         });
