@@ -7,9 +7,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 public class Fetch {
+
+    ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
     public void addToComboList (ObservableList ol, EntityManagerFactory em, String column, String table) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -112,9 +115,12 @@ public class Fetch {
             if (box.getChildren().get(i) instanceof Pane)
             {
                 sSearchCriteria = createSearchCriteria((Pane) box.getChildren().get(i), sSearchCriteria);
+                if(sSearchCriteria.contains("ERROR")){
+                    return sSearchCriteria;
+                }
             }
             //See if object is a textField
-            if(box.getChildren().get(i) instanceof TextField){
+            else if(box.getChildren().get(i) instanceof TextField){
                 String sTextField = ((TextField) box.getChildren().get(i)).getText().trim();
 
                 if(!sTextField.equals("")) {
@@ -125,21 +131,52 @@ public class Fetch {
 
                     //exact search and not surrounded by '' (int and date)
                     if (box.getChildren().get(i).getId().contains("id") ||
-                        box.getChildren().get(i).getId().contains("update") ||
-                        box.getChildren().get(i).getId().contains("release_year") ||
-                        box.getChildren().get(i).getId().contains("create_date"))
+                        box.getChildren().get(i).getId().contains("year") ){
 
-                        sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
+                        try {
+                            int parsed = Integer.parseInt(sTextField);
+                        } catch (NumberFormatException nfe) {
+                            //Should call for an Error popup method
+                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
+                            return "ERROR";
+                        }
+                            sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
                                 .concat(sTextField);
+                    }
+                    //Date search
+                    else if(box.getChildren().get(i).getId().contains("create_date") ||
+                            box.getChildren().get(i).getId().contains("last_update")){
+                        if(ec.isDate(sTextField))
+                        sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")
+                                .concat(sTextField).concat("%'");
+                        else{
+                            //Should call for an Error popup method
+                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
+                            return "ERROR";
+
+                        }
+                    }
                     //Max search
                     else if(box.getChildren().get(i).getId().contains("max_value")){
+                        if(ec.isDouble(sTextField))
                         sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" <= ")
                                 .concat(sTextField);
+                        else{
+                            //Should call for an Error popup method
+                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
+                            return "ERROR";
+                        }
                     }
                     //Min search
                     else if(box.getChildren().get(i).getId().contains("min_value")){
+                        if(ec.isDouble(sTextField))
                         sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" >= ")
                                 .concat(sTextField);
+                        else{
+                            //Should call for an Error popup method
+                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
+                            return "ERROR";
+                        }
                     }
                     //Search with "like '% %'"
                     else
@@ -148,7 +185,7 @@ public class Fetch {
                 }
             }
             //See if object is combobox
-            if(box.getChildren().get(i) instanceof ComboBox){
+            else if(box.getChildren().get(i) instanceof ComboBox){
                 if (((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem() != null) {
                     String sSelectedItem = ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem().toString();
 
@@ -163,7 +200,7 @@ public class Fetch {
             }
             //Hur ska denna del utformas så den ser "bra" ut?
             //See if object is checkbox
-            if(box.getChildren().get(i) instanceof CheckBox){
+            else if(box.getChildren().get(i) instanceof CheckBox){
                 if (((CheckBox) box.getChildren().get(i)).isSelected()) {
                     if (sSearchCriteria.equals(""))
                         sSearchCriteria += " WHERE ";
