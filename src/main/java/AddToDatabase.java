@@ -21,7 +21,7 @@ public class AddToDatabase {
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
-
+            test test = new test();
             Customer customer = new Customer();
             City city = new City();
             Country country = new Country();
@@ -37,6 +37,7 @@ public class AddToDatabase {
             customer.setAddress(0);
             //customer.setCreate_date(Date.valueOf(String.valueOf(2021-03-02)));
             customer.setLast_update(instant);
+
 
 
             entityManager.persist(customer);
