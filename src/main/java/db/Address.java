@@ -1,6 +1,5 @@
 package db;
 
-import org.geolatte.geom.Geometry;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 
@@ -39,7 +38,7 @@ public class Address {
 
 
     @Column(name = "location")
-    private org.locationtech.jts.geom.Point location;
+    public Point location;
 
 
     @Column(name = "last_update")
@@ -59,7 +58,7 @@ public class Address {
         this.city_id = city_id;
         this.postal_code = postal_code;
         this.phone = phone;
-        this.location = geometryFactory.createPoint(new Coordinate(0,0));
+        this.location = location;
         this.last_update = last_update;
     }
 
@@ -119,13 +118,12 @@ public class Address {
         this.phone = phone;
     }
 
-    public org.locationtech.jts.geom.Point getLocation() {
+    public Point getLocation() {
         return location;
     }
 
     public void setLocation(Point location) {
-        GeometryFactory geometryFactory = new GeometryFactory();
-        this.location = geometryFactory.createPoint(new Coordinate(0,0));
+        this.location = location;
 
     }
 

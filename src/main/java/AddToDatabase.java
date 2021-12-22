@@ -10,6 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.awt.*;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
 
@@ -51,19 +52,19 @@ public class AddToDatabase {
 
 
 
-            customer.setFirst_name("Daniel3");
+            /*customer.setFirst_name("Daniel3");
             customer.setLast_name("Säfström3");
             customer.setAddress_id(22); //adressID
             customer.setStore_id(1);
             customer.setActive(1);
             customer.setEmail("Daniel@hot");
-            customer.setAddress(0);
+            //customer.setAddress(0);
             //customer.setCreate_date(Date.valueOf(String.valueOf(2021-03-02)));
             customer.setLast_update(instant);
 
 
 
-            entityManager.persist(customer);
+            entityManager.persist(customer);*/
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
