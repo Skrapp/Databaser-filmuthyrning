@@ -34,6 +34,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         olCategory.add(0,null);
+        olLanguages.add(0,null);
+        olRating.add(0,null);
+        olStores.add(0,null);
 
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
@@ -53,7 +56,7 @@ public class Main extends Application {
 
         //Customer Search
         ComboBox cbCustomerSearchStoreId = new ComboBox(olStores);
-        cbMovieSearchOriginalLanguage.setPromptText("Butik ID");
+        cbCustomerSearchStoreId.setPromptText("Butik ID");
 
         //Movie add
         ComboBox cbMovieAddCategory = new ComboBox(olCategory);
