@@ -2,13 +2,13 @@ import db.Address;
 import db.City;
 import db.Country;
 import db.Customer;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.awt.*;
 import java.time.Instant;
 
 public class AddToDatabase {
@@ -27,11 +27,28 @@ public class AddToDatabase {
             Country country = new Country();
             Address address= new Address();
             Instant instant = Instant.now();
+            GeometryFactory geometryFactory = new GeometryFactory();
 
-            customer.setFirst_name("Daniel2");
-            customer.setLast_name("Säfström2");
-            customer.setAddress_id(15);
-            customer.setStore_id(1);
+
+            Point point = new Point(2, 2);
+
+            address.setAddress("Skogen");
+            address.setAddress2("Skogsvägen");
+            address.setDistrict("Knutby");
+            address.setCity_id(12);
+            address.setPostal_code("76437");
+            address.setPhone("122303032");
+            address.setLocation(point);
+            address.setLast_update(instant);
+
+            entityManager.persist(address);
+
+
+
+            customer.setFirst_name("Daniel3");
+            customer.setLast_name("Säfström3");
+            customer.setAddress_id(16);
+            customer.setStore_id(2);
             customer.setActive(1);
             customer.setEmail("Daniel@hot");
             customer.setAddress(0);

@@ -1,9 +1,14 @@
 package db;
 
+import org.geolatte.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.*;
 import java.awt.*;
 import java.time.Instant;
+
+
 
 @Entity
 @Table
@@ -32,8 +37,10 @@ public class Address {
     @Column(name = "phone")
     private String phone;
 
+
     @Column(name = "location")
-    private Point location;
+    private org.locationtech.jts.geom.Point location;
+
 
     @Column(name = "last_update")
     private Instant last_update;
@@ -41,7 +48,10 @@ public class Address {
     public Address() {
     }
 
+
+
     public Address(int address_id, String address, String address2, String district, int city_id, String postal_code, String phone, Point location, Instant last_update) {
+        GeometryFactory geometryFactory = new GeometryFactory();
         this.address_id = address_id;
         this.address = address;
         this.address2 = address2;
@@ -49,7 +59,7 @@ public class Address {
         this.city_id = city_id;
         this.postal_code = postal_code;
         this.phone = phone;
-        this.location = location;
+        this.location = geometryFactory.createPoint(new Coordinate(0,0));
         this.last_update = last_update;
     }
 
@@ -109,12 +119,14 @@ public class Address {
         this.phone = phone;
     }
 
-    public Point getLocation() {
+    public org.locationtech.jts.geom.Point getLocation() {
         return location;
     }
 
     public void setLocation(Point location) {
-        this.location = location;
+        GeometryFactory geometryFactory = new GeometryFactory();
+        this.location = geometryFactory.createPoint(new Coordinate(0,0));
+
     }
 
     public Instant getLast_update() {

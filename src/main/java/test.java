@@ -10,22 +10,21 @@ import java.util.List;
 public class test {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
     public static void main(String[] args) {
-        //addCountryID();
-        addCityID();
+        int countryID = addCountryID();
+        System.out.println(countryID);
+        int cityID = addCityID();
+        System.out.println(cityID);
     }
 
-    public static void addCountryID(){
+    public static int addCountryID(){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
+        short countryId = -1;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Customer customer = new Customer();
-            City city = new City();
             Country country = new Country();
-            Address address= new Address();
-            short countryId = -1;
             Instant instant = Instant.now();
 
             String texCountry = "Norge";
@@ -56,18 +55,19 @@ public class test {
         }finally {
             entityManager.close();
         }
+        return countryId;
     }
 
-    public static void addCityID(){
+    public static int addCityID(){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
+        short cityId = -1;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
             City city = new City();
 
-            short cityId = -1;
             Instant instant = Instant.now();
 
             short texcountryId = 100;
@@ -100,6 +100,7 @@ public class test {
         }finally {
             entityManager.close();
         }
+        return cityId;
     }
 
 
