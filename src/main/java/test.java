@@ -14,6 +14,7 @@ public class test {
         System.out.println(countryID);
         int cityID = addCityID();
         System.out.println(cityID);
+        deleteCustomer();
     }
 
     public static int addCountryID(){
@@ -102,6 +103,39 @@ public class test {
         }
         return cityId;
     }
+
+
+    public static void deleteCustomer(){
+        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        EntityTransaction transaction = null;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            short customerID = 603;
+
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM customer WHERE customer_id = '"+customerID+"'");
+            List<Short> aid = queryAdressID.getResultList();
+            short addressID = aid.get(0);
+
+            System.out.println(addressID);
+
+            entityManager.createNativeQuery("DELETE FROM customer where customer_id = '"+customerID+"'").executeUpdate();
+
+            //Query queryDeleteAdress = entityManager.createNativeQuery("DELETE from address WHERE address_id = '"+queryAdressID.getResultList()+"'").executeUpdate;
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+    }
+
+
 
 
 }

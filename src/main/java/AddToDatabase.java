@@ -8,8 +8,10 @@ import org.locationtech.jts.geom.GeometryFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import java.awt.*;
 import java.time.Instant;
+import java.util.List;
 
 public class AddToDatabase {
 
@@ -43,12 +45,16 @@ public class AddToDatabase {
 
             entityManager.persist(address);
 
+           /* Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = Skogen AND district = Knutby AND city_id = 12 AND phone =122303032");
+            List<Integer> chosenArtist = queryAdressID.getResultList();
+            int addressID = chosenArtist.get(0);*/
+
 
 
             customer.setFirst_name("Daniel3");
             customer.setLast_name("Säfström3");
-            customer.setAddress_id(16);
-            customer.setStore_id(2);
+            customer.setAddress_id(22); //adressID
+            customer.setStore_id(1);
             customer.setActive(1);
             customer.setEmail("Daniel@hot");
             customer.setAddress(0);
