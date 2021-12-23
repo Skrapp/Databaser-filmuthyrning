@@ -31,7 +31,8 @@ public class Main extends Application {
         );
         final ObservableList olLanguages = FXCollections.observableArrayList();
         final ObservableList olStaff = FXCollections.observableArrayList();
-        final ObservableList olSearchResults = FXCollections.observableArrayList();
+        final ObservableList olSearchResultsMovie = FXCollections.observableArrayList();
+        final ObservableList olSearchResultsCustomer = FXCollections.observableArrayList();
         final ObservableList olRating = FXCollections.observableArrayList();
         final ObservableList olStores = FXCollections.observableArrayList();
 
@@ -47,7 +48,6 @@ public class Main extends Application {
                 olStores.add(0,null);
 
                 Stage loginStage = new Stage(); //To login
-
 
                 primaryStage.setTitle("Uthyrning");
                 BorderPane borderPane = new BorderPane();
@@ -90,7 +90,8 @@ public class Main extends Application {
                 fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY, "name", "language");
 
                 // Lists
-                ListView lvSearchResults = new ListView(olSearchResults);
+                ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
+                ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
 
                 //Boxes
                 VBox vBoxMovieAdd = new VBox();
@@ -198,6 +199,9 @@ public class Main extends Application {
 
 
                 //Labels
+                //Center
+                Label lMovieResult = new Label("Filmresultat");
+                Label lCustomerResult = new Label("Kundresultat");
                 //Movie
                 Label lMovieHeader = new Label("Filmsektion");
                 lMovieHeader.setFont(new Font(40));
@@ -244,15 +248,6 @@ public class Main extends Application {
                 Label lCustomerSearchActive = new Label("Aktiv");
                 Label lCustomerSearchUpdate = new Label("Uppdaterad");
 
-                //-----------------------------
-                //Checkboxes
-                //SpecialFeatures and InStore
-                CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
-                CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
-                CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
-                //-----------------------------
-
-
                 //Customer add
                 Label lAddCustomerFirstName = new Label("Förnamn");
                 Label lAddCustomerLastName = new Label("Efternamn");
@@ -286,6 +281,14 @@ public class Main extends Application {
                 //File
                 Label lConfirmLogout = new Label("Är du säker?");
                 Label lConfirmExit = new Label("Är du säker?");
+
+                //-----------------------------
+                //Checkboxes
+                //SpecialFeatures and InStore
+                CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
+                CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
+                CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
+                //-----------------------------
 
                 //Text fields
                 // add customer
@@ -500,12 +503,11 @@ public class Main extends Application {
                 });
 
                 bSearchMovie.setOnAction(event -> {
-
-                        fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film", sMovieJoin);
+                        fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,ENTITY_MANAGER_FACTORY,"title", "film", sMovieJoin);
                 });
 
                 bSearchCustomer.setOnAction(event -> {
-                        fetch.searchFromDatabase(vBoxRight,olSearchResults,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
+                        fetch.searchFromDatabase(vBoxRight,olSearchResultsCustomer,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
                 });
 
                 bMovieSearchClear.setOnAction(event -> {
@@ -514,9 +516,6 @@ public class Main extends Application {
 
                 bCustomerSearchClear.setOnAction(event -> {
                         fxBuilder.clearFields(vBoxRight);
-
-                        fetch.searchFromDatabase(vBoxMovieSearch, olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film",sMovieJoin);
-
                 });
 
                 bConfirmLogout.setOnAction(event -> {
@@ -544,15 +543,13 @@ public class Main extends Application {
 
                 vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies,bMovieSearchClear);
 
-                vBoxCenter.getChildren().addAll(lvSearchResults);
+                vBoxCenter.getChildren().addAll(lMovieResult,lvSearchResultsMovie,lCustomerResult,lvSearchResultsCustomer);
 
 
                 vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,lMovieAddRentalCost,
-                        cbMovieAddCategory,lMovieAddDescription,
-                        lMovieAddLength, lMovieAddRating,lMovieAddOriginalLanguage,
-                        cbMovieAddLanguages,lMovieAddActors,lMovieAddSpecialFeatures,
-                        lMovieAddRentalDuration, lMovieAddReplacementCost,
-                        lMovieAddInStore, lMovieAddLastUpdate, bCreateMovie);
+                        cbMovieAddCategory,lMovieAddDescription, lMovieAddLength, lMovieAddRating,lMovieAddOriginalLanguage,
+                        cbMovieAddLanguages,lMovieAddActors,lMovieAddSpecialFeatures, lMovieAddRentalDuration,
+                        lMovieAddReplacementCost, lMovieAddInStore, lMovieAddLastUpdate, bCreateMovie);
 
                 //Logout
                 hBoxLogout.getChildren().addAll(bConfirmLogout,bCancelLogout);
@@ -570,9 +567,9 @@ public class Main extends Application {
 
                 hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieSearchLeft, vBoxMovieSearchRight);
 
-
-                vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId,lMovieSearchDescription,tfMovieSearchDescription,
-                        lMovieSearchLength,tfMovieSearchLengthMin,tfMovieSearchLengthMax,cbMovieSearchRating,cbMovieSearchLanguages,cbMovieSearchOriginalLanguage,
+                vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId,lMovieSearchDescription,
+                        tfMovieSearchDescription, lMovieSearchLength,tfMovieSearchLengthMin,tfMovieSearchLengthMax,
+                        cbMovieSearchRating, cbMovieSearchLanguages,cbMovieSearchOriginalLanguage,
                         lMovieSearchReleaseDate,tfMovieSearchReleaseYear);
 
                 vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
@@ -592,15 +589,21 @@ public class Main extends Application {
                         tfCustomerSearchUpdate,lCustomerSearchStoreId,cbCustomerSearchStoreId);
 
                 //Add customer
-                vBoxAddCustomer.getChildren().addAll(lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName, tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail,
-                        lAddCustomerStoreId, tfAddCustomerStoreId, lAddCustomerRegistered, tfAddCustomerRegistered, lAddCustomerActive, tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress,
-                        lAddCustomerPostalCode,tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone, tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity,
-                        lAddCustomerCountry, tfAddCustomerCountrys, bCreateCustomer);
+                vBoxAddCustomer.getChildren().addAll(lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName,
+                        tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail, lAddCustomerStoreId,
+                        tfAddCustomerStoreId, lAddCustomerRegistered, tfAddCustomerRegistered, lAddCustomerActive,
+                        tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress, lAddCustomerPostalCode,
+                        tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone,
+                        tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity, lAddCustomerCountry,
+                        tfAddCustomerCountrys, bCreateCustomer);
 
                 //Add staff
-                vBoxStaffAdd.getChildren().addAll(lStaffAddHeader, lStaffAddFirstName, tfStaffAddFirstName,lStaffAddLastName, tfStaffAddLastName,
-                        lStaffAddEmail, tfStaffAddEmail,lStaffAddCity, tfStaffAddCity, lStaffAddCountry, tfStaffAddCountry, lStaffUserName, tfStaffUserName, lStaffPassword, tfStaffPassword
-                        ,lStaffAddAdress, tfStaffAddAdress,lStaffDisctrict, tfStaffDistrict, bStaffAdd);
+                vBoxStaffAdd.getChildren().addAll(lStaffAddHeader, lStaffAddFirstName, tfStaffAddFirstName,
+                        lStaffAddLastName, tfStaffAddLastName, lStaffAddEmail, tfStaffAddEmail,lStaffAddCity,
+                        tfStaffAddCity, lStaffAddCountry, tfStaffAddCountry, lStaffUserName, tfStaffUserName,
+                        lStaffPassword, tfStaffPassword,lStaffAddAdress, tfStaffAddAdress,lStaffDisctrict,
+                        tfStaffDistrict, bStaffAdd);
+
                 //Add to borderPane
                 borderPane.setTop(menuBar);
                 borderPane.setLeft(vBoxLeft);

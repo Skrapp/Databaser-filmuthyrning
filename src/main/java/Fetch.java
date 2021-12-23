@@ -67,7 +67,8 @@ public class Fetch {
     }
 
     /**
-     * @param box vBox containing searchable data
+     * Search in table for written search criteria
+     * @param box Pane (VBox or HBox) containing searchable data
      * @param ol where data is saved
      * @param em entity manager factory
      * @param column what column in table to show in search results
