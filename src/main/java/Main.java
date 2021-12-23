@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -13,6 +14,13 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Optional;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+
+
+import javax.persistence.*;
+
+
 
 public class Main extends Application {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -33,10 +41,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+
         olCategory.add(0,null);
         olLanguages.add(0,null);
         olRating.add(0,null);
         olStores.add(0,null);
+
+        Stage loginStage = new Stage(); //To login
+
 
         primaryStage.setTitle("Uthyrning");
         BorderPane borderPane = new BorderPane();
@@ -44,6 +56,7 @@ public class Main extends Application {
         FXBuilder fxBuilder = new FXBuilder();
 
         // Combobox
+
         //Movie search
         ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
         cbMovieSearchCategory.setPromptText("Kategori");
@@ -70,6 +83,18 @@ public class Main extends Application {
         fetch.addToComboList(olRating, ENTITY_MANAGER_FACTORY,"rating","film");
         fetch.addToComboList(olStores, ENTITY_MANAGER_FACTORY,"store_id","store");
 
+        /*ComboBox cbCategory = new ComboBox(olCategory);
+        cbCategory.setPromptText("Kategori");
+        ComboBox cbLanguages = new ComboBox(olLanguages);
+        cbLanguages.setPromptText("Språk");*/
+
+        ComboBox cbAddCategory = new ComboBox(olCategory);
+        cbAddCategory.setPromptText("Kategori");
+        ComboBox cbAddLanguages = new ComboBox(olLanguages);
+        cbAddLanguages.setPromptText("Språk");
+        fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY, "name", "category");
+        fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY, "name", "language");
+
         // Lists
         ListView lvSearchResults = new ListView(olSearchResults);
 
@@ -90,6 +115,7 @@ public class Main extends Application {
         HBox hBoxAdvancedSearchCustomer = new HBox();
         hBoxAdvancedSearchCustomer.setPadding(new Insets(10));
         hBoxAdvancedSearchCustomer.setVisible(false);
+
         VBox vBoxCustomerSearchLeft = new VBox();
         vBoxCustomerSearchLeft.setPadding(new Insets(0,5,0,0));
         VBox vBoxCustomerSearchRight = new VBox();
@@ -97,7 +123,22 @@ public class Main extends Application {
         vBoxMovieSearchLeft.setPadding(new Insets(0,5,0,0));
         VBox vBoxMovieSearchRight = new VBox();
 
+        VBox vBoxAddCustomer = new VBox();
+
         VBox vBoxLeft = new VBox();
+
+        //Logout och EXIT
+        VBox vBoxExit = new VBox();
+        vBoxExit.setPadding(new Insets(10));
+        VBox vBoxLogout = new VBox();
+        vBoxLogout.setPadding(new Insets(10));
+        HBox hBoxLogout = new HBox();
+        hBoxLogout.setSpacing(10);
+        hBoxLogout.setPadding(new Insets(10, 0, 0, 0));
+        HBox hBoxExit = new HBox();
+        hBoxExit.setSpacing(10);
+        hBoxExit.setPadding(new Insets(10, 0, 0, 0));
+
 
         //Buttons
         Button bSearchMovie = new Button("Sök");
@@ -110,40 +151,49 @@ public class Main extends Application {
         Button bUpdateMovie = new Button("Redigera");
         Button bRentMovie = new Button("Hyra");
         Button bReturnMovie = new Button("Lämna tillbaka");
+
         Button bCustomerSearchClear= new Button("Töm sökning");
         Button bMovieSearchClear= new Button("Töm sökning");
+
+
+        //Logout buttons
+        Button bConfirmLogout = new Button("Logga ut");
+        Button bCancelLogout = new Button("Avbryt");
+        Button bConfirmExit = new Button("Avsluta");
+        Button bCancelExit = new Button("Avbryt");
+
 
         //Meny
         MenuBar menuBar = new MenuBar();
         Menu mbFile = new Menu("Arkiv");
-            MenuItem miFileLogOut = new MenuItem("Byt användare");
-            MenuItem miFileOptions = new MenuItem("Alternativ");
-            MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
-            MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
-            MenuItem miFilePrint = new MenuItem("Skriv ut");
-            MenuItem miFileExit = new MenuItem("Avsluta");
-        mbFile.getItems().addAll(miFileLogOut, miFileOptions,miFileOptionsFontsize,miFileOptionsShortcut, miFilePrint, miFileExit);
+        MenuItem miFileLogOut = new MenuItem("Logga ut");
+        MenuItem miFileOptions = new MenuItem("Alternativ");
+        MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
+        MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
+        MenuItem miFilePrint = new MenuItem("Skriv ut");
+        MenuItem miFileExit = new MenuItem("Avsluta");
+        mbFile.getItems().addAll(miFileLogOut, miFileOptions, miFileOptionsFontsize, miFileOptionsShortcut, miFilePrint, miFileExit);
         Menu mbStaff = new Menu("Anställda");
-            MenuItem miStaffAdd = new MenuItem("Lägg till");
-            MenuItem miStaffEdit = new MenuItem("Redigera");
-            MenuItem miStaffDelete = new MenuItem("Ta bort");
+        MenuItem miStaffAdd = new MenuItem("Lägg till");
+        MenuItem miStaffEdit = new MenuItem("Redigera");
+        MenuItem miStaffDelete = new MenuItem("Ta bort");
         mbStaff.getItems().addAll(miStaffAdd, miStaffEdit, miStaffDelete);
         Menu mbCustomer = new Menu("Kund");
-            MenuItem miCustomerAdd = new MenuItem("Lägg till");
-            MenuItem miCustomerEdit = new MenuItem("Redigera");
-            MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
-            MenuItem miCustomerLockedOut = new MenuItem("Portad");
+        MenuItem miCustomerAdd = new MenuItem("Lägg till");
+        MenuItem miCustomerEdit = new MenuItem("Redigera");
+        MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
+        MenuItem miCustomerLockedOut = new MenuItem("Portad");
         mbCustomer.getItems().addAll(miCustomerAdd, miCustomerEdit, miCustomerRentedBy, miCustomerLockedOut);
         Menu mbFilm = new Menu("Film");
-            MenuItem miFilmAdd = new MenuItem("Lägg till");
-            MenuItem miFilmEdit = new MenuItem("Redigera");
-            MenuItem miFilmDelete = new MenuItem("Ta bort");
+        MenuItem miFilmAdd = new MenuItem("Lägg till");
+        MenuItem miFilmEdit = new MenuItem("Redigera");
+        MenuItem miFilmDelete = new MenuItem("Ta bort");
         mbFilm.getItems().addAll(miFilmAdd, miFilmEdit, miFilmDelete);
         Menu mbHelp = new Menu("Hjälp");
-            MenuItem miHelpInstructions = new MenuItem("Instruktioner");
-            MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
-            MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
-            MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
+        MenuItem miHelpInstructions = new MenuItem("Instruktioner");
+        MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
+        MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
+        MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
         mbHelp.getItems().addAll(miHelpInstructions, miHelpMovieOfTheDay, miHelpContactSupport, miHelpAboutTheService);
 
         menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
@@ -205,6 +255,53 @@ public class Main extends Application {
         //-----------------------------
 
 
+        //Customer add
+        Label lAddCustomerFirstName = new Label("Förnamn");
+        Label lAddCustomerLastName = new Label("Efternamn");
+        Label lAddCustomerEmail = new Label("Kundmail");
+        Label lAddCustomerStoreId = new Label("ButikID");
+        Label lAddCustomerRegistered = new Label("Registrerad");
+        Label lAddCustomerActive = new Label("Aktiv");
+
+        Label lAddCustomerAddress = new Label("Adress");
+        Label lAddCustomerPostalCode = new Label("Postkod");
+        Label lAddCustomerDistrict = new Label("Distrikt");
+        Label lAddCustomerPhone = new Label("Telefonnummer");
+        Label lAddCustomerCity = new Label("Stad");
+        Label lAddCustomerCountry = new Label("Land");
+
+        Label lAddCustomerInfoUpdate = new Label("Uppdaterad");
+
+        //File
+        Label lConfirmLogout = new Label("Är du säker?");
+        Label lConfirmExit = new Label("Är du säker?");
+
+        //Text fields add customer
+        TextField tfAddCustomerFirstName = new TextField();
+        tfAddCustomerFirstName.setPromptText("Förnamn");
+        TextField tfAddCustomerLastName = new TextField();
+        tfAddCustomerLastName.setPromptText("Efternamn");
+        TextField tfAddCustomerEmail = new TextField();
+        tfAddCustomerEmail.setPromptText("Mailadress");
+        TextField tfAddCustomerStoreId = new TextField();
+        tfAddCustomerStoreId.setPromptText("Butiksid");
+        TextField tfAddCustomerRegistered = new TextField();
+        tfAddCustomerRegistered.setPromptText("Registreringsdatum?");
+        TextField tfAddCustomerActive = new TextField();
+        tfAddCustomerActive.setPromptText("Aktiv?");
+
+        TextField tfAddCustomerAddress = new TextField();
+        tfAddCustomerAddress.setPromptText("Adress");
+        TextField tfAddCustomerPostalCode = new TextField();
+        tfAddCustomerPostalCode.setPromptText("Postkod");
+        TextField tfAddCustomerDistrict = new TextField();
+        tfAddCustomerDistrict.setPromptText("Distrikt");
+        TextField tfAddCustomerPhone = new TextField();
+        tfAddCustomerPhone.setPromptText("Telefonnummer");
+        TextField tfAddCustomerCity = new TextField();
+        tfAddCustomerCity.setPromptText("Stad");
+        TextField tfAddCustomerCountrys = new TextField();
+        tfAddCustomerCountrys.setPromptText("Land");
 
         //Textfields
         //Movie search
@@ -327,8 +424,7 @@ public class Main extends Application {
 
         String sCustomerJoin =
                 " JOIN address a ON customer.address_id = a.address_id"+
-                " JOIN city ci ON ci.city_id = a.city_id"
-                ;
+                " JOIN city ci ON ci.city_id = a.city_id";
 
         //Popup
         //Movie - Add
@@ -336,30 +432,39 @@ public class Main extends Application {
             fxBuilder.createPopUp(vBoxMovieAdd);
         });
 
+        //customer
         miCustomerAdd.setOnAction(event -> {
-            fxBuilder.createPopUp(hboxTest);
+            fxBuilder.createPopUp(vBoxAddCustomer);
+        });
+
+        //Menu - File
+        miFileLogOut.setOnAction(event -> {
+            fxBuilder.createPopUp(vBoxLogout);
+        });
+        miFileExit.setOnAction(event -> {
+            fxBuilder.createPopUp(vBoxExit);
         });
 
         //Add button function
         bAdvancedSearchCustomer.setOnAction(event -> {
             if (hBoxAdvancedSearchCustomer.isVisible()) {
                 hBoxAdvancedSearchCustomer.setVisible(false);
-            }
-            else {
+            } else {
                 hBoxAdvancedSearchCustomer.setVisible(true);
             }
         });
         bAdvancedSearchMovies.setOnAction(event -> {
             if (hBoxAdvancedSearchMovies.isVisible()) {
                 hBoxAdvancedSearchMovies.setVisible(false);
-            }
-            else{
+            } else {
                 hBoxAdvancedSearchMovies.setVisible(true);
             }
         });
 
 
+        //Button actions
         bSearchMovie.setOnAction(event -> {
+
             fetch.searchFromDatabase(vBoxLeft,olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film", sMovieJoin);
         });
 
@@ -373,7 +478,30 @@ public class Main extends Application {
 
         bCustomerSearchClear.setOnAction(event -> {
             fxBuilder.clearFields(vBoxRight);
+
+            fetch.searchFromDatabase(vBoxMovieSearch, olSearchResults, ENTITY_MANAGER_FACTORY, "title", "film",sMovieJoin);
+
         });
+
+        bConfirmLogout.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            primaryStage.close();
+            loginStage.show();
+        });
+
+        bCancelLogout.setOnAction(event -> {
+                ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+        bConfirmExit.setOnAction(event -> {
+            primaryStage.close();
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+        bCancelExit.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
 
         //Add to boxes
         vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer,bCustomerSearchClear);
@@ -382,12 +510,21 @@ public class Main extends Application {
 
         vBoxCenter.getChildren().addAll(lvSearchResults);
 
-        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,tfAddTitle,lMovieAddRentalCost,tfMovieAddRentalCost,
-                cbMovieAddCategory,lMovieAddDescription,tfMovieAddDescription,
-                lMovieAddLength,tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
-                tfMovieAddOriginalLanguage, cbMovieAddLanguages,lMovieAddActors,tfMovieAddActors,lMovieAddSpecialFeatures,tfMovieAddSpecialFeatures,
-                lMovieAddRentalDuration,tfMovieAddRentalDuration, lMovieAddReplacementCost,tfMovieAddReplacementCost,
-                lMovieAddInStore,tfMovieAddInStore, lMovieAddLastUpdate,tfMovieAddLastUpdate, bCreateMovie);
+
+        vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,lMovieAddRentalCost,
+                cbMovieAddCategory,lMovieAddDescription,
+                lMovieAddLength, lMovieAddRating,lMovieAddOriginalLanguage,
+                cbMovieAddLanguages,lMovieAddActors,lMovieAddSpecialFeatures,
+                lMovieAddRentalDuration, lMovieAddReplacementCost,
+                lMovieAddInStore, lMovieAddLastUpdate, bCreateMovie);
+
+        //Logout
+        hBoxLogout.getChildren().addAll(bConfirmLogout,bCancelLogout);
+        vBoxLogout.getChildren().addAll(lConfirmLogout,hBoxLogout);
+
+        //Exit
+        hBoxExit.getChildren().addAll(bConfirmExit,bCancelExit);
+        vBoxExit.getChildren().addAll(lConfirmExit,hBoxExit);
 
 
         //Movie Search
@@ -396,6 +533,7 @@ public class Main extends Application {
                   bAdvancedSearchMovies,bSearchMovie);
 
         hBoxAdvancedSearchMovies.getChildren().addAll(vBoxMovieSearchLeft, vBoxMovieSearchRight);
+
 
         vBoxMovieSearchLeft.getChildren().addAll(lMovieSearchId,tfMovieSearchId,lMovieSearchDescription,tfMovieSearchDescription,
                 lMovieSearchLength,tfMovieSearchLengthMin,tfMovieSearchLengthMax,cbMovieSearchRating,cbMovieSearchLanguages,cbMovieSearchOriginalLanguage,
@@ -417,6 +555,11 @@ public class Main extends Application {
         vBoxCustomerSearchRight.getChildren().addAll(lCustomerSearchRegistered,tfCustomerSearchRegistered, lCustomerSearchUpdate,
                 tfCustomerSearchUpdate,lCustomerSearchStoreId,cbCustomerSearchStoreId);
 
+        //Add customer
+        vBoxAddCustomer.getChildren().addAll(lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName, tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail,
+                lAddCustomerStoreId, tfAddCustomerStoreId, lAddCustomerRegistered, tfAddCustomerRegistered, lAddCustomerActive, tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress,
+                lAddCustomerPostalCode,tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone, tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity,
+                lAddCustomerCountry, tfAddCustomerCountrys, bCreateCustomer);
 
         //Add to borderPane
         borderPane.setTop(menuBar);
@@ -424,8 +567,68 @@ public class Main extends Application {
         borderPane.setRight(vBoxRight);
         borderPane.setCenter(vBoxCenter);
 
-        Scene scene = new Scene(borderPane,1200,900);
+        //Test Login--------------------------------------------------------------------
+
+        loginStage.setTitle("Logga in");
+        BorderPane borderPaneLogin = new BorderPane();
+        Scene loginScen = new Scene(borderPaneLogin,400,400);
+        borderPaneLogin.setPadding(new Insets(20));
+
+        //TextFields
+        TextField tfUsername = new TextField();
+        tfUsername.setPromptText("Användarnamn");
+        TextField tfPassword = new PasswordField();
+        tfPassword.setPromptText("Lösenord");
+
+        //Labels
+        Label lWelcome = new Label("Välkommen");
+        lWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
+        lWelcome.setPadding(new Insets(0, 0, 30, 0));
+        Label lUsername = new Label("Användarnamn");
+        lUsername.setFont(Font.font(18));
+        Label lPassword = new Label("Lösenord");
+        lPassword.setFont(Font.font(18));
+
+        //Button
+        Button bLogin = new Button("Logga in");
+        Button bCancel = new Button("Avbryt");
+
+        //Boxes
+        VBox vBoxtfLogin = new VBox(tfUsername,tfPassword);
+        VBox vBoxLLogin = new VBox(lUsername,lPassword);
+        vBoxLLogin.setPadding(new Insets(10));
+        vBoxtfLogin.setPadding(new Insets(10));
+        HBox hBoxButtons = new HBox(bLogin,bCancel);
+        hBoxButtons.setSpacing(10);
+        hBoxButtons.setPadding(new Insets(10, 0, 0, 95));
+        HBox hBoxLogin = new HBox(vBoxLLogin,vBoxtfLogin);
+        VBox vBoxAllOfLogin = new VBox(lWelcome,hBoxLogin,hBoxButtons);
+
+        //Buttons action
+        bCancel.setOnAction(event -> {
+            tfUsername.clear();
+            tfPassword.clear();
+        });
+        bLogin.setOnAction(event -> {
+            fetch.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
+            tfPassword.clear();
+            tfUsername.clear();
+        });
+
+        //Position of boxes
+        hBoxButtons.setAlignment(Pos.CENTER_LEFT);
+        hBoxButtons.setAlignment(Pos.BOTTOM_CENTER);
+        borderPaneLogin.setCenter(vBoxAllOfLogin);
+        vBoxAllOfLogin.setAlignment(Pos.CENTER);
+
+        loginStage.setScene(loginScen);
+        loginStage.show();
+
+
+        ///---------------------------------------------------------------------------------------
+        Scene scene = new Scene(borderPane, 1200, 900);
         primaryStage.setScene(scene);
-        primaryStage.show();
+        //primaryStage.show();
+
     }
 }
