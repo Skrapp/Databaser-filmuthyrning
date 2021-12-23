@@ -329,7 +329,6 @@ public class Main extends Application {
             fxBuilder.createPopUp(vBoxExit);
         });
 
-
         //Add button function
         bAdvancedSearchCustomer.setOnAction(event -> {
             if (hBoxAdvancedSearchCustomer.isVisible()) {

@@ -1,40 +1,43 @@
 package db;
 
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "city")
+@Table
 public class City {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "city_id", nullable = false)
-    private Integer id;
 
-    @Column(name = "city", nullable = false, length = 50)
+    @Id
+    @Column(name = "city_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int city_id;
+
+    @Column(name = "city")
     private String city;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "country_id", nullable = false)
-    private Country country;
+    @Column(name = "country_id")
+    private int country_id;
 
-    @Column(name = "last_update", nullable = false)
-    private Instant lastUpdate;
+    @Column(name = "last_update")
+    private Instant last_update;
 
-    public Instant getLastUpdate() {
-        return lastUpdate;
+    public City() {
     }
 
-    public void setLastUpdate(Instant lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public City(int city_id, String city, int country_id, Instant last_update) {
+        this.city_id = city_id;
+        this.city = city;
+        this.country_id = country_id;
+        this.last_update = last_update;
     }
 
-    public Country getCountry() {
-        return country;
+    public int getCity_id() {
+        return city_id;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setCity_id(int city_id) {
+        this.city_id = city_id;
     }
 
     public String getCity() {
@@ -45,11 +48,19 @@ public class City {
         this.city = city;
     }
 
-    public Integer getId() {
-        return id;
+    public int getCountry_id() {
+        return country_id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCountry_id(int country_id) {
+        this.country_id = country_id;
+    }
+
+    public Instant getLast_update() {
+        return last_update;
+    }
+
+    public void setLast_update(Instant last_update) {
+        this.last_update = last_update;
     }
 }

@@ -87,7 +87,6 @@ public class Fetch {
                     loginStage.close();
 
                 } else {
-                    System.out.println("Fel lösenord");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Fel användarnamn eller lösenord");
                     alert.show();

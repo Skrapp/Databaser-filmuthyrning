@@ -4,25 +4,29 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "country")
+@Table
 public class Country {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "country_id", nullable = false)
-    private Integer id;
 
-    @Column(name = "country", nullable = false, length = 50)
+    @Id
+    @Column(name = "country_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int country_id;
+
+    @Column(name = "country")
     private String country;
 
-    @Column(name = "last_update", nullable = false)
-    private Instant lastUpdate;
+    @Column(name = "last_update")
+    private Instant last_update;
 
-    public Instant getLastUpdate() {
-        return lastUpdate;
+    public Country() {
     }
 
-    public void setLastUpdate(Instant lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public int getCountry_id() {
+        return country_id;
+    }
+
+    public void setCountry_id(int country_id) {
+        this.country_id = country_id;
     }
 
     public String getCountry() {
@@ -33,11 +37,11 @@ public class Country {
         this.country = country;
     }
 
-    public Integer getId() {
-        return id;
+    public Instant getLast_update() {
+        return last_update;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setLast_update(Instant last_update) {
+        this.last_update = last_update;
     }
 }
