@@ -8,7 +8,7 @@
         <datasource-mapping>
           <factory-entry name="Databaser-filmuthyrning" />
           <factory-entry name="Default" />
-          <factory-entry name="hibernate" />
+          <factory-entry name="hibernate" value="ec062466-350e-4acd-8c9d-38e49865f1ea" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
@@ -33,7 +33,6 @@
     <orderEntry type="library" name="Maven: com.google.guava:failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.17" level="project" />
@@ -41,6 +40,15 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: jaxen:jaxen:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.10.11" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.10.11" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.sun:tools:1.8.0">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.jdks/corretto-1.8.0_312/jre/../lib/tools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.31" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:3.5.2" level="project" />
@@ -74,5 +82,11 @@
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-entitymanager:5.6.2.Final" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.27" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate:hibernate-spatial:5.6.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.geolatte:geolatte-geom:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: org.locationtech.jts:jts-core:1.18.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.2.16" level="project" />
+    <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
   </component>
 </module>
