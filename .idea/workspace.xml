@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="La till address klass från databasen">
+    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Geometry">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +147,7 @@
       <workItem from="1640089049358" duration="13125000" />
       <workItem from="1640161125183" duration="2049000" />
       <workItem from="1640163229444" duration="9439000" />
-      <workItem from="1640248471573" duration="1139000" />
+      <workItem from="1640248471573" duration="1866000" />
     </task>
     <task id="LOCAL-00001" summary="La till address klass från databasen">
       <created>1640163164862</created>
@@ -154,7 +156,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640163164862</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Geometry">
+      <created>1640249721067</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1640249721067</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,6 +183,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="La till address klass från databasen" />
-    <option name="LAST_COMMIT_MESSAGE" value="La till address klass från databasen" />
+    <MESSAGE value="Geometry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Geometry" />
   </component>
 </project>
