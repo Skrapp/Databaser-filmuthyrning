@@ -117,8 +117,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.test2" />
-        <item itemvalue="Application.test" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.test" />
         <item itemvalue="Application.Login" />
         <item itemvalue="Application.NewLogin" />
       </list>
@@ -145,6 +145,7 @@
       <workItem from="1640089049358" duration="13125000" />
       <workItem from="1640161125183" duration="2049000" />
       <workItem from="1640163229444" duration="9439000" />
+      <workItem from="1640248471573" duration="1139000" />
     </task>
     <task id="LOCAL-00001" summary="La till address klass från databasen">
       <created>1640163164862</created>

@@ -1,6 +1,6 @@
 package db;
 
-import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.*;
@@ -38,7 +38,9 @@ public class Address {
 
 
     @Column(name = "location")
-    public Point location;
+    public Geometry location;
+
+
 
 
     @Column(name = "last_update")
@@ -49,7 +51,7 @@ public class Address {
 
 
 
-    public Address(int address_id, String address, String address2, String district, int city_id, String postal_code, String phone, Point location, Instant last_update) {
+    public Address(int address_id, String address, String address2, String district, int city_id, String postal_code, String phone, Geometry location, Instant last_update) {
         GeometryFactory geometryFactory = new GeometryFactory();
         this.address_id = address_id;
         this.address = address;
@@ -60,6 +62,7 @@ public class Address {
         this.phone = phone;
         this.location = location;
         this.last_update = last_update;
+
     }
 
     public int getAddress_id() {
@@ -118,11 +121,11 @@ public class Address {
         this.phone = phone;
     }
 
-    public Point getLocation() {
+    public Geometry getLocation() {
         return location;
     }
 
-    public void setLocation(Point location) {
+    public void setLocation(Geometry location) {
         this.location = location;
 
     }

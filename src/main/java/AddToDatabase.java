@@ -3,6 +3,7 @@ import db.City;
 import db.Country;
 import db.Customer;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.EntityManager;
@@ -31,6 +32,10 @@ public class AddToDatabase {
             Address address= new Address();
             Instant instant = Instant.now();
             GeometryFactory geometryFactory = new GeometryFactory();
+            Coordinate coord = new Coordinate(1, 2);
+            Geometry geometry = null;
+            geometry = geometryFactory.createPoint(coord);
+
 
 
             Point point = new Point(2, 2);
@@ -41,7 +46,7 @@ public class AddToDatabase {
             address.setCity_id(12);
             address.setPostal_code("76437");
             address.setPhone("122303032");
-            address.setLocation(point);
+            address.setLocation(geometry);
             address.setLast_update(instant);
 
             entityManager.persist(address);
@@ -49,8 +54,6 @@ public class AddToDatabase {
            /* Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = Skogen AND district = Knutby AND city_id = 12 AND phone =122303032");
             List<Integer> chosenArtist = queryAdressID.getResultList();
             int addressID = chosenArtist.get(0);*/
-
-
 
             /*customer.setFirst_name("Daniel3");
             customer.setLast_name("Säfström3");
