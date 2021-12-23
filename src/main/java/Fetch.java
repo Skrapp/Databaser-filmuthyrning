@@ -34,7 +34,6 @@ public class Fetch {
         }finally {
             entityManager.close();
         }
-
     }
 
     public void searchFromDatabase(TextField tf, ObservableList ol, EntityManagerFactory em, String column, String table){
@@ -109,12 +108,13 @@ public class Fetch {
      * @param sSearchCriteria string to add search criteria
      * @return search criteria
      */
-    //
     public String createSearchCriteria (Pane box, String sSearchCriteria) {
         for (int i = 0; i < box.getChildren().size(); i++) {
+            //See if object is a pane
             if (box.getChildren().get(i) instanceof Pane)
             {
                 sSearchCriteria = createSearchCriteria((Pane) box.getChildren().get(i), sSearchCriteria);
+                //If there is an error do not continue
                 if(sSearchCriteria.contains("ERROR")){
                     return sSearchCriteria;
                 }
@@ -153,7 +153,6 @@ public class Fetch {
                             //Should call for an Error popup method
                             System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
                             return "ERROR";
-
                         }
                     }
                     //Max search
@@ -213,9 +212,6 @@ public class Fetch {
                     //exact search and surrounded by ''
                     sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" = '")
                             .concat(box.getChildren().get(i).getId().split(",")[1]).concat("'");
-
-
-
                 }
             }
             System.out.println(sSearchCriteria); //Debug
