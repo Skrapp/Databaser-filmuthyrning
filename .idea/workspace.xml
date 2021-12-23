@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Geometry">
+    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +144,7 @@
       <workItem from="1640089049358" duration="13125000" />
       <workItem from="1640161125183" duration="2049000" />
       <workItem from="1640163229444" duration="9439000" />
-      <workItem from="1640248471573" duration="1866000" />
+      <workItem from="1640248471573" duration="2488000" />
     </task>
     <task id="LOCAL-00001" summary="La till address klass från databasen">
       <created>1640163164862</created>
@@ -163,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640249721067</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry">
+      <created>1640250582309</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1640250582309</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +188,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="La till address klass från databasen" />
     <MESSAGE value="Geometry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Geometry" />
+    <MESSAGE value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
   </component>
 </project>

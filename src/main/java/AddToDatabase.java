@@ -37,23 +37,22 @@ public class AddToDatabase {
             geometry = geometryFactory.createPoint(coord);
 
 
-
-            Point point = new Point(2, 2);
-
-            address.setAddress("Hos Jesper");
+            address.setAddress("Hos Jesper 2");
             address.setAddress2("");
-            address.setDistrict("Salabacke");
+            address.setDistrict("Salabacke 2");
             address.setCity_id(16);
-            address.setPostal_code("75597");
-            address.setPhone("6371");
+            address.setPostal_code("755972");
+            address.setPhone("63712");
             address.setLocation(geometry);
             address.setLast_update(instant);
 
             entityManager.persist(address);
 
-            /*Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = Skogen AND district = Knutby AND city_id = 12 AND phone =122303032");
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = 'Hos Jesper 2' AND district = 'Salabacke 2' AND city_id = 16 AND phone ='63712'");
             List<Short> chosenID = queryAdressID.getResultList();
             short addressID = chosenID.get(0);
+
+            System.out.println(addressID);
 
             customer.setFirst_name("Daniel3");
             customer.setLast_name("Säfström3");
@@ -67,7 +66,7 @@ public class AddToDatabase {
 
 
 
-            entityManager.persist(customer);*/
+            entityManager.persist(customer);
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
