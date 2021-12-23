@@ -10,14 +10,16 @@
         <class>db.Category</class>
         <class>db.Language</class>
         <class>db.Film</class>
-        <class>db.Film</class>
         <class>db.Category</class>
         <class>db.FilmCategoryId</class>
         <class>db.FilmCategory</class>
         <class>db.FilmText</class>
         <class>db.FilmActorId</class>
         <class>db.FilmActor</class>
-        <class>db.Film</class>
+        <class>db.Address</class>
+        <class>db.City</class>
+        <class>db.Country</class>
+        <class>db.City</class>
         <class>db.Address</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
@@ -25,7 +27,7 @@
             <property name="javax.persistence.jdbc.user" value="test2"/>
             <property name="javax.persistence.jdbc.password" value="test2"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update" />
         </properties>
     </persistence-unit>
