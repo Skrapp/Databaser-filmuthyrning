@@ -4,7 +4,6 @@ import db.Language;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.locationtech.jts.geom.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -32,7 +31,7 @@ public class Create {
             //Objects for entity Language (new and original) created where corresponding language_id for whatever
             // language chosen is set to the object, object is then set to newFilm Film object.
             Language language = new Language();
-            language.setId(Integer.valueOf(sTextField[13])); //sTextField[12] is language_id value of language combobox
+            language.setId(Integer.valueOf(sTextField[13])); //sTextField[13] is language_id value of language combobox
             newFilm.setTitle(sTextField[1]);
             newFilm.setDescription(sTextField[6]);
             newFilm.setLanguage(language);
@@ -44,12 +43,6 @@ public class Create {
             newFilm.setOriginalLanguage(language);
             newFilm.setReleaseYear(2002);
             newFilm.setSpecialFeatures("Trailers,Commentaries,Behind the Scenes");
-            GeometryFactory geometryFactory = new GeometryFactory();
-            Coordinate coord = new Coordinate(1, 2);
-            Geometry geometry = null;
-            geometry = geometryFactory.createPoint(coord);
-            Address address = new Address();
-            address.setLocation(geometry);
             emCreateMovie.persist(newFilm);
             emCreateMovie.flush();
             transaction.commit();

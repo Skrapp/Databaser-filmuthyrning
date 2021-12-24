@@ -1,7 +1,5 @@
-import db.Address;
 import db.City;
 import db.Country;
-import db.Customer;
 
 import javax.persistence.*;
 import java.time.Instant;

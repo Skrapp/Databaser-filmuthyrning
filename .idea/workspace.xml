@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Databaser-filmuthyrning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Databaser-filmuthyrning.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Create.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Create.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/City.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +27,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="com.haulmont.jpb.JpaEntity" />
         <option value="Class" />
+        <option value="com.haulmont.jpb.JpaEntity" />
       </list>
     </option>
   </component>
@@ -44,7 +55,7 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
       </map>
     </option>
   </component>
@@ -63,6 +74,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
@@ -156,6 +168,8 @@
       <workItem from="1639920223082" duration="596000" />
       <workItem from="1639920870119" duration="9139000" />
       <workItem from="1639995093897" duration="17718000" />
+      <workItem from="1640299546107" duration="1169000" />
+      <workItem from="1640300791436" duration="2693000" />
     </task>
     <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
       <created>1639785458250</created>
@@ -194,6 +208,8 @@
       <updated>1640034652232</updated>
     </task>
     <task>
+      <created>1640299537553</created>
+      <updated>1640299537553</updated>
       <workItem from="1639828038247" duration="10989000" />
       <workItem from="1639995361919" duration="3334000" />
       <workItem from="1640022026311" duration="1246000" />
