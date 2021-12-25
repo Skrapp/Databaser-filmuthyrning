@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry">
+    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ErrorCheck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +24,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="JpbToolWindowState">
     <option name="myId2FirstActivated">
@@ -52,33 +61,16 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.stylelint" value="" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="proofread" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.test2">
-    <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Login" />
-      <module name="Databaser-filmuthyrning" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value=".*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Databaser-filmuthyrning" />
@@ -86,40 +78,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="NewLogin" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="db.NewLogin" />
-      <module name="Databaser-filmuthyrning" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value=".*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="test" />
-      <module name="Databaser-filmuthyrning" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="test2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="test2" />
-      <module name="Databaser-filmuthyrning" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.test2" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.test" />
-        <item itemvalue="Application.Login" />
-        <item itemvalue="Application.NewLogin" />
       </list>
     </recent_temporary>
   </component>
@@ -137,37 +98,48 @@
       <workItem from="1639653840288" duration="1012000" />
       <workItem from="1639657035788" duration="1189000" />
       <workItem from="1639744081885" duration="2067000" />
-      <workItem from="1639828038247" duration="10989000" />
-      <workItem from="1639995361919" duration="3334000" />
-      <workItem from="1640022026311" duration="1246000" />
-      <workItem from="1640078949963" duration="5408000" />
-      <workItem from="1640089049358" duration="13125000" />
-      <workItem from="1640161125183" duration="2049000" />
-      <workItem from="1640163229444" duration="9439000" />
-      <workItem from="1640248471573" duration="2488000" />
+      <workItem from="1639748664077" duration="1172000" />
+      <workItem from="1639920223082" duration="596000" />
+      <workItem from="1639920870119" duration="9139000" />
+      <workItem from="1639995093897" duration="17718000" />
     </task>
-    <task id="LOCAL-00001" summary="La till address klass från databasen">
-      <created>1640163164862</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1640163164862</updated>
+    <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
+      <created>1639785458250</created>
+      <option name="number" value="LOCAL−00001" />
+      <option name="presentableId" value="LOCAL−00001" />
+      <updated>1639785458250</updated>
     </task>
-    <task id="LOCAL-00002" summary="Geometry">
-      <created>1640249721067</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1640249721067</updated>
+    <task id="LOCAL−00002" summary="Kan söka efter data ur textfields och comboboxes i en vBox.">
+      <created>1639862092248</created>
+      <option name="number" value="LOCAL−00002" />
+      <option name="presentableId" value="LOCAL−00002" />
+      <updated>1639862092248</updated>
     </task>
-    <task id="LOCAL-00003" summary="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry">
-      <created>1640250582309</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1640250582309</updated>
+    <task id="LOCAL−00003" summary="Nu kan man söka med checkboxar för extramaterial och om den finns i lager. Koden är dock för specifik och känns inte optimal. &#10;Skapade några exempel på checkboxar&#10;La till ett tomt alternativ i alla comboBoxar för att användaren ska kunna ta bort det sökkriteriet">
+      <created>1639957382476</created>
+      <option name="number" value="LOCAL−00003" />
+      <option name="presentableId" value="LOCAL−00003" />
+      <updated>1639957382477</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL−00004" summary="La till så man kan söka max och min värdet på olika textfält">
+      <created>1639999204078</created>
+      <option name="number" value="LOCAL−00004" />
+      <option name="presentableId" value="LOCAL−00004" />
+      <updated>1639999204078</updated>
+    </task>
+    <task id="LOCAL−00005" summary="La till max och min textfält">
+      <created>1640018670251</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1640018670251</updated>
+    </task>
+    <task id="LOCAL−00006" summary="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
+      <created>1640034652232</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1640034652232</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,12 +155,18 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="La till address klass från databasen" />
-    <MESSAGE value="Geometry" />
-    <MESSAGE value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
+    <MESSAGE value="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar." />
+    <MESSAGE value="Kan söka efter data ur textfields och comboboxes i en vBox." />
+    <MESSAGE value="Nu kan man söka med checkboxar för extramaterial och om den finns i lager. Koden är dock för specifik och känns inte optimal. &#10;Skapade några exempel på checkboxar&#10;La till ett tomt alternativ i alla comboBoxar för att användaren ska kunna ta bort det sökkriteriet" />
+    <MESSAGE value="La till så man kan söka max och min värdet på olika textfält" />
+    <MESSAGE value="La till max och min textfält" />
+    <MESSAGE value="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort" />
+    <option name="LAST_COMMIT_MESSAGE" value="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
