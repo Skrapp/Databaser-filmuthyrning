@@ -101,7 +101,7 @@ public class AddToDatabase {
             newFilm.setDescription(sTextField[6]);
             newFilm.setLanguage(language);
             newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously.
-            newFilm.setRentalDuration(Integer.valueOf(sTextField[8]));
+            newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sTextField[8])));
             newFilm.setRentalRate(BigDecimal.valueOf(Long.parseLong(sTextField[3])));
             newFilm.setReplacementCost(BigDecimal.valueOf(Long.parseLong(sTextField[21])));
             newFilm.setRating(sTextField[10]);
@@ -109,6 +109,7 @@ public class AddToDatabase {
             newFilm.setReleaseYear(2002);
             newFilm.setSpecialFeatures(sTextField[17]);
             emAddMovie.persist(newFilm);
+            newFilm.setCategory(Integer.valueOf(sTextField[4]), emAddMovie, newFilm);
             emAddMovie.flush();
             transaction.commit();
         }catch (Exception e){
@@ -121,18 +122,21 @@ public class AddToDatabase {
         }
     }
 
+
     private String getCorrespondingId(String cbString, EntityManagerFactory em) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         String idAsString = "";
+        Query query;
+        Query query2;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
-            Query query = entityManager.createNativeQuery("SELECT language_id from language WHERE name = '" + cbString + "';");
-            Query query2 = entityManager.createNativeQuery("SELECT category_id from category WHERE name = '" + cbString + "';");
+            query = entityManager.createNativeQuery("SELECT language_id from language WHERE name = '" + cbString + "';");
+            query2 = entityManager.createNativeQuery("SELECT category_id from category WHERE name = '" + cbString + "';");
             try {
-                if (query.getSingleResult() != null) idAsString = query.getResultList().get(0).toString();
-                if (query2.getSingleResult() != null) idAsString = query2.getResultList().get(0).toString();
+                if (!query2.getResultList().isEmpty()) idAsString = query2.getResultList().get(0).toString();
+                if (!query.getResultList().isEmpty()) idAsString = query.getResultList().get(0).toString();
                 transaction.commit();
             }catch (NoResultException ee) {
                 if (transaction != null) {

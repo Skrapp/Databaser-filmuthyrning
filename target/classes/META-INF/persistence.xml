@@ -21,6 +21,7 @@
         <class>db.Country</class>
         <class>db.City</class>
         <class>db.Address</class>
+        <class>db.FilmCategory</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/sakila?serverTimezone=UTC"/>

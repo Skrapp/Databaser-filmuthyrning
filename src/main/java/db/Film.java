@@ -125,6 +125,16 @@ public class Film {
         this.language = language;
     }
 
+    public void setCategory(Integer categoryId, EntityManager entityManager, Film film) {
+        FilmCategory filmCategory = new FilmCategory();
+        FilmCategoryId filmCategoryId = new FilmCategoryId();
+        filmCategoryId.setFilmId(film.getId());
+        filmCategoryId.setCategoryId(categoryId);
+        filmCategory.setId(filmCategoryId);
+        filmCategory.setLastUpdate(Instant.now());
+        entityManager.persist(filmCategory);
+    }
+
     public Integer getReleaseYear() {
         return releaseYear;
     }
