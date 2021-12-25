@@ -2,22 +2,25 @@ import db.Address;
 import db.City;
 import db.Country;
 import db.Customer;
+import javafx.scene.control.TextField;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 
-public class test {
+public class Test {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
     public static void main(String[] args) {
-        int countryID = addCountryID();
-        System.out.println(countryID);
-        int cityID = addCityID();
-        System.out.println(cityID);
+        Main main = new Main();
+        //int countryID = addCountryID();
+        //System.out.println(countryID);
+        //int cityID = addCityID();
+        //System.out.println(cityID);
         deleteCustomer();
     }
 
-    public static int addCountryID(){
+
+    public int addCountryID(TextField tfAddCustomerCountrys){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
         short countryId = -1;
@@ -28,15 +31,15 @@ public class test {
             Country country = new Country();
             Instant instant = Instant.now();
 
-            String texCountry = "Norge";
+            String Country = tfAddCustomerCountrys.getText();
 
-                Query query = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + texCountry + "'");
+                Query query = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
 
                 if (query.getResultList().isEmpty()) {
-                    country.setCountry(texCountry);
+                    country.setCountry(Country);
                     country.setLast_update(instant);
                     entityManager.persist(country);
-                    Query query1 = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + texCountry + "'");
+                    Query query1 = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
                     List<Short> chosenCountry1 = query1.getResultList();
                     countryId = chosenCountry1.get(0);
                 } else {
@@ -59,7 +62,7 @@ public class test {
         return countryId;
     }
 
-    public static int addCityID(){
+    public int addCityID(TextField tfAddCustomerCity, int countryID){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
         short cityId = -1;
@@ -71,17 +74,16 @@ public class test {
 
             Instant instant = Instant.now();
 
-            short texcountryId = 100;
-            String texCity = "Oslo";
+            String City = tfAddCustomerCity.getText();
 
-            Query query = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + texcountryId + "' AND city = '"+texCity+"'");
+            Query query = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
 
             if (query.getResultList().isEmpty()) {
-                city.setCity(texCity);
-                city.setCountry_id(texcountryId);
+                city.setCity(City);
+                city.setCountry_id(countryID);
                 city.setLast_update(instant);
                 entityManager.persist(city);
-                Query query1 = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + texcountryId + "' AND city = '"+texCity+"'");
+                Query query1 = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
                 List<Short> chosenCountry1 = query1.getResultList();
                 cityId = chosenCountry1.get(0);
             } else {

@@ -11,21 +11,21 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.awt.*;
-import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
+import javafx.scene.control.TextField;
 
 public class AddToDatabase {
 
-    public void addCustomer (EntityManagerFactory em/*, TextField tfAddCustomerFirstName, TextField tfAddCustomerLastName, TextField tfAddCustomerEmail, TextField tfAddCustomerStoreId,
-                             TextField tfAddCustomerRegistered, TextField tfAddCustomerActive, TextField tfAddCustomerAddress, TextField tfAddCustomerPostalCode, TextField tfAddCustomerDistrict,
-                             TextField tfAddCustomerPhone, TextField tfAddCustomerCity, TextField tfAddCustomerCountrys*/) {
+    public void addCustomer (EntityManagerFactory em, TextField tfAddCustomerFirstName, TextField tfAddCustomerLastName, TextField tfAddCustomerEmail, TextField tfAddCustomerStoreId,
+                             TextField tfAddCustomerActive, TextField tfAddCustomerAddress, TextField tfAddCustomerPostalCode, TextField tfAddCustomerDistrict,
+                             TextField tfAddCustomerPhone, int cityID) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
-            test test = new test();
+            Test test = new Test();
             Customer customer = new Customer();
             City city = new City();
             Country country = new Country();
@@ -37,30 +37,30 @@ public class AddToDatabase {
             geometry = geometryFactory.createPoint(coord);
 
 
-            address.setAddress("Hos Jesper 2");
+            address.setAddress(tfAddCustomerAddress.getText());
             address.setAddress2("");
-            address.setDistrict("Salabacke 2");
-            address.setCity_id(16);
-            address.setPostal_code("755972");
-            address.setPhone("63712");
+            address.setDistrict(tfAddCustomerDistrict.getText());
+            address.setCity_id(cityID);
+            address.setPostal_code(tfAddCustomerPostalCode.getText());
+            address.setPhone(tfAddCustomerPhone.getText());
             address.setLocation(geometry);
             address.setLast_update(instant);
 
             entityManager.persist(address);
 
-            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = 'Hos Jesper 2' AND district = 'Salabacke 2' AND city_id = 16 AND phone ='63712'");
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = '" +tfAddCustomerAddress.getText() + "' AND district = '"+tfAddCustomerDistrict.getText()+"' AND city_id = '"+cityID+"' AND phone ='"+tfAddCustomerPhone.getText()+"' " +
+                    "AND postal_code= '"+tfAddCustomerPostalCode.getText()+"'");
             List<Short> chosenID = queryAdressID.getResultList();
             short addressID = chosenID.get(0);
 
             System.out.println(addressID);
 
-            customer.setFirst_name("Daniel3");
-            customer.setLast_name("Säfström3");
+            customer.setFirst_name(tfAddCustomerFirstName.getText());
+            customer.setLast_name(tfAddCustomerLastName.getText());
             customer.setAddress_id(addressID); //adressID
-            customer.setStore_id(1);
-            customer.setActive(1);
-            customer.setEmail("Daniel@hot");
-            //customer.setAddress(0);
+            customer.setStore_id(Integer.parseInt(tfAddCustomerStoreId.getText()));
+            customer.setActive(Integer.parseInt(tfAddCustomerActive.getText()));
+            customer.setEmail(tfAddCustomerEmail.getText());
             //customer.setCreate_date(Date.valueOf(String.valueOf(2021-03-02)));
             customer.setLast_update(instant);
 

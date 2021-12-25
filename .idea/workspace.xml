@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test2.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +48,7 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
       </map>
     </option>
   </component>
@@ -114,8 +118,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="test" />
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="Databaser-filmuthyrning" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -132,7 +136,7 @@
       <list>
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.test2" />
-        <item itemvalue="Application.test" />
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.Login" />
         <item itemvalue="Application.NewLogin" />
       </list>
@@ -194,6 +198,8 @@
       <updated>1640034652232</updated>
     </task>
     <task>
+      <created>1640449044184</created>
+      <updated>1640449044184</updated>
       <workItem from="1639828038247" duration="10989000" />
       <workItem from="1639995361919" duration="3334000" />
       <workItem from="1640022026311" duration="1246000" />
@@ -240,6 +246,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="La till address klass från databasen" />

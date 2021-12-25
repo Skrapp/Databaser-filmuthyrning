@@ -13,13 +13,8 @@ import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Optional;
+
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
-
-
-import javax.persistence.*;
-
 
 
 public class Main extends Application {
@@ -500,7 +495,24 @@ public class Main extends Application {
                         } else {
                                 hBoxAdvancedSearchMovies.setVisible(true);
                         }
+
                 });
+                bCreateCustomer.setOnAction(event -> {
+                        Test test = new Test();
+                        AddToDatabase addToDatabase = new AddToDatabase();
+                        int countryID = test.addCountryID(tfAddCustomerCountrys);
+                        int cityID = test.addCityID(tfAddCustomerCity, countryID);
+                        addToDatabase.addCustomer(ENTITY_MANAGER_FACTORY, tfAddCustomerFirstName, tfAddCustomerLastName, tfAddCustomerEmail, tfAddCustomerStoreId,
+                                tfAddCustomerActive, tfAddCustomerAddress, tfAddCustomerPostalCode, tfAddCustomerDistrict, tfAddCustomerPhone, cityID);
+                        tfAddCustomerActive.clear();
+                        tfAddCustomerFirstName.clear();
+                        tfAddCustomerLastName.clear();
+                        tfAddCustomerAddress.clear();
+                        tfAddCustomerCity.clear();
+                        tfAddCustomerCountrys.clear();
+                        tfAddCustomerEmail.clear();
+                });
+
 
                 bSearchMovie.setOnAction(event -> {
                         fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,ENTITY_MANAGER_FACTORY,"title", "film", sMovieJoin);
@@ -591,7 +603,7 @@ public class Main extends Application {
                 //Add customer
                 vBoxAddCustomer.getChildren().addAll(lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName,
                         tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail, lAddCustomerStoreId,
-                        tfAddCustomerStoreId, lAddCustomerRegistered, tfAddCustomerRegistered, lAddCustomerActive,
+                        tfAddCustomerStoreId, lAddCustomerActive,
                         tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress, lAddCustomerPostalCode,
                         tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone,
                         tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity, lAddCustomerCountry,
