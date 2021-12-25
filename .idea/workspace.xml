@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ErrorCheck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,12 +44,15 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="22JaQjZf5C7Co6U6Lgrfn3DQmGa" />
   <component name="ProjectViewState">
@@ -68,11 +70,59 @@
     <property name="node.js.selected.package.stylelint" value="" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="proofread" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Login" />
+      <module name="Databaser-filmuthyrning" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value=".*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Databaser-filmuthyrning" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NewLogin" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="db.NewLogin" />
+      <module name="Databaser-filmuthyrning" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value=".*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="test" />
+      <module name="Databaser-filmuthyrning" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="test2" />
       <module name="Databaser-filmuthyrning" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -81,6 +131,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.test2" />
+        <item itemvalue="Application.test" />
+        <item itemvalue="Application.Login" />
+        <item itemvalue="Application.NewLogin" />
       </list>
     </recent_temporary>
   </component>
@@ -139,7 +193,38 @@
       <option name="presentableId" value="LOCAL−00006" />
       <updated>1640034652232</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task>
+      <workItem from="1639828038247" duration="10989000" />
+      <workItem from="1639995361919" duration="3334000" />
+      <workItem from="1640022026311" duration="1246000" />
+      <workItem from="1640078949963" duration="5408000" />
+      <workItem from="1640089049358" duration="13125000" />
+      <workItem from="1640161125183" duration="2049000" />
+      <workItem from="1640163229444" duration="9439000" />
+      <workItem from="1640248471573" duration="2488000" />
+    </task>
+    <task id="LOCAL-00001" summary="La till address klass från databasen">
+      <created>1640163164862</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1640163164862</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Geometry">
+      <created>1640249721067</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1640249721067</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry">
+      <created>1640250582309</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1640250582309</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,13 +242,10 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar." />
-    <MESSAGE value="Kan söka efter data ur textfields och comboboxes i en vBox." />
-    <MESSAGE value="Nu kan man söka med checkboxar för extramaterial och om den finns i lager. Koden är dock för specifik och känns inte optimal. &#10;Skapade några exempel på checkboxar&#10;La till ett tomt alternativ i alla comboBoxar för att användaren ska kunna ta bort det sökkriteriet" />
-    <MESSAGE value="La till så man kan söka max och min värdet på olika textfält" />
-    <MESSAGE value="La till max och min textfält" />
-    <MESSAGE value="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort" />
-    <option name="LAST_COMMIT_MESSAGE" value="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort" />
+    <MESSAGE value="La till address klass från databasen" />
+    <MESSAGE value="Geometry" />
+    <MESSAGE value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
