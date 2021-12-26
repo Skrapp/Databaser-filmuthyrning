@@ -69,10 +69,11 @@ public class Fetch {
     /**
      * Search in table for written search criteria
      * @param box Pane (VBox or HBox) containing searchable data
-     * @param ol where data is saved
+     * @param ol where data is written out
      * @param em entity manager factory
      * @param column what column in table to show in search results
      * @param table what table in database to use
+     * @param join String of what other tables should be joined
      */
     public void searchFromDatabase(Pane box, ObservableList ol, EntityManagerFactory em, String column, String table, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
@@ -82,7 +83,6 @@ public class Fetch {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            //Only for film right now
             Query query = entityManager.createNativeQuery(
                     "SELECT " + column +
                     " FROM " + table +
@@ -108,9 +108,45 @@ public class Fetch {
         }
     }
 
+    public boolean isInStore(EntityManagerFactory em, String movieTitle, String join){
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        Boolean isInStore = false;
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+                    "SELECT title"+
+                            " FROM film"+
+                            join +
+                            " WHERE title = '" + movieTitle +
+                            "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
+                            " GROUP BY film.film_id" +
+                            " ORDER BY film.title;"
+            );
+
+            List<String>list = query.getResultList();
+
+            if (list.size() >= 1)
+                isInStore = true;
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return isInStore;
+    }
+
 
     /**
-     * Searches all data in children to a Pane and returns a string with searchCriteria formatted for sql
+     * Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
      * @param box Pane (parent to VBox and HBox) containing the searchable information
      * @param sSearchCriteria string to add search criteria
      * @return search criteria

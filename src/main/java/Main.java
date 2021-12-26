@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
@@ -16,6 +17,7 @@ import javax.persistence.Persistence;
 import java.util.Optional;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import org.geolatte.geom.V;
 
 
 import javax.persistence.*;
@@ -82,10 +84,6 @@ public class Main extends Application {
                 fetch.addToComboList(olRating, ENTITY_MANAGER_FACTORY,"rating","film");
                 fetch.addToComboList(olStores, ENTITY_MANAGER_FACTORY,"store_id","store");
 
-                ComboBox cbAddCategory = new ComboBox(olCategory);
-                cbAddCategory.setPromptText("Kategori");
-                ComboBox cbAddLanguages = new ComboBox(olLanguages);
-                cbAddLanguages.setPromptText("Språk");
                 fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY, "name", "category");
                 fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY, "name", "language");
 
@@ -103,7 +101,15 @@ public class Main extends Application {
                 vBoxCenter.setPadding(new Insets(10));
                 VBox vBoxRight = new VBox();
                 vBoxRight.setPadding(new Insets(10));
+                VBox vBoxCenterButtons = new VBox();
+                HBox hBoxButtonRent = new HBox();
+                hBoxButtonRent.setSpacing(5);
+                hBoxButtonRent.setAlignment(Pos.CENTER);
+                HBox hBoxButtonInfo = new HBox();
+                hBoxButtonInfo.setSpacing(5);
+                hBoxButtonInfo.setAlignment(Pos.CENTER);
 
+                //Advanced search
                 HBox hBoxAdvancedSearchMovies = new HBox();
                 hBoxAdvancedSearchMovies.setPadding(new Insets(10));
                 hBoxAdvancedSearchMovies.setVisible(false);
@@ -137,6 +143,12 @@ public class Main extends Application {
                 hBoxExit.setSpacing(10);
                 hBoxExit.setPadding(new Insets(10, 0, 0, 0));
 
+                //Renting popup
+                VBox vBoxRentMovie = new VBox();
+                vBoxRentMovie.setPadding(new Insets(10));
+                HBox hBoxRentMovieButtons = new HBox();
+                hBoxRentMovieButtons.setAlignment(Pos.CENTER);
+                hBoxRentMovieButtons.setSpacing(20);
 
                 //Buttons
                 Button bSearchMovie = new Button("Sök");
@@ -149,11 +161,16 @@ public class Main extends Application {
                 Button bUpdateMovie = new Button("Redigera");
                 Button bRentMovie = new Button("Hyra");
                 Button bReturnMovie = new Button("Lämna tillbaka");
+                Button bInfoMovie = new Button("Info om filmen");
+                Button bInfoCustomer = new Button("Info om kunden");
 
                 Button bCustomerSearchClear= new Button("Töm sökning");
                 Button bMovieSearchClear= new Button("Töm sökning");
 
                 Button bStaffAdd = new Button("Lägg till");
+
+                Button bRentMovieAccept = new Button("Ja");
+                Button bRentMovieDecline = new Button("Nej");
 
                 //Logout buttons
                 Button bConfirmLogout = new Button("Logga ut");
@@ -281,6 +298,9 @@ public class Main extends Application {
                 //File
                 Label lConfirmLogout = new Label("Är du säker?");
                 Label lConfirmExit = new Label("Är du säker?");
+
+                //Text
+                Text tRentMovie = new Text("");
 
                 //-----------------------------
                 //Checkboxes
@@ -486,7 +506,7 @@ public class Main extends Application {
                         fxBuilder.createPopUp(vBoxExit);
                 });
 
-                //Add button function
+                //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
                         if (hBoxAdvancedSearchCustomer.isVisible()) {
                                 hBoxAdvancedSearchCustomer.setVisible(false);
@@ -494,6 +514,7 @@ public class Main extends Application {
                                 hBoxAdvancedSearchCustomer.setVisible(true);
                         }
                 });
+
                 bAdvancedSearchMovies.setOnAction(event -> {
                         if (hBoxAdvancedSearchMovies.isVisible()) {
                                 hBoxAdvancedSearchMovies.setVisible(false);
@@ -518,6 +539,24 @@ public class Main extends Application {
                         fxBuilder.clearFields(vBoxRight);
                 });
 
+                //Rent movie
+                bRentMovie.setOnAction(event -> {
+                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        if(sMovie != null && sCustomer != null){
+                                if(fetch.isInStore(ENTITY_MANAGER_FACTORY,sMovie,sMovieJoin)) {
+                                        tRentMovie.setText("Vill " + sCustomer + " hyra " + sMovie);
+                                        fxBuilder.createPopUp(vBoxRentMovie);
+                                }
+                                else
+                                        //Create popup for informing it is not in stock
+                                        fxBuilder.createPopUp(hboxTest);
+                        }
+                        else
+                                System.out.println("Välj kund och film");
+                });
+
+                //Log out
                 bConfirmLogout.setOnAction(event -> {
                         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
                         primaryStage.close();
@@ -543,9 +582,17 @@ public class Main extends Application {
 
                 vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies,bMovieSearchClear);
 
-                vBoxCenter.getChildren().addAll(lMovieResult,lvSearchResultsMovie,lCustomerResult,lvSearchResultsCustomer);
+                vBoxCenter.getChildren().addAll(lMovieResult,lvSearchResultsMovie,vBoxCenterButtons,lCustomerResult,lvSearchResultsCustomer);
 
+                vBoxCenterButtons.getChildren().addAll(hBoxButtonRent,hBoxButtonInfo);
+                hBoxButtonInfo.getChildren().addAll(bInfoMovie,bInfoCustomer);
+                hBoxButtonRent.getChildren().addAll(bRentMovie,bReturnMovie);
 
+                //Renting popup
+                vBoxRentMovie.getChildren().addAll(tRentMovie,hBoxRentMovieButtons);
+                hBoxRentMovieButtons.getChildren().addAll(bRentMovieAccept,bRentMovieDecline);
+
+                //Movie Add
                 vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,lMovieAddRentalCost,
                         cbMovieAddCategory,lMovieAddDescription, lMovieAddLength, lMovieAddRating,lMovieAddOriginalLanguage,
                         cbMovieAddLanguages,lMovieAddActors,lMovieAddSpecialFeatures, lMovieAddRentalDuration,
