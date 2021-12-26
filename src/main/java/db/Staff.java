@@ -1,15 +1,17 @@
 package db;
 
+import org.checkerframework.checker.units.qual.C;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "staff")
+@Table
 public class Staff {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
-    private Integer staffId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int staffID;
 
     @Column(name = "first_name")
     private String firstName;
@@ -17,9 +19,8 @@ public class Staff {
     @Column(name = "last_name")
     private String lastName;
 
-
-    @JoinColumn(name = "address_id")
-    private int addressId;
+    @Column(name ="address_id")
+    private int adressID;
 
     @Column(name = "picture")
     private byte[] picture;
@@ -27,8 +28,8 @@ public class Staff {
     @Column(name = "email")
     private String email;
 
-    @JoinColumn(name = "store_id")
-    private int  storeId;
+    @Column(name = "store_id")
+    private int storeID;
 
     @Column(name = "active")
     private int active;
@@ -42,76 +43,22 @@ public class Staff {
     @Column(name = "last_update")
     private Instant lastUpdate;
 
-    public Instant getLastUpdate() {
-        return lastUpdate;
+    @Column(name = "addressId")
+    private int addressId;
+
+    @Column(name = "storeId")
+    private int storeId;
+
+
+    public Staff() {
     }
 
-    public void setLastUpdate(Instant lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public int getStaffID() {
+        return staffID;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public int getStore() {
-        return storeId;
-    }
-
-    public void setStore(int store) {
-        this.storeId = storeId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
-    public int getAddress() {
-        return addressId;
-    }
-
-    public void setAddress(int address) {
-        this.addressId = addressId;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
     }
 
     public String getFirstName() {
@@ -122,11 +69,93 @@ public class Staff {
         this.firstName = firstName;
     }
 
-    public Integer getStaffId() {
-        return staffId;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setStaffId(Integer id) {
-        this.staffId = id;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAdressID() {
+        return adressID;
+    }
+
+    public void setAdressID(int adressID) {
+        this.adressID = adressID;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Instant getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Instant lastUpdate) {
+        this.lastUpdate = lastUpdate;
+
+
+    }
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
     }
 }

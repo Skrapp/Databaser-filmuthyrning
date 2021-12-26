@@ -1,7 +1,4 @@
-import db.Address;
-import db.City;
-import db.Country;
-import db.Customer;
+import db.*;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -57,7 +54,7 @@ public class AddToDatabase {
                            TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode, TextField tfAddCustomerDistrict, TextField tfAddCustomerPhone, int cityID){
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
-        short adressId = -1;
+        short addressID = 1;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
@@ -84,7 +81,7 @@ public class AddToDatabase {
                     "' AND district = '"+tfAddCustomerDistrict.getText()+"' AND city_id = '"+cityID+"' AND phone ='"+tfAddCustomerPhone.getText()+"' " +
                     "AND postal_code= '"+tfAddCustomerPostalCode.getText()+"'");
             List<Short> chosenID = queryAdressID.getResultList();
-            short addressID = chosenID.get(0);
+             addressID = chosenID.get(0);
 
             System.out.println(addressID);
 
@@ -98,7 +95,48 @@ public class AddToDatabase {
         }finally {
             entityManager.close();
         }
-        return adressId;
+        return addressID;
+    }
+    public void AddStaff(EntityManagerFactory em, TextField tfStaffAddFirstName, TextField tfStaffAddLastName, TextField tfStaffAddEmail,
+                         TextField tfStaffAddUserName, TextField tfStaffAddPassword,TextField tfStaffAddStoreID,TextField tfStaffAddActive, int addressID){
+            EntityManager entityManager = em.createEntityManager();
+            EntityTransaction transaction = null;
+            try{
+                transaction = entityManager.getTransaction();
+                transaction.begin();
+                Staff staff = new Staff();
+
+                Instant instant = Instant.now();
+
+
+
+
+                staff.setFirstName(tfStaffAddFirstName.getText());
+                staff.setLastName(tfStaffAddLastName.getText());
+                staff.setEmail(tfStaffAddEmail.getText());
+                staff.setUsername(tfStaffAddUserName.getText());
+                staff.setPassword(tfStaffAddPassword.getText());
+                staff.setLastUpdate(instant);
+                staff.setAdressID(addressID);
+                staff.setStoreID(Integer.parseInt(tfStaffAddStoreID.getText()));
+                staff.setActive(Integer.parseInt(tfStaffAddActive.getText()));
+                //staff.setPicture();
+                staff.setStoreId(0);
+                staff.setAddressId(0);
+
+
+
+                entityManager.persist(staff);
+                transaction.commit();
+            }catch (Exception e){
+                if(transaction != null){
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }finally {
+                entityManager.close();
+            }
+
     }
 
 }

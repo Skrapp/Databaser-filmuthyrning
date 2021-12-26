@@ -15,6 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import javafx.scene.text.FontWeight;
+import org.checkerframework.checker.units.qual.A;
 
 
 public class Main extends Application {
@@ -277,6 +278,10 @@ public class Main extends Application {
                 Label lStaffAddPassword = new Label("Lösenord");
                 Label lStaffAddDisctrict = new Label("Distrikt");
                 Label lStaffAddAdress2 = new Label("Adress2");
+                Label lStaffAddStoreID = new Label("ButikID");
+                Label lStaffAddActive = new Label("Aktiv");
+                Label lStaffAddPhone = new Label("Telefonnummer");
+                Label lStaffAddPostalCode = new Label("Postkod");
 
                 //File
                 Label lConfirmLogout = new Label("Är du säker?");
@@ -389,7 +394,7 @@ public class Main extends Application {
                 TextField tfCustomerSearchUpdate = new TextField();
                 tfCustomerSearchUpdate.setPromptText("Uppdaterad");
 
-                //Textfields
+                // Staff Add Textfields
                 TextField tfStaffAddFirstName = new TextField();
                 tfStaffAddFirstName.setPromptText("Förnamn");
                 TextField tfStaffAddLastName = new TextField();
@@ -410,6 +415,14 @@ public class Main extends Application {
                 tfStaffAddPassword.setPromptText("Password");
                 TextField tfStaffAddDistrict = new TextField();
                 tfStaffAddDistrict.setPromptText("Distrikt");
+                TextField tfStaffAddStoreID = new TextField();
+                tfStaffAddStoreID.setPromptText("StoreID");
+                TextField tfStaffAddActive = new TextField();
+                tfStaffAddActive.setPromptText("Aktiv");
+                TextField tfStaffAddPhone = new TextField();
+                tfStaffAddPhone.setPromptText("Nummer");
+                TextField tfStaffAddPostalCode = new TextField();
+                tfStaffAddPostalCode.setPromptText("Postkod");
 
                 //Add ID to text fields
                 //Movie
@@ -527,6 +540,18 @@ public class Main extends Application {
 
                 });
 
+                bStaffAdd.setOnAction(event -> {
+                        Test test = new Test();
+                        AddToDatabase addToDatabase = new AddToDatabase();
+                        int countryID = test.addCountryID(tfStaffAddCountry);
+                        int cityID = test.addCityID(tfStaffAddCity, countryID);
+                        int addressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY,tfStaffAddAdress,tfStaffAddAdress2,tfStaffAddPostalCode
+                                , tfStaffAddDistrict,tfStaffAddPhone, cityID);
+
+                        addToDatabase.AddStaff(ENTITY_MANAGER_FACTORY,tfStaffAddFirstName,tfStaffAddLastName,tfStaffAddEmail,tfStaffAddUserName,tfStaffAddPassword,
+                                tfStaffAddStoreID, tfStaffAddActive, addressID);
+
+                });
 
                 bSearchMovie.setOnAction(event -> {
                         fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,ENTITY_MANAGER_FACTORY,"title", "film", sMovieJoin);
@@ -632,9 +657,10 @@ public class Main extends Application {
                 //Add staff
                 vBoxStaffAdd.getChildren().addAll(lStaffAddHeader, lStaffAddFirstName, tfStaffAddFirstName,
                         lStaffAddLastName, tfStaffAddLastName, lStaffAddEmail, tfStaffAddEmail,lStaffAddCity,
-                        tfStaffAddCity, lStaffAddCountry, tfStaffAddCountry, lStaffAddUserName, tfStaffAddUserName,
-                        lStaffAddPassword, tfStaffAddPassword,lStaffAddAdress, tfStaffAddAdress,lAddCustomerAdress2, tfAddCustomerAddress2,lStaffAddDisctrict,
-                        tfStaffAddDistrict, bStaffAdd, bStaffAddClear);
+                        tfStaffAddCity, lStaffAddCountry, tfStaffAddCountry,lStaffAddStoreID,tfStaffAddStoreID, lStaffAddUserName, tfStaffAddUserName,
+                        lStaffAddPassword, tfStaffAddPassword,lStaffAddActive,tfStaffAddActive,lStaffAddAdress, tfStaffAddAdress,lStaffAddAdress2,
+                        tfStaffAddAdress2,lStaffAddDisctrict,
+                        tfStaffAddDistrict,lStaffAddPhone,tfStaffAddPhone,lStaffAddPostalCode,tfStaffAddPostalCode, bStaffAdd, bStaffAddClear);
 
                 //Add to borderPane
                 borderPane.setTop(menuBar);
