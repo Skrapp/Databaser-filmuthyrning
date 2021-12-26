@@ -18,42 +18,18 @@ import javafx.scene.control.TextField;
 public class AddToDatabase {
 
     public void addCustomer (EntityManagerFactory em, TextField tfAddCustomerFirstName, TextField tfAddCustomerLastName, TextField tfAddCustomerEmail, TextField tfAddCustomerStoreId,
-                             TextField tfAddCustomerActive, TextField tfAddCustomerAddress, TextField tfAddCustomerPostalCode, TextField tfAddCustomerDistrict,
-                             TextField tfAddCustomerPhone, int cityID) {
+                             TextField tfAddCustomerActive, int addressID) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
-            Test test = new Test();
             Customer customer = new Customer();
-            City city = new City();
-            Country country = new Country();
-            Address address= new Address();
+
             Instant instant = Instant.now();
-            GeometryFactory geometryFactory = new GeometryFactory();
-            Coordinate coord = new Coordinate(1, 2);
-            Geometry geometry = null;
-            geometry = geometryFactory.createPoint(coord);
 
 
-            address.setAddress(tfAddCustomerAddress.getText());
-            address.setAddress2("");
-            address.setDistrict(tfAddCustomerDistrict.getText());
-            address.setCity_id(cityID);
-            address.setPostal_code(tfAddCustomerPostalCode.getText());
-            address.setPhone(tfAddCustomerPhone.getText());
-            address.setLocation(geometry);
-            address.setLast_update(instant);
 
-            entityManager.persist(address);
-
-            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = '" +tfAddCustomerAddress.getText() + "' AND district = '"+tfAddCustomerDistrict.getText()+"' AND city_id = '"+cityID+"' AND phone ='"+tfAddCustomerPhone.getText()+"' " +
-                    "AND postal_code= '"+tfAddCustomerPostalCode.getText()+"'");
-            List<Short> chosenID = queryAdressID.getResultList();
-            short addressID = chosenID.get(0);
-
-            System.out.println(addressID);
 
             customer.setFirst_name(tfAddCustomerFirstName.getText());
             customer.setLast_name(tfAddCustomerLastName.getText());
@@ -77,4 +53,52 @@ public class AddToDatabase {
             entityManager.close();
         }
     }
+    public int addAdressId(EntityManagerFactory em,
+                           TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode, TextField tfAddCustomerDistrict, TextField tfAddCustomerPhone, int cityID){
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        short adressId = -1;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            Address address= new Address();
+            Instant instant = Instant.now();
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Coordinate coord = new Coordinate(1, 2);
+            Geometry geometry = null;
+            geometry = geometryFactory.createPoint(coord);
+
+
+            address.setAddress(tfAddCustomerAddress.getText());
+            address.setAddress2(tfAddCustomerAddress2.getText());
+            address.setDistrict(tfAddCustomerDistrict.getText());
+            address.setCity_id(cityID);
+            address.setPostal_code(tfAddCustomerPostalCode.getText());
+            address.setPhone(tfAddCustomerPhone.getText());
+            address.setLocation(geometry);
+            address.setLast_update(instant);
+
+            entityManager.persist(address);
+
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM address WHERE address = '" +tfAddCustomerAddress.getText() +
+                    "' AND district = '"+tfAddCustomerDistrict.getText()+"' AND city_id = '"+cityID+"' AND phone ='"+tfAddCustomerPhone.getText()+"' " +
+                    "AND postal_code= '"+tfAddCustomerPostalCode.getText()+"'");
+            List<Short> chosenID = queryAdressID.getResultList();
+            short addressID = chosenID.get(0);
+
+            System.out.println(addressID);
+
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return adressId;
+    }
+
 }

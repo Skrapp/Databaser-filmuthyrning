@@ -8,39 +8,38 @@ import java.time.Instant;
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "staff_id", nullable = false)
-    private Integer id;
+    @Column(name = "staff_id")
+    private Integer staffId;
 
-    @Column(name = "first_name", nullable = false, length = 45)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 45)
+    @Column(name = "last_name")
     private String lastName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+
+    @JoinColumn(name = "address_id")
+    private int addressId;
 
     @Column(name = "picture")
     private byte[] picture;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email")
     private String email;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+    @JoinColumn(name = "store_id")
+    private int  storeId;
 
-    @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    @Column(name = "active")
+    private int active;
 
-    @Column(name = "username", nullable = false, length = 16)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "password", length = 40)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "last_update", nullable = false)
+    @Column(name = "last_update")
     private Instant lastUpdate;
 
     public Instant getLastUpdate() {
@@ -67,20 +66,20 @@ public class Staff {
         this.username = username;
     }
 
-    public Boolean getActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 
-    public Store getStore() {
-        return store;
+    public int getStore() {
+        return storeId;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void setStore(int store) {
+        this.storeId = storeId;
     }
 
     public String getEmail() {
@@ -99,12 +98,12 @@ public class Staff {
         this.picture = picture;
     }
 
-    public Address getAddress() {
-        return address;
+    public int getAddress() {
+        return addressId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddress(int address) {
+        this.addressId = addressId;
     }
 
     public String getLastName() {
@@ -123,11 +122,11 @@ public class Staff {
         this.firstName = firstName;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getStaffId() {
+        return staffId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStaffId(Integer id) {
+        this.staffId = id;
     }
 }

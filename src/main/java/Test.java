@@ -12,10 +12,6 @@ public class Test {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
     public static void main(String[] args) {
         Main main = new Main();
-        //int countryID = addCountryID();
-        //System.out.println(countryID);
-        //int cityID = addCityID();
-        //System.out.println(cityID);
         deleteCustomer();
     }
 
@@ -46,9 +42,6 @@ public class Test {
                     List<Short> chosenCountry = query.getResultList();
                     countryId = chosenCountry.get(0);
                 }
-
-                System.out.println(countryId);
-
 
             transaction.commit();
         }catch (Exception e){
@@ -91,9 +84,6 @@ public class Test {
                 cityId = chosenCountry.get(0);
             }
 
-            System.out.println(cityId);
-
-
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -135,6 +125,7 @@ public class Test {
         }finally {
             entityManager.close();
         }
+
     }
 
 
