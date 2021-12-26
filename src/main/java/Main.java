@@ -49,6 +49,7 @@ public class Main extends Application {
                 BorderPane borderPane = new BorderPane();
                 Fetch fetch = new Fetch();
                 FXBuilder fxBuilder = new FXBuilder();
+                Test test = new Test();
 
                 // Combobox
 
@@ -116,8 +117,10 @@ public class Main extends Application {
 
                 VBox vBoxStaffAdd = new VBox();
                 vBoxStaffAdd.setPadding(new Insets(10));
+                VBox vBoxDeleteStaff = new VBox();
 
                 VBox vBoxAddCustomer = new VBox();
+                VBox vBoxDeleteCustomer = new VBox();
 
                 VBox vBoxLeft = new VBox();
 
@@ -158,6 +161,10 @@ public class Main extends Application {
                 Button bCancelLogout = new Button("Avbryt");
                 Button bConfirmExit = new Button("Avsluta");
                 Button bCancelExit = new Button("Avbryt");
+
+                //Delete buttons
+                Button bDeleteCustomer = new Button("Radera");
+                Button bDeleteStaff = new Button("Radera");
 
 
                 //Meny
@@ -264,6 +271,9 @@ public class Main extends Application {
                 Label lAddCustomerCountry = new Label("Land");
                 Label lAddCustomerAdress2 = new Label("Adress");
 
+                Label lDeleteCustomer = new Label("Ange kundID");
+
+
 
                 //Staff
                 Label lStaffAddHeader = new Label("Lägg till arbetare");
@@ -282,6 +292,7 @@ public class Main extends Application {
                 Label lStaffAddActive = new Label("Aktiv");
                 Label lStaffAddPhone = new Label("Telefonnummer");
                 Label lStaffAddPostalCode = new Label("Postkod");
+                Label lDeleteStaff = new Label("Ange personalID");
 
                 //File
                 Label lConfirmLogout = new Label("Är du säker?");
@@ -324,6 +335,9 @@ public class Main extends Application {
                 tfAddCustomerCity.setPromptText("Stad");
                 TextField tfAddCustomerCountrys = new TextField();
                 tfAddCustomerCountrys.setPromptText("Land");
+
+                TextField tfDeleteCustomer = new TextField();
+                tfDeleteCustomer.setPromptText("Ange IDnummer");
 
 
                 //Movie search
@@ -423,6 +437,8 @@ public class Main extends Application {
                 tfStaffAddPhone.setPromptText("Nummer");
                 TextField tfStaffAddPostalCode = new TextField();
                 tfStaffAddPostalCode.setPromptText("Postkod");
+                TextField tfDeleteStaff = new TextField();
+                tfDeleteStaff.setPromptText("Ange PersonalID");
 
                 //Add ID to text fields
                 //Movie
@@ -493,13 +509,17 @@ public class Main extends Application {
                         fxBuilder.createPopUp(vBoxAddCustomer);
                 });
                 miCustomerDelete.setOnAction(event -> {
-                        fxBuilder.createPopUp(vBoxAddCustomer);
+                        fxBuilder.createPopUp(vBoxDeleteCustomer);
                 });
 
 
                 //Staff Add
                 miStaffAdd.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxStaffAdd);
+                });
+
+                miStaffDelete.setOnAction(event -> {
+                        fxBuilder.createPopUp(vBoxDeleteStaff);
                 });
 
                 //Menu - File
@@ -527,7 +547,6 @@ public class Main extends Application {
 
                 });
                 bCreateCustomer.setOnAction(event -> {
-                        Test test = new Test();
                         AddToDatabase addToDatabase = new AddToDatabase();
                         int countryID = test.addCountryID(tfAddCustomerCountrys);
                         int cityID = test.addCityID(tfAddCustomerCity, countryID);
@@ -537,11 +556,11 @@ public class Main extends Application {
                         addToDatabase.addCustomer(ENTITY_MANAGER_FACTORY, tfAddCustomerFirstName,
                                 tfAddCustomerLastName, tfAddCustomerEmail, tfAddCustomerStoreId,
                                 tfAddCustomerActive, adressID);
+                        fxBuilder.clearFields(vBoxAddCustomer);
 
                 });
 
                 bStaffAdd.setOnAction(event -> {
-                        Test test = new Test();
                         AddToDatabase addToDatabase = new AddToDatabase();
                         int countryID = test.addCountryID(tfStaffAddCountry);
                         int cityID = test.addCityID(tfStaffAddCity, countryID);
@@ -550,7 +569,18 @@ public class Main extends Application {
 
                         addToDatabase.AddStaff(ENTITY_MANAGER_FACTORY,tfStaffAddFirstName,tfStaffAddLastName,tfStaffAddEmail,tfStaffAddUserName,tfStaffAddPassword,
                                 tfStaffAddStoreID, tfStaffAddActive, addressID);
+                        fxBuilder.clearFields(vBoxStaffAdd);
 
+                });
+
+                bDeleteCustomer.setOnAction(event -> {
+                        test.deleteCustomer(tfDeleteCustomer, "customer", "customer_id", "customer", "customer_id");
+                        fxBuilder.clearFields(vBoxDeleteCustomer);
+                });
+
+                bDeleteStaff.setOnAction(event -> {
+                        test.deleteCustomer(tfDeleteStaff, "staff", "staff_id", "staff", "staff_id");
+                        fxBuilder.clearFields(vBoxDeleteStaff);
                 });
 
                 bSearchMovie.setOnAction(event -> {
@@ -654,6 +684,9 @@ public class Main extends Application {
                         tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity, lAddCustomerCountry,
                         tfAddCustomerCountrys, bCreateCustomer, bCustomerAddClear);
 
+                //Delete customer
+                vBoxDeleteCustomer.getChildren().addAll(lDeleteCustomer,tfDeleteCustomer, bDeleteCustomer);
+
                 //Add staff
                 vBoxStaffAdd.getChildren().addAll(lStaffAddHeader, lStaffAddFirstName, tfStaffAddFirstName,
                         lStaffAddLastName, tfStaffAddLastName, lStaffAddEmail, tfStaffAddEmail,lStaffAddCity,
@@ -661,6 +694,9 @@ public class Main extends Application {
                         lStaffAddPassword, tfStaffAddPassword,lStaffAddActive,tfStaffAddActive,lStaffAddAdress, tfStaffAddAdress,lStaffAddAdress2,
                         tfStaffAddAdress2,lStaffAddDisctrict,
                         tfStaffAddDistrict,lStaffAddPhone,tfStaffAddPhone,lStaffAddPostalCode,tfStaffAddPostalCode, bStaffAdd, bStaffAddClear);
+
+                //Delete staff
+                vBoxDeleteStaff.getChildren().addAll(lDeleteStaff,tfDeleteStaff,bDeleteStaff);
 
                 //Add to borderPane
                 borderPane.setTop(menuBar);

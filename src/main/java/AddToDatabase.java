@@ -108,9 +108,6 @@ public class AddToDatabase {
 
                 Instant instant = Instant.now();
 
-
-
-
                 staff.setFirstName(tfStaffAddFirstName.getText());
                 staff.setLastName(tfStaffAddLastName.getText());
                 staff.setEmail(tfStaffAddEmail.getText());

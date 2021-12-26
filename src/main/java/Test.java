@@ -12,7 +12,7 @@ public class Test {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
     public static void main(String[] args) {
         Main main = new Main();
-        deleteCustomer();
+
     }
 
 
@@ -97,37 +97,36 @@ public class Test {
     }
 
 
-    public static void deleteCustomer(){
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-        EntityTransaction transaction = null;
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
+        public void deleteCustomer(TextField tfID, String getAddressIDTable, String whereID, String deleteFromTable, String whereCustomerOrStaffID){
+            //"SELECT address_id FROM '"+getAdressIDFrom+"'  <--- getAddressIDTable = customer eller staff. WHERE "whereID" --> customer_id eller staffid  = '"+deleteID+"'")  <--- deleteId = staff_id eller customer_id
+            EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+            EntityTransaction transaction = null;
+            try{
+                transaction = entityManager.getTransaction();
+                transaction.begin();
 
-            short customerID = 603;
+                short deleteID = (short) Integer.parseInt(tfID.getText());
 
-            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM customer WHERE customer_id = '"+customerID+"'");
-            List<Short> aid = queryAdressID.getResultList();
-            short addressID = aid.get(0);
+                Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM "+getAddressIDTable+" WHERE "+whereID+" = '"+deleteID+"'");
+                List<Short> aid = queryAdressID.getResultList();
+                short addressID = aid.get(0);
 
-            System.out.println(addressID);
+                System.out.println(addressID);
 
-            entityManager.createNativeQuery("DELETE FROM customer where customer_id = '"+customerID+"'").executeUpdate();
+                entityManager.createNativeQuery("DELETE "+deleteFromTable+" FROM "+deleteFromTable+" where "+whereCustomerOrStaffID+" = '"+deleteID+"'").executeUpdate();
 
-            //Query queryDeleteAdress = entityManager.createNativeQuery("DELETE from address WHERE address_id = '"+queryAdressID.getResultList()+"'").executeUpdate;
+                entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '"+addressID+"'").executeUpdate();
 
-            transaction.commit();
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
+                transaction.commit();
+            }catch (Exception e){
+                if(transaction != null){
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }finally {
+                entityManager.close();
             }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
         }
-
-    }
-
 
 
 
