@@ -14,15 +14,7 @@ import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Optional;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
-import org.geolatte.geom.V;
-
-
-import javax.persistence.*;
-
-
 
 public class Main extends Application {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -44,10 +36,6 @@ public class Main extends Application {
 
         @Override
         public void start(Stage primaryStage) throws Exception {
-                olCategory.add(0,null);
-                olLanguages.add(0,null);
-                olRating.add(0,null);
-                olStores.add(0,null);
 
                 Stage loginStage = new Stage(); //To login
 
@@ -56,8 +44,8 @@ public class Main extends Application {
                 Fetch fetch = new Fetch();
                 FXBuilder fxBuilder = new FXBuilder();
 
-                // Combobox
 
+                // Combobox
                 //Movie search
                 ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
                 cbMovieSearchCategory.setPromptText("Kategori");
@@ -77,6 +65,12 @@ public class Main extends Application {
                 cbMovieAddCategory.setPromptText("Kategori");
                 ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
                 cbMovieAddLanguages.setPromptText("Språk");
+
+                //Add default options to observable lists
+                olCategory.add(0,null);
+                olLanguages.add(0,null);
+                olRating.add(0,null);
+                olStores.add(0,null);
 
                 //Add data to observable lists
                 fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
@@ -159,16 +153,17 @@ public class Main extends Application {
                 Button bCreateCustomer = new Button("Lägg till");
                 Button bUpdateCustomer = new Button("Redigera");
                 Button bUpdateMovie = new Button("Redigera");
-                Button bRentMovie = new Button("Hyra");
-                Button bReturnMovie = new Button("Lämna tillbaka");
-                Button bInfoMovie = new Button("Info om filmen");
-                Button bInfoCustomer = new Button("Info om kunden");
 
                 Button bCustomerSearchClear= new Button("Töm sökning");
                 Button bMovieSearchClear= new Button("Töm sökning");
 
                 Button bStaffAdd = new Button("Lägg till");
 
+                //Rent movie
+                Button bRentMovie = new Button("Hyra");
+                Button bReturnMovie = new Button("Lämna tillbaka");
+                Button bInfoMovie = new Button("Info om filmen");
+                Button bInfoCustomer = new Button("Info om kunden");
                 Button bRentMovieAccept = new Button("Ja");
                 Button bRentMovieDecline = new Button("Nej");
 
@@ -177,7 +172,6 @@ public class Main extends Application {
                 Button bCancelLogout = new Button("Avbryt");
                 Button bConfirmExit = new Button("Avsluta");
                 Button bCancelExit = new Button("Avbryt");
-
 
                 //Meny
                 MenuBar menuBar = new MenuBar();
@@ -226,19 +220,16 @@ public class Main extends Application {
                 Label lMovieSearchId = new Label("FilmID");
                 Label lMovieSearchDescription = new Label("Beskrivning");
                 Label lMovieSearchActors = new Label("Skådespelare");
-                Label lMovieSearchOriginalLanguage = new Label("Originalspråk");
                 Label lMovieSearchLength = new Label("Längd");
-                Label lMovieSearchRating = new Label("Betyg");
                 Label lMovieSearchRentalCost = new Label("Hyreskostnad");
                 Label lMovieSearchReplacementCost = new Label("Ersättningskostnad");
-                Label lMovieSearchInStore = new Label("Tillgänglighet");
                 Label lMovieSearchSpecialFeatures = new Label("Extramaterial");
                 Label lMovieSearchRentalDuration = new Label("Hyrestid");
                 Label lMovieSearchLastUpdate = new Label("Senast uppdaterad");
                 Label lMovieSearchReleaseDate = new Label("Utgivningsdatum");
 
+                //Movie add
                 Label lMovieAddTitle = new Label("Titel");
-                Label lMovieAddId = new Label("FilmID");
                 Label lMovieAddDescription = new Label("Beskrivning");
                 Label lMovieAddActors = new Label("Skådespelare");
                 Label lMovieAddOriginalLanguage = new Label("Originalspråk");
@@ -262,7 +253,6 @@ public class Main extends Application {
                 Label lCustomerSearchAddress = new Label("Adress");
                 Label lCustomerSearchPhone = new Label("Telefonnummer");
                 Label lCustomerSearchRegistered = new Label("Registrerad");
-                Label lCustomerSearchActive = new Label("Aktiv");
                 Label lCustomerSearchUpdate = new Label("Uppdaterad");
 
                 //Customer add
@@ -272,15 +262,12 @@ public class Main extends Application {
                 Label lAddCustomerStoreId = new Label("ButikID");
                 Label lAddCustomerRegistered = new Label("Registrerad");
                 Label lAddCustomerActive = new Label("Aktiv");
-
                 Label lAddCustomerAddress = new Label("Adress");
                 Label lAddCustomerPostalCode = new Label("Postkod");
                 Label lAddCustomerDistrict = new Label("Distrikt");
                 Label lAddCustomerPhone = new Label("Telefonnummer");
                 Label lAddCustomerCity = new Label("Stad");
                 Label lAddCustomerCountry = new Label("Land");
-
-                Label lAddCustomerInfoUpdate = new Label("Uppdaterad");
 
                 //Staff
                 Label lStaffAddHeader = new Label("Lägg till arbetare");
@@ -300,15 +287,16 @@ public class Main extends Application {
                 Label lConfirmExit = new Label("Är du säker?");
 
                 //Text
-                Text tRentMovie = new Text("");
+                Text tRentMovie = new Text();
 
-                //-----------------------------
                 //Checkboxes
                 //SpecialFeatures and InStore
                 CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
+                CheckBox chbMovieSearchSFBTS = new CheckBox("Bakom kulisserna");
+                CheckBox chbMovieSearchSFCommentaries = new CheckBox("Kommentarer");
+                CheckBox chbMovieSearchSFDeletedScenes = new CheckBox("Borttaget material");
                 CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
                 CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
-                //-----------------------------
 
                 //Text fields
                 // add customer
@@ -447,9 +435,10 @@ public class Main extends Application {
                 cbMovieSearchCategory.setId("c.name");
 
                 chbMovieSearchSFTrailers.setId("film.special_features,trailers");
-                chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
-
-                tfTest.setId("test");
+                chbMovieSearchSFBTS.setId("film.special_features,Behind The Scenes");
+                chbMovieSearchSFDeletedScenes.setId("film.special_features,Deleted Scenes");
+                chbMovieSearchSFCommentaries.setId("film.special_features,Commentaries");
+                chbMovieSearchInStore.setId("InStore");
 
                 //Customer
                 tfCustomerSearchName.setId("customer.first_name");
@@ -462,25 +451,24 @@ public class Main extends Application {
                 tfCustomerSearchUpdate.setId("customer.last_update");
 
                 cbCustomerSearchStoreId.setId("customer.store_id");
-
                 chbCustomerSearchActive.setId("customer.active,1");
 
-                HBox hboxTest = new HBox();
-                hboxTest.getChildren().addAll(tfTest);
+                HBox hBoxTest = new HBox();
+                hBoxTest.getChildren().addAll(tfTest);
 
                 //Join text for mySQL for search
                 String sMovieJoin =
                         " JOIN language l ON film.language_id = l.language_id" +
-                                " JOIN film_actor fa ON film.film_id = fa.film_id" +
-                                " JOIN actor a ON fa.actor_id = a.actor_id" +
-                                " JOIN film_category fc ON film.film_id = fc.film_id" +
-                                " JOIN category c ON fc.category_id = c.category_id" +
-                                " JOIN inventory i ON film.film_id = i.film_id" +
-                                " JOIN rental r ON i.inventory_id = r.inventory_id";
+                        " JOIN film_actor fa ON film.film_id = fa.film_id" +
+                        " JOIN actor a ON fa.actor_id = a.actor_id" +
+                        " JOIN film_category fc ON film.film_id = fc.film_id" +
+                        " JOIN category c ON fc.category_id = c.category_id" +
+                        " JOIN inventory i ON film.film_id = i.film_id" +
+                        " JOIN rental r ON i.inventory_id = r.inventory_id";
 
                 String sCustomerJoin =
                         " JOIN address a ON customer.address_id = a.address_id"+
-                                " JOIN city ci ON ci.city_id = a.city_id";
+                        " JOIN city ci ON ci.city_id = a.city_id";
 
                 //Popup
                 //Movie - Add
@@ -508,19 +496,11 @@ public class Main extends Application {
 
                 //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
-                        if (hBoxAdvancedSearchCustomer.isVisible()) {
-                                hBoxAdvancedSearchCustomer.setVisible(false);
-                        } else {
-                                hBoxAdvancedSearchCustomer.setVisible(true);
-                        }
+                        hBoxAdvancedSearchCustomer.setVisible(!hBoxAdvancedSearchCustomer.isVisible());
                 });
 
                 bAdvancedSearchMovies.setOnAction(event -> {
-                        if (hBoxAdvancedSearchMovies.isVisible()) {
-                                hBoxAdvancedSearchMovies.setVisible(false);
-                        } else {
-                                hBoxAdvancedSearchMovies.setVisible(true);
-                        }
+                        hBoxAdvancedSearchMovies.setVisible(!hBoxAdvancedSearchMovies.isVisible());
                 });
 
                 bSearchMovie.setOnAction(event -> {
@@ -531,6 +511,7 @@ public class Main extends Application {
                         fetch.searchFromDatabase(vBoxRight,olSearchResultsCustomer,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
                 });
 
+                //Empty text fields
                 bMovieSearchClear.setOnAction(event -> {
                         fxBuilder.clearFields(vBoxLeft);
                 });
@@ -550,7 +531,7 @@ public class Main extends Application {
                                 }
                                 else
                                         //Create popup for informing it is not in stock
-                                        fxBuilder.createPopUp(hboxTest);
+                                        fxBuilder.createPopUp(hBoxTest);
                         }
                         else
                                 System.out.println("Välj kund och film");
@@ -620,6 +601,7 @@ public class Main extends Application {
                         lMovieSearchReleaseDate,tfMovieSearchReleaseYear);
 
                 vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
+                        chbMovieSearchSFBTS,chbMovieSearchSFCommentaries,chbMovieSearchSFDeletedScenes,
                         lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,
                         tfMovieSearchReplacementCostMin,tfMovieSearchReplacementCostMax,lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
@@ -719,6 +701,5 @@ public class Main extends Application {
                 Scene scene = new Scene(borderPane, 1200, 900);
                 primaryStage.setScene(scene);
                 //primaryStage.show();
-
         }
 }
