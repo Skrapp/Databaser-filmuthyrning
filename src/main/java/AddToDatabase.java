@@ -100,7 +100,7 @@ public class AddToDatabase {
             newFilm.setTitle(sTextField[1]);
             newFilm.setDescription(sTextField[6]);
             newFilm.setLanguage(language);
-            newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously.
+            newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously. Removed the textbox.
             newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sTextField[8])));
             newFilm.setRentalRate(BigDecimal.valueOf(Long.parseLong(sTextField[3])));
             newFilm.setReplacementCost(BigDecimal.valueOf(Long.parseLong(sTextField[21])));

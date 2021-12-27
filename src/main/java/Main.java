@@ -20,10 +20,7 @@ import javafx.scene.text.FontWeight;
 public class Main extends Application {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
-        final ObservableList olCategory = FXCollections.observableArrayList(
-                "Här",
-                "och här" //Om vi ska lägga in dom manuellt
-        );
+        final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
         final ObservableList olStaff = FXCollections.observableArrayList();
         final ObservableList olSearchResultsMovie = FXCollections.observableArrayList();
