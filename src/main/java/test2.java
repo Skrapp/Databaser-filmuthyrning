@@ -8,6 +8,6 @@ public class test2 {
 
 
         AddToDatabase addToDatabase = new AddToDatabase();
-        //addToDatabase.addCustomer(ENTITY_MANAGER_FACTORY);
+        addToDatabase.addCustomer(ENTITY_MANAGER_FACTORY);
     }
 }

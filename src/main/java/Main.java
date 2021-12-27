@@ -176,6 +176,10 @@ public class Main extends Application {
                 Button bConfirmExit = new Button("Avsluta");
                 Button bCancelExit = new Button("Avbryt");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 1ddd4cf (Merge remote-tracking branch 'origin/DanielTest' into Erik)
                 //Meny
                 MenuBar menuBar = new MenuBar();
                 Menu mbFile = new Menu("Arkiv");
@@ -271,6 +275,11 @@ public class Main extends Application {
                 Label lAddCustomerPhone = new Label("Telefonnummer");
                 Label lAddCustomerCity = new Label("Stad");
                 Label lAddCustomerCountry = new Label("Land");
+<<<<<<< HEAD
+=======
+
+                Label lAddCustomerInfoUpdate = new Label("Uppdaterad");
+>>>>>>> parent of 1ddd4cf (Merge remote-tracking branch 'origin/DanielTest' into Erik)
 
                 //Staff
                 Label lStaffAddHeader = new Label("Lägg till arbetare");
@@ -499,11 +508,26 @@ public class Main extends Application {
 
                 //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
+<<<<<<< HEAD
                         hBoxAdvancedSearchCustomer.setVisible(!hBoxAdvancedSearchCustomer.isVisible());
                 });
 
                 bAdvancedSearchMovies.setOnAction(event -> {
                         hBoxAdvancedSearchMovies.setVisible(!hBoxAdvancedSearchMovies.isVisible());
+=======
+                        if (hBoxAdvancedSearchCustomer.isVisible()) {
+                                hBoxAdvancedSearchCustomer.setVisible(false);
+                        } else {
+                                hBoxAdvancedSearchCustomer.setVisible(true);
+                        }
+                });
+                bAdvancedSearchMovies.setOnAction(event -> {
+                        if (hBoxAdvancedSearchMovies.isVisible()) {
+                                hBoxAdvancedSearchMovies.setVisible(false);
+                        } else {
+                                hBoxAdvancedSearchMovies.setVisible(true);
+                        }
+>>>>>>> parent of 1ddd4cf (Merge remote-tracking branch 'origin/DanielTest' into Erik)
                 });
 
                 bSearchMovie.setOnAction(event -> {
@@ -522,6 +546,7 @@ public class Main extends Application {
                 bCustomerSearchClear.setOnAction(event -> {
                         fxBuilder.clearFields(vBoxRight);
                 });
+<<<<<<< HEAD
 
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
@@ -539,6 +564,8 @@ public class Main extends Application {
                         else
                                 System.out.println("Välj kund och film");
                 });
+=======
+>>>>>>> parent of 1ddd4cf (Merge remote-tracking branch 'origin/DanielTest' into Erik)
 
                 //Log out
                 bConfirmLogout.setOnAction(event -> {

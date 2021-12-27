@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +45,7 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
   </component>
@@ -117,8 +116,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Test" />
+    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="test" />
       <module name="Databaser-filmuthyrning" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -135,7 +134,7 @@
       <list>
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.test2" />
-        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.test" />
         <item itemvalue="Application.Login" />
         <item itemvalue="Application.NewLogin" />
       </list>
@@ -161,7 +160,6 @@
       <workItem from="1639995093897" duration="17718000" />
       <workItem from="1640299546107" duration="1169000" />
       <workItem from="1640300791436" duration="8789000" />
-      <workItem from="1640521988584" duration="3827000" />
     </task>
     <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
       <created>1639785458250</created>
@@ -202,8 +200,6 @@
     <task>
       <created>1640299537553</created>
       <updated>1640299537553</updated>
-      <created>1640449044184</created>
-      <updated>1640449044184</updated>
       <workItem from="1639828038247" duration="10989000" />
       <workItem from="1639995361919" duration="3334000" />
       <workItem from="1640022026311" duration="1246000" />
@@ -250,7 +246,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="La till address klass från databasen" />
