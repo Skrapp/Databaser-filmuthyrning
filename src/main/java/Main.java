@@ -225,19 +225,15 @@ public class Main extends Application {
                 Label lMovieSearchId = new Label("FilmID");
                 Label lMovieSearchDescription = new Label("Beskrivning");
                 Label lMovieSearchActors = new Label("Skådespelare");
-                Label lMovieSearchOriginalLanguage = new Label("Originalspråk");
                 Label lMovieSearchLength = new Label("Längd");
-                Label lMovieSearchRating = new Label("Betyg");
                 Label lMovieSearchRentalCost = new Label("Hyreskostnad");
                 Label lMovieSearchReplacementCost = new Label("Ersättningskostnad");
-                Label lMovieSearchInStore = new Label("Tillgänglighet");
                 Label lMovieSearchSpecialFeatures = new Label("Extramaterial");
                 Label lMovieSearchRentalDuration = new Label("Hyrestid");
                 Label lMovieSearchLastUpdate = new Label("Senast uppdaterad");
                 Label lMovieSearchReleaseDate = new Label("Utgivningsdatum");
 
                 Label lMovieAddTitle = new Label("Titel");
-                Label lMovieAddId = new Label("FilmID");
                 Label lMovieAddDescription = new Label("Beskrivning");
                 Label lMovieAddActors = new Label("Skådespelare");
                 Label lMovieAddOriginalLanguage = new Label("Originalspråk");
@@ -314,6 +310,9 @@ public class Main extends Application {
                 //Checkboxes
                 //SpecialFeatures and InStore
                 CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
+                CheckBox chbMovieSearchSFCommentaries = new CheckBox("Kommentarer");
+                CheckBox chbMovieSearchSFBTS = new CheckBox("Bakom kulisserna");
+                CheckBox chbMovieSearchSFDeletedScenes = new CheckBox("Borttaget material");
                 CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
                 CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
                 //-----------------------------
@@ -475,6 +474,9 @@ public class Main extends Application {
                 cbMovieSearchCategory.setId("c.name");
 
                 chbMovieSearchSFTrailers.setId("film.special_features,trailers");
+                chbMovieSearchSFCommentaries.setId("film.special_features,commentaries");
+                chbMovieSearchSFBTS.setId("film.special_features,behind the scenes");
+                chbMovieSearchSFDeletedScenes.setId("film.special_features,deleted scenes");
                 chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
 
                 tfTest.setId("test");
@@ -544,22 +546,14 @@ public class Main extends Application {
 
                 //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
-                        if (hBoxAdvancedSearchCustomer.isVisible()) {
-                                hBoxAdvancedSearchCustomer.setVisible(false);
-                        } else {
-                                hBoxAdvancedSearchCustomer.setVisible(true);
-                        }
+                        hBoxAdvancedSearchCustomer.setVisible(!hBoxAdvancedSearchCustomer.isVisible());
                 });
 
                 bAdvancedSearchMovies.setOnAction(event -> {
-                        if (hBoxAdvancedSearchMovies.isVisible()) {
-                                hBoxAdvancedSearchMovies.setVisible(false);
-                        } else {
-                                hBoxAdvancedSearchMovies.setVisible(true);
-                        }
-
+                        hBoxAdvancedSearchMovies.setVisible(!hBoxAdvancedSearchMovies.isVisible());
                 });
                 bCreateCustomer.setOnAction(event -> {
+                        //Change test -> addToDatabase
                         int countryID = test.addCountryID(tfAddCustomerCountrys);
                         int cityID = test.addCityID(tfAddCustomerCity, countryID);
                         int adressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY, tfAddCustomerAddress, tfAddCustomerAddress2,
@@ -578,7 +572,8 @@ public class Main extends Application {
                         int addressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY,tfStaffAddAdress,tfStaffAddAdress2,tfStaffAddPostalCode
                                 , tfStaffAddDistrict,tfStaffAddPhone, cityID);
 
-                        addToDatabase.AddStaff(ENTITY_MANAGER_FACTORY,tfStaffAddFirstName,tfStaffAddLastName,tfStaffAddEmail,tfStaffAddUserName,tfStaffAddPassword,
+                        addToDatabase.AddStaff(ENTITY_MANAGER_FACTORY,tfStaffAddFirstName,tfStaffAddLastName,
+                                tfStaffAddEmail,tfStaffAddUserName,tfStaffAddPassword,
                                 tfStaffAddStoreID, tfStaffAddActive, addressID);
                         fxBuilder.clearFields(vBoxStaffAdd);
 
@@ -618,6 +613,7 @@ public class Main extends Application {
 
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
+                        //Funktion?
                         String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         if(sMovie != null && sCustomer != null){
@@ -630,6 +626,7 @@ public class Main extends Application {
                                         fxBuilder.createPopUp(hboxTest);
                         }
                         else
+                                //Create popup for error
                                 System.out.println("Välj kund och film");
                 });
 
@@ -744,7 +741,7 @@ public class Main extends Application {
                 borderPane.setCenter(vBoxCenter);
 
                 //Test Login--------------------------------------------------------------------
-
+                //Flyttas om
                 loginStage.setTitle("Logga in");
                 BorderPane borderPaneLogin = new BorderPane();
                 Scene loginScen = new Scene(borderPaneLogin,400,400);
@@ -803,11 +800,9 @@ public class Main extends Application {
                 loginStage.setScene(loginScen);
                 loginStage.show();
 
-
                 ///---------------------------------------------------------------------------------------
+
                 Scene scene = new Scene(borderPane, 1200, 900);
                 primaryStage.setScene(scene);
-                //primaryStage.show();
-
         }
 }

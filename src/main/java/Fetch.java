@@ -18,6 +18,7 @@ import java.util.List;
 public class Fetch {
 
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
+
     public void addToComboList (ObservableList ol, EntityManagerFactory em, String column, String table) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -108,6 +109,12 @@ public class Fetch {
         }
     }
 
+    /**Checks if film is in any store
+     * @param em EntityManagerFactory
+     * @param movieTitle Title of movie //Change to ID
+     * @param join String of what other tables should be joined
+     * @return
+     */
     public boolean isInStore(EntityManagerFactory em, String movieTitle, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -119,12 +126,12 @@ public class Fetch {
 
             Query query = entityManager.createNativeQuery(
                     "SELECT title"+
-                            " FROM film"+
-                            join +
-                            " WHERE title = '" + movieTitle +
-                            "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
-                            " GROUP BY film.film_id" +
-                            " ORDER BY film.title;"
+                        " FROM film"+
+                        join +
+                        " WHERE title = '" + movieTitle +
+                        "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
+                        " GROUP BY film.film_id" +
+                        " ORDER BY film.title;"
             );
 
             List<String>list = query.getResultList();
@@ -144,9 +151,7 @@ public class Fetch {
         return isInStore;
     }
 
-
-    /**
-     * Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
+    /**Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
      * @param box Pane (parent to VBox and HBox) containing the searchable information
      * @param sSearchCriteria string to add search criteria
      * @return search criteria
@@ -172,9 +177,7 @@ public class Fetch {
                     else
                         sSearchCriteria += " AND ";
 
-
-
-                    //exact search and not surrounded by '' (int and date)
+                    //exact search and not surrounded by '' (int)
                     if (box.getChildren().get(i).getId().contains("id") ||
                         box.getChildren().get(i).getId().contains("year") ){
 
@@ -254,9 +257,9 @@ public class Fetch {
                     if(box.getChildren().get(i).getId().equals("InStore"))
                         sSearchCriteria += "(r.return_date IS NOT NULL OR r.rental_date IS NULL)";
                     else
-                    //exact search and surrounded by ''
-                    sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" = '")
-                            .concat(box.getChildren().get(i).getId().split(",")[1]).concat("'");
+                    //exact search and surrounded by ''. ID example: ("film.special_features,behind the scenes")
+                    sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" like '%")
+                            .concat(box.getChildren().get(i).getId().split(",")[1]).concat("%'");
                 }
             }
             System.out.println(sSearchCriteria); //Debug
