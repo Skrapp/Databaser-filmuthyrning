@@ -45,7 +45,6 @@ public class Main extends Application {
                 Fetch fetch = new Fetch();
                 FXBuilder fxBuilder = new FXBuilder();
                 AddToDatabase addToDatabase = new AddToDatabase();
-                Test test = new Test();
 
                 // Combobox
 
@@ -554,8 +553,8 @@ public class Main extends Application {
                 });
                 bCreateCustomer.setOnAction(event -> {
                         //Change test -> addToDatabase
-                        int countryID = test.addCountryID(tfAddCustomerCountrys);
-                        int cityID = test.addCityID(tfAddCustomerCity, countryID);
+                        int countryID = addToDatabase.addCountryID(ENTITY_MANAGER_FACTORY,tfAddCustomerCountrys);
+                        int cityID = addToDatabase.addCityID(ENTITY_MANAGER_FACTORY,tfAddCustomerCity, countryID);
                         int adressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY, tfAddCustomerAddress, tfAddCustomerAddress2,
                                 tfAddCustomerPostalCode, tfAddCustomerDistrict, tfAddCustomerPhone,cityID);
 
@@ -567,8 +566,8 @@ public class Main extends Application {
                 });
 
                 bStaffAdd.setOnAction(event -> {
-                        int countryID = test.addCountryID(tfStaffAddCountry);
-                        int cityID = test.addCityID(tfStaffAddCity, countryID);
+                        int countryID = addToDatabase.addCountryID(ENTITY_MANAGER_FACTORY,tfStaffAddCountry);
+                        int cityID = addToDatabase.addCityID(ENTITY_MANAGER_FACTORY,tfStaffAddCity, countryID);
                         int addressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY,tfStaffAddAdress,tfStaffAddAdress2,tfStaffAddPostalCode
                                 , tfStaffAddDistrict,tfStaffAddPhone, cityID);
 
@@ -580,12 +579,12 @@ public class Main extends Application {
                 });
 
                 bDeleteCustomer.setOnAction(event -> {
-                        test.deleteCustomer(tfDeleteCustomer, "customer", "customer_id", "customer", "customer_id");
+                        addToDatabase.deleteCustomer(ENTITY_MANAGER_FACTORY,tfDeleteCustomer, "customer", "customer_id");
                         fxBuilder.clearFields(vBoxDeleteCustomer);
                 });
 
                 bDeleteStaff.setOnAction(event -> {
-                        test.deleteCustomer(tfDeleteStaff, "staff", "staff_id", "staff", "staff_id");
+                        addToDatabase.deleteCustomer(ENTITY_MANAGER_FACTORY,tfDeleteStaff, "staff", "staff_id");
                         fxBuilder.clearFields(vBoxDeleteStaff);
                 });
 

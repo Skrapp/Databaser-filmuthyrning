@@ -94,6 +94,7 @@ public class AddToDatabase {
             address.setLocation(geometry);
             address.setLast_update(instant);
 
+
             entityManager.persist(address);
 
             //Checks for adress ID
@@ -259,5 +260,135 @@ public class AddToDatabase {
             entityManager.close();
         }
         return idAsString;
+    }
+
+    /**Ser ifall country finns, om inte: lägger till ett nytt country
+     * @param tfAddCountryName Country name
+     * @return returnerar countryID
+     */
+    public int addCountryID(EntityManagerFactory entityManagerFactory, TextField tfAddCountryName){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        short countryId = -1;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Country country = new Country();
+            Instant instant = Instant.now();
+
+            String Country = tfAddCountryName.getText();
+
+            Query query = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
+
+            //If list is empty add country
+            if (query.getResultList().isEmpty()) {
+                country.setCountry(Country);
+                country.setLast_update(instant);
+                entityManager.persist(country);
+                Query query1 = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
+                List<Short> chosenCountry1 = query1.getResultList();
+                countryId = chosenCountry1.get(0);
+            } else {
+                List<Short> chosenCountry = query.getResultList();
+                countryId = chosenCountry.get(0);
+            }
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return countryId;
+    }
+
+    /** checks if city Idin Country exists, else add new city
+     * @param tfAddCityName Name of city
+     * @param countryID ID of country
+     * @return Return cityID
+     */
+    public int addCityID(EntityManagerFactory entityManagerFactory, TextField tfAddCityName, int countryID){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        short cityId = -1;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            City city = new City();
+
+            Instant instant = Instant.now();
+
+            String City = tfAddCityName.getText();
+
+            Query query = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
+
+            //Checks if City ID exist
+            if (query.getResultList().isEmpty()) {
+                city.setCity(City);
+                city.setCountry_id(countryID);
+                city.setLast_update(instant);
+                entityManager.persist(city);
+                Query query1 = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
+                List<Short> chosenCountry1 = query1.getResultList();
+                cityId = chosenCountry1.get(0);
+            } else {
+                List<Short> chosenCountry = query.getResultList();
+                cityId = chosenCountry.get(0);
+            }
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return cityId;
+    }
+
+    /**Deletes Customer or Staff
+     * @param tfID ID of customer/Staff
+     * @param staffOrCustomer Table where adress ID is, Staff/Customer
+     * @param customer_idOrstaff_id Either Customer_id or Staff_id
+     * //@param deleteFromTable Table to delete from (Same as staffOrCustomer)
+     * //@param whereCustomerOrStaffID Either Customer_id or Staff_id (Same as customer_idOrstaff_id)
+     */
+    public void deleteCustomer(EntityManagerFactory entityManagerFactory, TextField tfID, String staffOrCustomer, String customer_idOrstaff_id){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            //Add errorCheck
+            short deleteID = (short) Integer.parseInt(tfID.getText());
+
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM "+staffOrCustomer+" WHERE "+customer_idOrstaff_id+" = '"+deleteID+"'");
+            List<Short> aid = queryAdressID.getResultList();
+            short addressID = aid.get(0);
+
+            System.out.println(addressID); //Debug
+
+
+            entityManager.createNativeQuery("DELETE " + staffOrCustomer + " FROM " + staffOrCustomer + " where " + customer_idOrstaff_id + " = '" + deleteID + "'").executeUpdate();
+
+            entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
     }
 }
