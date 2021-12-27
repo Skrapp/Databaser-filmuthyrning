@@ -32,6 +32,9 @@ public class Main extends Application {
         }
 
         @Override
+        //Flytta ut alla variabler,
+        //gör om Main till View (Allt som har med gränssnitt att göra)
+        //Flytta main metoden till ny Main
         public void start(Stage primaryStage) throws Exception {
                 olCategory.add(0,null);
                 olLanguages.add(0,null);
@@ -42,12 +45,11 @@ public class Main extends Application {
 
                 primaryStage.setTitle("Uthyrning");
                 BorderPane borderPane = new BorderPane();
-                Fetch fetch = new Fetch();
+                Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY);
                 FXBuilder fxBuilder = new FXBuilder();
-                AddToDatabase addToDatabase = new AddToDatabase();
+                AddToDatabase addToDatabase = new AddToDatabase(ENTITY_MANAGER_FACTORY);
 
                 // Combobox
-
                 //Movie search
                 ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
                 cbMovieSearchCategory.setPromptText("Kategori");
@@ -69,13 +71,13 @@ public class Main extends Application {
                 cbMovieAddLanguages.setPromptText("Språk");
 
                 //Add data to observable lists
-                fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY,"name","category");
-                fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY,"name","language");
-                fetch.addToComboList(olRating, ENTITY_MANAGER_FACTORY,"rating","film");
-                fetch.addToComboList(olStores, ENTITY_MANAGER_FACTORY,"store_id","store");
+                fetch.addToComboList(olCategory, "name","category");
+                fetch.addToComboList(olLanguages, "name","language");
+                fetch.addToComboList(olRating, "rating","film");
+                fetch.addToComboList(olStores, "store_id","store");
 
-                fetch.addToComboList(olCategory, ENTITY_MANAGER_FACTORY, "name", "category");
-                fetch.addToComboList(olLanguages, ENTITY_MANAGER_FACTORY, "name", "language");
+                fetch.addToComboList(olCategory,  "name", "category");
+                fetch.addToComboList(olLanguages,  "name", "language");
 
                 // Lists
                 ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
@@ -141,6 +143,9 @@ public class Main extends Application {
                 HBox hBoxRentMovieButtons = new HBox();
                 hBoxRentMovieButtons.setAlignment(Pos.CENTER);
                 hBoxRentMovieButtons.setSpacing(20);
+
+                //Info popup
+                VBox vBoxInfoMovie = new VBox();
 
                 //Buttons
                 Button bSearchMovie = new Button("Sök");
@@ -212,7 +217,6 @@ public class Main extends Application {
 
                 menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
 
-
                 //Labels
                 //Center
                 Label lMovieResult = new Label("Filmresultat");
@@ -232,6 +236,7 @@ public class Main extends Application {
                 Label lMovieSearchLastUpdate = new Label("Senast uppdaterad");
                 Label lMovieSearchReleaseDate = new Label("Utgivningsdatum");
 
+                //Movie add
                 Label lMovieAddTitle = new Label("Titel");
                 Label lMovieAddDescription = new Label("Beskrivning");
                 Label lMovieAddActors = new Label("Skådespelare");
@@ -521,10 +526,10 @@ public class Main extends Application {
                 miCustomerAdd.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxAddCustomer);
                 });
+
                 miCustomerDelete.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxDeleteCustomer);
                 });
-
 
                 //Staff Add
                 miStaffAdd.setOnAction(event -> {
@@ -539,6 +544,7 @@ public class Main extends Application {
                 miFileLogOut.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxLogout);
                 });
+
                 miFileExit.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxExit);
                 });
@@ -551,14 +557,15 @@ public class Main extends Application {
                 bAdvancedSearchMovies.setOnAction(event -> {
                         hBoxAdvancedSearchMovies.setVisible(!hBoxAdvancedSearchMovies.isVisible());
                 });
+
                 bCreateCustomer.setOnAction(event -> {
                         //Change test -> addToDatabase
-                        int countryID = addToDatabase.addCountryID(ENTITY_MANAGER_FACTORY,tfAddCustomerCountrys);
-                        int cityID = addToDatabase.addCityID(ENTITY_MANAGER_FACTORY,tfAddCustomerCity, countryID);
-                        int adressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY, tfAddCustomerAddress, tfAddCustomerAddress2,
+                        int countryID = addToDatabase.addCountryID(tfAddCustomerCountrys);
+                        int cityID = addToDatabase.addCityID(tfAddCustomerCity, countryID);
+                        int adressID = addToDatabase.addAdressId( tfAddCustomerAddress, tfAddCustomerAddress2,
                                 tfAddCustomerPostalCode, tfAddCustomerDistrict, tfAddCustomerPhone,cityID);
 
-                        addToDatabase.addCustomer(ENTITY_MANAGER_FACTORY, tfAddCustomerFirstName,
+                        addToDatabase.addCustomer( tfAddCustomerFirstName,
                                 tfAddCustomerLastName, tfAddCustomerEmail, tfAddCustomerStoreId,
                                 tfAddCustomerActive, adressID);
                         fxBuilder.clearFields(vBoxAddCustomer);
@@ -566,34 +573,34 @@ public class Main extends Application {
                 });
 
                 bStaffAdd.setOnAction(event -> {
-                        int countryID = addToDatabase.addCountryID(ENTITY_MANAGER_FACTORY,tfStaffAddCountry);
-                        int cityID = addToDatabase.addCityID(ENTITY_MANAGER_FACTORY,tfStaffAddCity, countryID);
-                        int addressID = addToDatabase.addAdressId(ENTITY_MANAGER_FACTORY,tfStaffAddAdress,tfStaffAddAdress2,tfStaffAddPostalCode
+                        int countryID = addToDatabase.addCountryID(tfStaffAddCountry);
+                        int cityID = addToDatabase.addCityID(tfStaffAddCity, countryID);
+                        int addressID = addToDatabase.addAdressId(tfStaffAddAdress,tfStaffAddAdress2,tfStaffAddPostalCode
                                 , tfStaffAddDistrict,tfStaffAddPhone, cityID);
 
-                        addToDatabase.AddStaff(ENTITY_MANAGER_FACTORY,tfStaffAddFirstName,tfStaffAddLastName,
+                        addToDatabase.AddStaff(tfStaffAddFirstName,tfStaffAddLastName,
                                 tfStaffAddEmail,tfStaffAddUserName,tfStaffAddPassword,
                                 tfStaffAddStoreID, tfStaffAddActive, addressID);
                         fxBuilder.clearFields(vBoxStaffAdd);
-
                 });
 
                 bDeleteCustomer.setOnAction(event -> {
-                        addToDatabase.deleteCustomer(ENTITY_MANAGER_FACTORY,tfDeleteCustomer, "customer", "customer_id");
+                        addToDatabase.deleteCustomer(tfDeleteCustomer, "customer", "customer_id");
                         fxBuilder.clearFields(vBoxDeleteCustomer);
                 });
 
                 bDeleteStaff.setOnAction(event -> {
-                        addToDatabase.deleteCustomer(ENTITY_MANAGER_FACTORY,tfDeleteStaff, "staff", "staff_id");
+                        addToDatabase.deleteCustomer(tfDeleteStaff, "staff", "staff_id");
                         fxBuilder.clearFields(vBoxDeleteStaff);
                 });
 
                 bSearchMovie.setOnAction(event -> {
-                        fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,ENTITY_MANAGER_FACTORY,"title", "film", sMovieJoin);
+                        //Dela upp så GUI och databashanterare är i olika klasser. Byt ut vbox till Strängar/Array
+                        fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,"title", "film", sMovieJoin);
                 });
 
                 bSearchCustomer.setOnAction(event -> {
-                        fetch.searchFromDatabase(vBoxRight,olSearchResultsCustomer,ENTITY_MANAGER_FACTORY,"first_name","customer",sCustomerJoin);
+                        fetch.searchFromDatabase(vBoxRight,olSearchResultsCustomer,"first_name","customer",sCustomerJoin);
                 });
 
                 bMovieSearchClear.setOnAction(event -> {
@@ -616,7 +623,7 @@ public class Main extends Application {
                         String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         if(sMovie != null && sCustomer != null){
-                                if(fetch.isInStore(ENTITY_MANAGER_FACTORY,sMovie,sMovieJoin)) {
+                                if(fetch.isInStore(sMovie,sMovieJoin)) {
                                         //Popup for renting movie
                                         tRentMovie.setText("Vill " + sCustomer + " hyra " + sMovie);
                                         fxBuilder.createPopUp(vBoxRentMovie);
@@ -627,7 +634,16 @@ public class Main extends Application {
                         }
                         else
                                 //Create popup for error
-                                fxBuilder.createErrorPopup("Markera både kund och film.");
+                                fxBuilder.createErrorPopup("Markera både kund och film \nför att kunna hyra.");
+                });
+
+                bInfoMovie.setOnAction(event -> {
+                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        if (sMovie != null){
+                                TableView tvInfo = new TableView(olCategory);
+                                fetch.findBaseDataForFilm(sMovie,"film",sMovieJoin);
+                                fxBuilder.createInformationPopup(tvInfo);
+                        }
                 });
 
                 //Log out
@@ -649,7 +665,6 @@ public class Main extends Application {
                 bCancelExit.setOnAction(event -> {
                         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
                 });
-
 
                 //Add to boxes
                 vBoxRight.getChildren().addAll(vBoxCustomerSearch, hBoxAdvancedSearchCustomer,bCustomerSearchClear);
@@ -784,7 +799,7 @@ public class Main extends Application {
                         tfPassword.clear();
                 });
                 bLogin.setOnAction(event -> {
-                        fetch.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
+                        fetch.login(tfUsername,tfPassword,primaryStage,loginStage);
                         tfPassword.clear();
                         tfUsername.clear();
                 });

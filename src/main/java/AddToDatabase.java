@@ -18,8 +18,13 @@ import java.util.List;
 
 public class AddToDatabase {
 
+    EntityManagerFactory em;
+
+    public AddToDatabase(EntityManagerFactory em) {
+        this.em = em;
+    }
+
     /**Adds Customer to Database
-     * @param em EntityManagerFactory
      * @param tfAddCustomerFirstName First name of customer
      * @param tfAddCustomerLastName Last Name of customer
      * @param tfAddCustomerEmail Email of customer
@@ -27,7 +32,7 @@ public class AddToDatabase {
      * @param tfAddCustomerActive If customer is Active
      * @param addressID AdressID of customer
      */
-    public void addCustomer (EntityManagerFactory em, TextField tfAddCustomerFirstName, TextField tfAddCustomerLastName,
+    public void addCustomer (TextField tfAddCustomerFirstName, TextField tfAddCustomerLastName,
                              TextField tfAddCustomerEmail, TextField tfAddCustomerStoreId,
                              TextField tfAddCustomerActive, int addressID) {
         EntityManager entityManager = em.createEntityManager();
@@ -60,7 +65,6 @@ public class AddToDatabase {
     }
 
     /**
-     * @param em EntityManagerFactory
      * @param tfAddCustomerAddress Adress of Customer/Staff
      * @param tfAddCustomerAddress2 Adress2 of Customer/Staff
      * @param tfAddCustomerPostalCode Postal code  of Customer/Staff
@@ -69,8 +73,7 @@ public class AddToDatabase {
      * @param cityID City ID of Customer/Staff
      * @return Return Adress ID
      */
-    public int addAdressId(EntityManagerFactory em,
-                           TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
+    public int addAdressId(                           TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
                            TextField tfAddCustomerDistrict, TextField tfAddCustomerPhone, int cityID){
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
@@ -121,7 +124,6 @@ public class AddToDatabase {
     }
 
     /** Adds Staff
-     * @param em EntityManagerFactory
      * @param tfStaffAddFirstName First name of staff
      * @param tfStaffAddLastName last Name of staff
      * @param tfStaffAddEmail Email of staff
@@ -131,7 +133,7 @@ public class AddToDatabase {
      * @param tfStaffAddActive Is staff active
      * @param addressID Adress ID of staff
      */
-    public void AddStaff(EntityManagerFactory em, TextField tfStaffAddFirstName, TextField tfStaffAddLastName, TextField tfStaffAddEmail,
+    public void AddStaff(TextField tfStaffAddFirstName, TextField tfStaffAddLastName, TextField tfStaffAddEmail,
                          TextField tfStaffAddUserName, TextField tfStaffAddPassword,TextField tfStaffAddStoreID,TextField tfStaffAddActive, int addressID){
             EntityManager entityManager = em.createEntityManager();
             EntityTransaction transaction = null;
@@ -168,10 +170,10 @@ public class AddToDatabase {
 
     /** Adds a movie to Database
      * @param box VBOX containing information to be added
-     * @param entityManager EntityManagerFactory
+     * @param em EntityManagerFactory
      */
-    public void addMovie(VBox box, EntityManagerFactory entityManager) {
-        EntityManager emAddMovie = entityManager.createEntityManager();
+    public void addMovie(VBox box, EntityManagerFactory em) {
+        EntityManager emAddMovie = em.createEntityManager();
         EntityTransaction transaction = null;
         String[] sInfoField = new String[box.getChildren().size()];
         try{
@@ -187,7 +189,7 @@ public class AddToDatabase {
                 //Checks if child is combobox
                 else if (box.getChildren().get(i) instanceof ComboBox) {
                     String cbString = (String) ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem();
-                    sInfoField[i] = getCorrespondingId(cbString, entityManager); // Gets the corresponding ID for whatever is chosen in combobox
+                    sInfoField[i] = getCorrespondingId(cbString); // Gets the corresponding ID for whatever is chosen in combobox
                     System.out.println(i + "cb     " + sInfoField[i]); //Debug
                 }
             }
@@ -226,10 +228,9 @@ public class AddToDatabase {
 
     /** Get ID of category or Language
      * @param cbString Data from Combobox
-     * @param em EntityManagerFactory
      * @return Return ID for Language/Category
      */
-    private String getCorrespondingId(String cbString, EntityManagerFactory em) {
+    private String getCorrespondingId(String cbString) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         String idAsString = "";
@@ -264,12 +265,12 @@ public class AddToDatabase {
         return idAsString;
     }
 
-    /**Ser ifall country finns, om inte: lägger till ett nytt country
+    /**Check if country exist in database, if not: add a new country
      * @param tfAddCountryName Country name
      * @return returnerar countryID
      */
-    public int addCountryID(EntityManagerFactory entityManagerFactory, TextField tfAddCountryName){
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public int addCountryID(TextField tfAddCountryName){
+        EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         short countryId = -1;
         try{
@@ -313,8 +314,8 @@ public class AddToDatabase {
      * @param countryID ID of country
      * @return Return cityID
      */
-    public int addCityID(EntityManagerFactory entityManagerFactory, TextField tfAddCityName, int countryID){
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public int addCityID(TextField tfAddCityName, int countryID){
+        EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         short cityId = -1;
         try{
@@ -362,8 +363,8 @@ public class AddToDatabase {
      * //@param deleteFromTable Table to delete from (Same as staffOrCustomer)
      * //@param whereCustomerOrStaffID Either Customer_id or Staff_id (Same as customer_idOrstaff_id)
      */
-    public void deleteCustomer(EntityManagerFactory entityManagerFactory, TextField tfID, String staffOrCustomer, String customer_idOrstaff_id){
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public void deleteCustomer(TextField tfID, String staffOrCustomer, String customer_idOrstaff_id){
+        EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         try{
             transaction = entityManager.getTransaction();

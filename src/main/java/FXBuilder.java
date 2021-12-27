@@ -1,10 +1,7 @@
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -65,5 +62,13 @@ public class FXBuilder {
         vBoxError.setSpacing(10);
 
         createPopUp(vBoxError);
+    }
+
+    public void createInformationPopup(TableView tableView){
+        VBox vBoxInfo = new VBox(tableView);
+        vBoxInfo.setAlignment(Pos.CENTER);
+        vBoxInfo.setSpacing(10);
+
+        createPopUp(vBoxInfo);
     }
 }
