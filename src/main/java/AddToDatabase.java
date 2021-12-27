@@ -12,6 +12,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AddToDatabase {
@@ -377,9 +379,22 @@ public class AddToDatabase {
             System.out.println(addressID); //Debug
 
 
-            entityManager.createNativeQuery("DELETE " + staffOrCustomer + " FROM " + staffOrCustomer + " where " + customer_idOrstaff_id + " = '" + deleteID + "'").executeUpdate();
+            if (staffOrCustomer.equals("customer")) {
 
-            entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
+                //delete payment so you can delete customer
+                entityManager.createNativeQuery("DELETE payment FROM payment WHERE customer_id ='" + deleteID + "'").executeUpdate();
+                //delete rental so you kan delete customer - To do, dont delete if they havent returned a movie
+                entityManager.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '"+deleteID+"'").executeUpdate();
+                //Delete customer before address so you can it
+                entityManager.createNativeQuery("DELETE customer FROM customer where customer_id = '" + deleteID + "'").executeUpdate();
+                //delete address
+                entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
+
+            } else {
+                entityManager.createNativeQuery("DELETE staff FROM staff where staff_id = '" + deleteID + "'").executeUpdate();
+
+                entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
+            }
 
             transaction.commit();
         }catch (Exception e){
