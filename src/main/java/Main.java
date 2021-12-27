@@ -14,7 +14,9 @@ import javafx.stage.Stage;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import javafx.scene.text.FontWeight;
+
 
 public class Main extends Application {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -43,6 +45,7 @@ public class Main extends Application {
                 BorderPane borderPane = new BorderPane();
                 Fetch fetch = new Fetch();
                 FXBuilder fxBuilder = new FXBuilder();
+                AddToDatabase addToDatabase = new AddToDatabase();
 
 
                 // Combobox
@@ -363,7 +366,7 @@ public class Main extends Application {
 
                 //Movie add
                 TextField tfAddTitle = new TextField();
-                TextField tfMovieAddId = new TextField();
+                TextField tfMovieAddTitle = new TextField();
                 TextField tfMovieAddDescription = new TextField();
                 TextField tfMovieAddActors = new TextField();
                 TextField tfMovieAddOriginalLanguage = new TextField();
@@ -573,11 +576,13 @@ public class Main extends Application {
                 vBoxRentMovie.getChildren().addAll(tRentMovie,hBoxRentMovieButtons);
                 hBoxRentMovieButtons.getChildren().addAll(bRentMovieAccept,bRentMovieDecline);
 
-                //Movie Add
-                vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle,lMovieAddRentalCost,
-                        cbMovieAddCategory,lMovieAddDescription, lMovieAddLength, lMovieAddRating,lMovieAddOriginalLanguage,
-                        cbMovieAddLanguages,lMovieAddActors,lMovieAddSpecialFeatures, lMovieAddRentalDuration,
-                        lMovieAddReplacementCost, lMovieAddInStore, lMovieAddLastUpdate, bCreateMovie);
+                vBoxMovieAdd.getChildren().addAll(lMovieHeader, lMovieAddTitle, tfMovieAddTitle, lMovieAddRentalCost,
+                        tfMovieAddRentalCost, cbMovieAddCategory,lMovieAddDescription, tfMovieAddDescription,
+                        lMovieAddLength, tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
+                        tfMovieAddOriginalLanguage, cbMovieAddLanguages,lMovieAddActors, tfMovieAddActors,
+                        lMovieAddSpecialFeatures, tfMovieAddSpecialFeatures, lMovieAddRentalDuration, tfMovieAddRentalDuration,
+                        lMovieAddReplacementCost, tfMovieAddReplacementCost, lMovieAddInStore, tfMovieAddInStore,
+                        lMovieAddLastUpdate, tfMovieAddLastUpdate, bCreateMovie);
 
                 //Logout
                 hBoxLogout.getChildren().addAll(bConfirmLogout,bCancelLogout);
@@ -685,6 +690,9 @@ public class Main extends Application {
                         fetch.login(ENTITY_MANAGER_FACTORY,tfUsername,tfPassword,primaryStage,loginStage);
                         tfPassword.clear();
                         tfUsername.clear();
+                });
+                bCreateMovie.setOnAction(event -> {
+                        addToDatabase.addMovie(vBoxMovieAdd, ENTITY_MANAGER_FACTORY);
                 });
 
                 //Position of boxes
