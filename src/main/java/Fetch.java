@@ -6,22 +6,19 @@ import javafx.scene.control.Alert;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 public class Fetch {
+
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
 
-    /**
-     * Adds specified data to observable list from the database
-     * @param ol where data is to be stored
-     * @param em Entity Manager Factory
-     * @param column What data to show
-     * @param table From what table to take data from
-     */
     public void addToComboList (ObservableList ol, EntityManagerFactory em, String column, String table) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -30,11 +27,10 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery("SELECT "+ column +" FROM "+ table +" GROUP BY " + column + ";");
-
             List<Object>list = query.getResultList();
-            for (Object p : list)
+            for (Object p : list){
                 ol.add(p);
-
+            }
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -81,7 +77,7 @@ public class Fetch {
      * @param join String of what other tables should be joined
      */
     public void searchFromDatabase(Pane box, ObservableList ol, EntityManagerFactory em, String column, String table, String join){
-        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag mitt i november.
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
 
         try{
@@ -102,7 +98,6 @@ public class Fetch {
             for(String s : list){
                 ol.add(s);
             }
-
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -114,11 +109,11 @@ public class Fetch {
         }
     }
 
-    /**Checks if a movie is in stock
-     * @param em Entity Manager Factory
-     * @param movieTitle What title to search for
+    /**Checks if film is in any store
+     * @param em EntityManagerFactory
+     * @param movieTitle Title of movie //Change to ID
      * @param join String of what other tables should be joined
-     * @return returns if the movie is in stock or not
+     * @return
      */
     public boolean isInStore(EntityManagerFactory em, String movieTitle, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
@@ -131,12 +126,12 @@ public class Fetch {
 
             Query query = entityManager.createNativeQuery(
                     "SELECT title"+
-                            " FROM film"+
-                            join +
-                            " WHERE title = '" + movieTitle +
-                            "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
-                            " GROUP BY film.film_id" +
-                            " ORDER BY film.title;"
+                        " FROM film"+
+                        join +
+                        " WHERE title = '" + movieTitle +
+                        "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
+                        " GROUP BY film.film_id" +
+                        " ORDER BY film.title;"
             );
 
             List<String>list = query.getResultList();
@@ -156,8 +151,7 @@ public class Fetch {
         return isInStore;
     }
 
-
-    /** Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
+    /**Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
      * @param box Pane (parent to VBox and HBox) containing the searchable information
      * @param sSearchCriteria string to add search criteria
      * @return search criteria
@@ -183,11 +177,10 @@ public class Fetch {
                     else
                         sSearchCriteria += " AND ";
 
-                    //exact search and not surrounded by '' (int and date)
+                    //exact search and not surrounded by '' (int)
                     if (box.getChildren().get(i).getId().contains("id") ||
                         box.getChildren().get(i).getId().contains("year") ){
 
-                        //Checks if it's an integer
                         try {
                             int parsed = Integer.parseInt(sTextField);
                         } catch (NumberFormatException nfe) {
@@ -201,7 +194,6 @@ public class Fetch {
                     //Date search
                     else if(box.getChildren().get(i).getId().contains("create_date") ||
                             box.getChildren().get(i).getId().contains("last_update")){
-                        //Checks if it's the correct date format
                         if(ec.isDate(sTextField))
                         sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")
                                 .concat(sTextField).concat("%'");
@@ -213,7 +205,6 @@ public class Fetch {
                     }
                     //Max search
                     else if(box.getChildren().get(i).getId().contains("max_value")){
-                        //Checks if it's a double
                         if(ec.isDouble(sTextField))
                         sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" <= ")
                                 .concat(sTextField);
@@ -225,7 +216,6 @@ public class Fetch {
                     }
                     //Min search
                     else if(box.getChildren().get(i).getId().contains("min_value")){
-                        //Checks if it's a double
                         if(ec.isDouble(sTextField))
                         sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" >= ")
                                 .concat(sTextField);
@@ -255,6 +245,7 @@ public class Fetch {
                             .concat(sSelectedItem).concat("'");
                 }
             }
+            //Hur ska denna del utformas så den ser "bra" ut?
             //See if object is checkbox
             else if(box.getChildren().get(i) instanceof CheckBox){
                 if (((CheckBox) box.getChildren().get(i)).isSelected()) {
@@ -266,7 +257,7 @@ public class Fetch {
                     if(box.getChildren().get(i).getId().equals("InStore"))
                         sSearchCriteria += "(r.return_date IS NOT NULL OR r.rental_date IS NULL)";
                     else
-                    //contains searched content
+                    //exact search and surrounded by ''. ID example: ("film.special_features,behind the scenes")
                     sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" like '%")
                             .concat(box.getChildren().get(i).getId().split(",")[1]).concat("%'");
                 }
@@ -275,7 +266,6 @@ public class Fetch {
         }
         return sSearchCriteria;
     }
-
     public void login(EntityManagerFactory em, TextField tfUsername, TextField tfPassword, Stage primaryStage, Stage loginStage) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;

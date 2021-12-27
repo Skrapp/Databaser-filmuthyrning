@@ -14,7 +14,11 @@ public class Test {
     }
 
 
-    public int addCountryID(TextField tfAddCustomerCountrys){
+    /**Ser ifall country finns, om inte: lägger till ett nytt country
+     * @param tfAddCountryName Country name
+     * @return returnerar countryID
+     */
+    public int addCountryID(TextField tfAddCountryName){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
         short countryId = -1;
@@ -25,10 +29,11 @@ public class Test {
             Country country = new Country();
             Instant instant = Instant.now();
 
-            String Country = tfAddCustomerCountrys.getText();
+            String Country = tfAddCountryName.getText();
 
                 Query query = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
 
+                //If list is empty add country
                 if (query.getResultList().isEmpty()) {
                     country.setCountry(Country);
                     country.setLast_update(instant);
@@ -53,7 +58,12 @@ public class Test {
         return countryId;
     }
 
-    public int addCityID(TextField tfAddCustomerCity, int countryID){
+    /** checks if city Idin Country exists, else add new city
+     * @param tfAddCityName Name of city
+     * @param countryID ID of country
+     * @return Return cityID
+     */
+    public int addCityID(TextField tfAddCityName, int countryID){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;
         short cityId = -1;
@@ -65,10 +75,11 @@ public class Test {
 
             Instant instant = Instant.now();
 
-            String City = tfAddCustomerCity.getText();
+            String City = tfAddCityName.getText();
 
             Query query = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
 
+            //Checks if City ID exist
             if (query.getResultList().isEmpty()) {
                 city.setCity(City);
                 city.setCountry_id(countryID);
@@ -95,6 +106,13 @@ public class Test {
     }
 
 
+    /**Deletes Customer or Staff
+     * @param tfID ID of customer/Staff
+     * @param getAddressIDTable Table where adress ID is, Staff/Customer
+     * @param whereID Either Customer_id or Staff_id
+     * @param deleteFromTable Table to delete from (Same as getAddressIDTable)
+     * @param whereCustomerOrStaffID Either Customer_id or Staff_id (Same as whereID)
+     */
         public void deleteCustomer(TextField tfID, String getAddressIDTable, String whereID, String deleteFromTable, String whereCustomerOrStaffID){
             //"SELECT address_id FROM '"+getAdressIDFrom+"'  <--- getAddressIDTable = customer eller staff. WHERE "whereID" --> customer_id eller staffid  = '"+deleteID+"'")  <--- deleteId = staff_id eller customer_id
             EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
@@ -103,13 +121,14 @@ public class Test {
                 transaction = entityManager.getTransaction();
                 transaction.begin();
 
+                //Add errorCheck
                 short deleteID = (short) Integer.parseInt(tfID.getText());
 
                 Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM "+getAddressIDTable+" WHERE "+whereID+" = '"+deleteID+"'");
                 List<Short> aid = queryAdressID.getResultList();
                 short addressID = aid.get(0);
 
-                System.out.println(addressID);
+                System.out.println(addressID); //Debug
 
                 entityManager.createNativeQuery("DELETE "+deleteFromTable+" FROM "+deleteFromTable+" where "+whereCustomerOrStaffID+" = '"+deleteID+"'").executeUpdate();
 
@@ -125,7 +144,4 @@ public class Test {
                 entityManager.close();
             }
         }
-
-
-
 }

@@ -9,6 +9,9 @@ public class ErrorCheck {
         this.dateFormat = dateFormat;
     }
 
+    public ErrorCheck() {
+    }
+
     public boolean isDate(String dateStr) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         simpleDateFormat.setLenient(false);
