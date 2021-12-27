@@ -1,5 +1,7 @@
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -7,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -47,4 +50,20 @@ public class FXBuilder {
     }
 
     //Errorpopup
+    public void createErrorPopup(String errorMessage){
+        Text tError = new Text(errorMessage);
+
+        Button bClose = new Button("Stäng");
+        bClose.setOnAction(event -> {
+            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        });
+
+        VBox vBoxError = new VBox(tError,bClose);
+        vBoxError.setAlignment(Pos.CENTER);
+        vBoxError.setPrefWidth(300);
+        vBoxError.setPrefHeight(50);
+        vBoxError.setSpacing(10);
+
+        createPopUp(vBoxError);
+    }
 }

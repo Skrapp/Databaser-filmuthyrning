@@ -136,6 +136,7 @@ public class Fetch {
 
             List<String>list = query.getResultList();
 
+            System.out.println(list.size());
             if (list.size() >= 1)
                 isInStore = true;
 
@@ -253,7 +254,7 @@ public class Fetch {
                         sSearchCriteria += " WHERE ";
                     else
                         sSearchCriteria += " AND ";
-                    //Special search inStore
+                    //Special search for inStore
                     if(box.getChildren().get(i).getId().equals("InStore"))
                         sSearchCriteria += "(r.return_date IS NOT NULL OR r.rental_date IS NULL)";
                     else

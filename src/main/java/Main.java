@@ -501,16 +501,16 @@ public class Main extends Application {
                 //Join text for mySQL for search
                 String sMovieJoin =
                         " JOIN language l ON film.language_id = l.language_id" +
-                                " JOIN film_actor fa ON film.film_id = fa.film_id" +
-                                " JOIN actor a ON fa.actor_id = a.actor_id" +
-                                " JOIN film_category fc ON film.film_id = fc.film_id" +
-                                " JOIN category c ON fc.category_id = c.category_id" +
-                                " JOIN inventory i ON film.film_id = i.film_id" +
-                                " JOIN rental r ON i.inventory_id = r.inventory_id";
+                                " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
+                                " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
+                                " LEFT JOIN film_category fc ON film.film_id = fc.film_id" +
+                                " LEFT JOIN category c ON fc.category_id = c.category_id" +
+                                " LEFT JOIN inventory i ON film.film_id = i.film_id" +
+                                " LEFT JOIN rental r ON i.inventory_id = r.inventory_id";
 
                 String sCustomerJoin =
-                        " JOIN address a ON customer.address_id = a.address_id"+
-                                " JOIN city ci ON ci.city_id = a.city_id";
+                        " LEFT JOIN address a ON customer.address_id = a.address_id"+
+                                " LEFT JOIN city ci ON ci.city_id = a.city_id";
 
                 //Popup
                 //Movie - Add
@@ -618,16 +618,17 @@ public class Main extends Application {
                         String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         if(sMovie != null && sCustomer != null){
                                 if(fetch.isInStore(ENTITY_MANAGER_FACTORY,sMovie,sMovieJoin)) {
+                                        //Popup for renting movie
                                         tRentMovie.setText("Vill " + sCustomer + " hyra " + sMovie);
                                         fxBuilder.createPopUp(vBoxRentMovie);
                                 }
                                 else
                                         //Create popup for informing it is not in stock
-                                        fxBuilder.createPopUp(hboxTest);
+                                        fxBuilder.createErrorPopup(sMovie + " är redan uthyrd.");
                         }
                         else
                                 //Create popup for error
-                                System.out.println("Välj kund och film");
+                                fxBuilder.createErrorPopup("Markera både kund och film.");
                 });
 
                 //Log out
@@ -696,6 +697,7 @@ public class Main extends Application {
                         lMovieSearchReleaseDate,tfMovieSearchReleaseYear);
 
                 vBoxMovieSearchRight.getChildren().addAll(lMovieSearchActors,tfMovieSearchActors,lMovieSearchSpecialFeatures,chbMovieSearchSFTrailers,
+                        chbMovieSearchSFBTS, chbMovieSearchSFCommentaries, chbMovieSearchSFDeletedScenes,
                         lMovieSearchRentalDuration,tfMovieSearchRentalDurationMin,tfMovieSearchRentalDurationMax, lMovieSearchReplacementCost,
                         tfMovieSearchReplacementCostMin,tfMovieSearchReplacementCostMax,lMovieSearchLastUpdate,tfMovieSearchLastUpdate);
 
