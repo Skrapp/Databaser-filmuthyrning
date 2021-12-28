@@ -1,25 +1,23 @@
 import javafx.collections.ObservableList;
 
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
 
-import javafx.scene.control.Alert;
-
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 public class Fetch {
 
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
+    EntityManagerFactory em;
 
-    public void addToComboList (ObservableList ol, EntityManagerFactory em, String column, String table) {
+    public Fetch(EntityManagerFactory em) {
+        this.em = em;
+    }
+
+    public void addToComboList (ObservableList ol, String column, String table) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
         try{
@@ -42,7 +40,7 @@ public class Fetch {
         }
     }
 
-    public void searchFromDatabase(TextField tf, ObservableList ol, EntityManagerFactory em, String column, String table){
+    public void searchFromDatabase(TextField tf, ObservableList ol, String column, String table){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
 
@@ -71,12 +69,11 @@ public class Fetch {
      * Search in table for written search criteria
      * @param box Pane (VBox or HBox) containing searchable data
      * @param ol where data is written out
-     * @param em entity manager factory
      * @param column what column in table to show in search results
      * @param table what table in database to use
      * @param join String of what other tables should be joined
      */
-    public void searchFromDatabase(Pane box, ObservableList ol, EntityManagerFactory em, String column, String table, String join){
+    public void searchFromDatabase(Pane box, ObservableList ol, String column, String table, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
 
@@ -109,13 +106,74 @@ public class Fetch {
         }
     }
 
+    //On going
+    //Funktion för varje datadel (film base data, actor, inventory, inStore)
+    public void findBaseDataForFilm(String sSelectedTitle, String table, String join){
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+                    "SELECT film.*" +
+                    " FROM " + table +
+                    join +
+                    " WHERE film.title = " + sSelectedTitle +
+                    " GROUP BY " + table + "." + table + "_id;"
+            );
+
+            List<Object[]>list = query.getResultList();
+            for(Object[] o : list){
+                //Add to ObservableList
+                System.out.println(o[1]);//Test
+            }
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+    }
+
+    //To add: if more than a single film_id is found, user should be able to choose what ID to look at
+    public int findFilmId (String sTitle){
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        int filmID = -1;
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryFilmID = entityManager.createNativeQuery("SELECT film_id FROM film " +
+                            "WHERE title = '" + sTitle + "';");
+            List<Short> chosenID = queryFilmID.getResultList();
+            filmID = chosenID.get(0);
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        System.out.println(filmID);
+        return filmID;
+    }
+
     /**Checks if film is in any store
-     * @param em EntityManagerFactory
      * @param movieTitle Title of movie //Change to ID
      * @param join String of what other tables should be joined
      * @return
      */
-    public boolean isInStore(EntityManagerFactory em, String movieTitle, String join){
+    public boolean isInStore(String movieTitle, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
         Boolean isInStore = false;
@@ -134,8 +192,9 @@ public class Fetch {
                         " ORDER BY film.title;"
             );
 
-            List<String>list = query.getResultList();
+            List<String>list = query.getResultList();//.get(i) Gör till forloop och få all them data
 
+            System.out.println(list.size());
             if (list.size() >= 1)
                 isInStore = true;
 
@@ -151,6 +210,7 @@ public class Fetch {
         return isInStore;
     }
 
+    //createSearchCriteria, får in massa strängvariabler, String titel = "he"
     /**Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
      * @param box Pane (parent to VBox and HBox) containing the searchable information
      * @param sSearchCriteria string to add search criteria
@@ -167,6 +227,7 @@ public class Fetch {
                     return sSearchCriteria;
                 }
             }
+
             //See if object is a textField
             else if(box.getChildren().get(i) instanceof TextField){
                 String sTextField = ((TextField) box.getChildren().get(i)).getText().trim();
@@ -253,7 +314,7 @@ public class Fetch {
                         sSearchCriteria += " WHERE ";
                     else
                         sSearchCriteria += " AND ";
-                    //Special search inStore
+                    //Special search for inStore
                     if(box.getChildren().get(i).getId().equals("InStore"))
                         sSearchCriteria += "(r.return_date IS NOT NULL OR r.rental_date IS NULL)";
                     else
@@ -266,7 +327,7 @@ public class Fetch {
         }
         return sSearchCriteria;
     }
-    public void login(EntityManagerFactory em, TextField tfUsername, TextField tfPassword, Stage primaryStage, Stage loginStage) {
+    public void login(TextField tfUsername, TextField tfPassword, Stage primaryStage, Stage loginStage) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         String username = tfUsername.getText();
