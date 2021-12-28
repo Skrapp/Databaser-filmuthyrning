@@ -462,7 +462,7 @@ public class AddToDatabase {
         return inventoryId;
     }
 
-    private Integer getCustomerIdFromName(String firstName) {
+    private Integer getCustomerIdFromName(String fullName) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         int customerId = 0;
@@ -471,7 +471,11 @@ public class AddToDatabase {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "';");
+            String[] split = fullName.split(" ");
+            String firstName = split[0];
+            String lastName = split[1];
+
+            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "' AND last_name = '" + lastName + "';");
 
             customerIdShort = (short) queryCustomerID.getResultList().get(0);
             customerId = customerIdShort;

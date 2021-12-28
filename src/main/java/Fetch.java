@@ -1,3 +1,5 @@
+import db.Customer;
+import db.Film;
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.*;
@@ -93,7 +95,17 @@ public class Fetch {
             List<String>list = query.getResultList();
             ol.clear();
             for(String s : list){
-                ol.add(s);
+                if (table == "customer") {
+                    Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getCustomer_id(), customer.getFirst_name() + " " + customer.getLast_name(), customer.getEmail());
+                    ol.add(srCustomer);
+                } else if (table == "film") {
+                    Film film = entityManager.find(Film.class, getFilmIdFromTitle(s));
+                    FilmSearchResults srFilm = new FilmSearchResults(film.getId(), film.getTitle(), film.getDescription());
+                    ol.add(srFilm);
+                } else {
+                    ol.add(s);
+                }
             }
             transaction.commit();
         }catch (Exception e){
@@ -104,6 +116,58 @@ public class Fetch {
         }finally {
             entityManager.close();
         }
+    }
+
+    private Integer getFilmIdFromTitle(String title) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int filmId = 0;
+        short filmIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryFilmID = entityManager.createNativeQuery("SELECT film_id from film WHERE title = '" + title + "';");
+
+            filmIdShort = (short) queryFilmID.getResultList().get(0);
+            filmId = filmIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return filmId;
+    }
+
+    private Integer getCustomerIdFromName(String firstName) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int customerId = 0;
+        short customerIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "';");
+
+            customerIdShort = (short) queryCustomerID.getResultList().get(0);
+            customerId = customerIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return customerId;
     }
 
     //On going

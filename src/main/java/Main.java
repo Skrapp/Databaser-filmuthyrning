@@ -1,3 +1,4 @@
+import db.Film;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -5,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,6 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import javafx.scene.text.FontWeight;
+import org.hibernate.mapping.Table;
 
 import java.util.List;
 
@@ -82,8 +85,44 @@ public class Main extends Application {
                 fetch.addToComboList(olLanguages,  "name", "language");
 
                 // Lists
-                ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
-                ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
+                // ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
+                // ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
+                TableView<CustomerSearchResults> lvSearchResultsCustomer = new TableView<CustomerSearchResults>();
+                final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList(
+                        new CustomerSearchResults(1, "Erik Johansson", "email@email.mejl"),
+                        new CustomerSearchResults(2, "Någon Annan", "annanemail@annanemail.annanmejl")
+                );
+                TableColumn colCustomerId = new TableColumn("Id");
+                colCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
+                colCustomerId.setPrefWidth(50);
+                TableColumn colCustomerName = new TableColumn("Full name");
+                colCustomerName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+                colCustomerName.setPrefWidth(150);
+                TableColumn colCustomerEmail = new TableColumn("Email");
+                colCustomerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+                colCustomerEmail.setPrefWidth(250);
+                lvSearchResultsCustomer.setItems(olCustomerSearchResults);
+                lvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                lvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail);
+
+                TableView<FilmSearchResults> lvSearchResultsMovie = new TableView<FilmSearchResults>();
+                final ObservableList<FilmSearchResults> olMovieSearchResults = FXCollections.observableArrayList(
+                        new FilmSearchResults(1, "Erik Johansson", "email@email.mejl"),
+                        new FilmSearchResults(2, "Någon Annan", "annanemail@annanemail.annanmejl")
+                );
+                TableColumn colMovieId = new TableColumn("Id");
+                colMovieId.setCellValueFactory(new PropertyValueFactory<>("id"));
+                colMovieId.setPrefWidth(50);
+                TableColumn colMovieTitle = new TableColumn("Title");
+                colMovieTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+                colMovieTitle.setPrefWidth(150);
+                TableColumn colMovieDescription = new TableColumn("Description");
+                colMovieDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+                colMovieDescription.setPrefWidth(250);
+                lvSearchResultsMovie.setItems(olMovieSearchResults);
+                lvSearchResultsMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                lvSearchResultsMovie.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
+
 
                 //Boxes
                 VBox vBoxMovieAdd = new VBox();
@@ -598,11 +637,11 @@ public class Main extends Application {
 
                 bSearchMovie.setOnAction(event -> {
                         //Dela upp så GUI och databashanterare är i olika klasser. Byt ut vbox till Strängar/Array
-                        fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,"title", "film", sMovieJoin);
+                        fetch.searchFromDatabase(vBoxLeft,olMovieSearchResults,"title", "film", sMovieJoin);
                 });
 
                 bSearchCustomer.setOnAction(event -> {
-                        fetch.searchFromDatabase(vBoxRight,olSearchResultsCustomer,"first_name","customer",sCustomerJoin);
+                        fetch.searchFromDatabase(vBoxRight,olCustomerSearchResults,"first_name","customer",sCustomerJoin);
                 });
 
                 bMovieSearchClear.setOnAction(event -> {
@@ -622,8 +661,10 @@ public class Main extends Application {
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
                         //Funktion?
-                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.getTitle();
+                        CustomerSearchResults customerSearchResults = lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        String sCustomer = customerSearchResults.fullName;
                         //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet, annars blir det strul nånstans pga flera likadana förnamn?
                         if(sMovie != null && sCustomer != null){
                                 if(fetch.isInStore(sMovie,sMovieJoin)) {
@@ -641,8 +682,10 @@ public class Main extends Application {
                 });
 
                 bRentMovieAccept.setOnAction(e -> {
-                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.getTitle();
+                        CustomerSearchResults customerSearchResults = lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        String sCustomer = customerSearchResults.fullName;
                         addToDatabase.rentMovie(sMovie, sCustomer);
                         ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
                 });
@@ -652,7 +695,8 @@ public class Main extends Application {
                 });
 
                 bInfoMovie.setOnAction(event -> {
-                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.title;
                         if (sMovie != null){
                                 TableView tvInfo = new TableView(olCategory);
                                 fetch.findBaseDataForFilm(sMovie,"film",sMovieJoin);

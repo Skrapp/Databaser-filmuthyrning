@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9deb4e2-1dbe-48b8-8030-9288aec3ea14" name="Changes" comment="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/db/Inventory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/db/Payment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/db/Rental.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/db/Staff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="b9deb4e2-1dbe-48b8-8030-9288aec3ea14" name="Changes" comment="Lagt till funktion för att hyra film.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/CustomerSearchResults.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/FilmSearchResults.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Filmuthyrning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Filmuthyrning.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AddToDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/test2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="com.haulmont.jpb.JpaEntity" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -183,7 +174,7 @@
       <workItem from="1640300791436" duration="8789000" />
       <workItem from="1640521988584" duration="3827000" />
       <workItem from="1640616059340" duration="10890000" />
-      <workItem from="1640663331806" duration="6081000" />
+      <workItem from="1640663331806" duration="11994000" />
     </task>
     <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
       <created>1639785458250</created>
@@ -215,11 +206,11 @@
       <option name="presentableId" value="LOCAL−00005" />
       <updated>1640473571890</updated>
     </task>
-    <task id="LOCAL−00006" summary="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
-      <created>1640034652232</created>
+    <task id="LOCAL−00006" summary="Lagt till funktion för att hyra film.">
+      <created>1640670420182</created>
       <option name="number" value="LOCAL−00006" />
       <option name="presentableId" value="LOCAL−00006" />
-      <updated>1640034652232</updated>
+      <updated>1640670420182</updated>
     </task>
     <task>
       <created>1640449044184</created>
@@ -254,7 +245,7 @@
       <option name="project" value="LOCAL" />
       <updated>1640250582309</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,19 +268,20 @@
     <MESSAGE value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
     <MESSAGE value="Pågående arbete med funktion för att lägga till film, funkar i det stora, behöver putsas i det lilla." />
     <MESSAGE value="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
-    <option name="LAST_COMMIT_MESSAGE" value="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
+    <MESSAGE value="Lagt till funktion för att hyra film." />
+    <option name="LAST_COMMIT_MESSAGE" value="Lagt till funktion för att hyra film." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>133</line>
+          <line>197</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>131</line>
+          <line>195</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
