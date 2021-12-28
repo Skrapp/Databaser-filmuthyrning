@@ -16,6 +16,8 @@ import javax.persistence.Persistence;
 
 import javafx.scene.text.FontWeight;
 
+import java.util.List;
+
 public class Main extends Application {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
@@ -622,6 +624,7 @@ public class Main extends Application {
                         //Funktion?
                         String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet, annars blir det strul nånstans pga flera likadana förnamn?
                         if(sMovie != null && sCustomer != null){
                                 if(fetch.isInStore(sMovie,sMovieJoin)) {
                                         //Popup for renting movie
@@ -635,6 +638,17 @@ public class Main extends Application {
                         else
                                 //Create popup for error
                                 fxBuilder.createErrorPopup("Markera både kund och film \nför att kunna hyra.");
+                });
+
+                bRentMovieAccept.setOnAction(e -> {
+                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        addToDatabase.rentMovie(sMovie, sCustomer);
+                        ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
+                });
+
+                bRentMovieDecline.setOnAction(e -> {
+                        ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
                 });
 
                 bInfoMovie.setOnAction(event -> {

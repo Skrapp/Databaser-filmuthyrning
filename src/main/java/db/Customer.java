@@ -11,10 +11,10 @@ public class Customer {
     @Id
     @Column(name = "customer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int customer_id;
+    private Integer customer_id;
 
     @Column(name = "store_id")
-    private int store_id;
+    private Integer store_id;
 
     @Column(name = "first_name")
     private String first_name;
@@ -26,10 +26,10 @@ public class Customer {
     private String email;
 
     @Column(name = "address_id")
-    private int address_id;
+    private Integer address_id;
 
     @Column(name = "active")
-    private int active;
+    private Integer active;
 
     @Column(name = "create_date")
     private Date create_date;
@@ -38,12 +38,12 @@ public class Customer {
     private Instant last_update;
 
     @Column(name = "address")
-    private int address;
+    private Integer address;
 
     public Customer() {
     }
 
-    public Customer(int customer_id, int store_id, String first_name, String last_name, String email, int address_id, int active, Date create_date, Instant last_update, int address) {
+    public Customer(Integer customer_id, Integer store_id, String first_name, String last_name, String email, Integer address_id, Integer active, Date create_date, Instant last_update, Integer address) {
         this.customer_id = customer_id;
         this.store_id = store_id;
         this.first_name = first_name;
@@ -56,19 +56,19 @@ public class Customer {
         this.address = address;
     }
 
-    public int getCustomer_id() {
+    public Integer getCustomer_id() {
         return customer_id;
     }
 
-    public void setCustomer_id(int customer_id) {
+    public void setCustomer_id(Integer customer_id) {
         this.customer_id = customer_id;
     }
 
-    public int getStore_id() {
+    public Integer getStore_id() {
         return store_id;
     }
 
-    public void setStore_id(int store_id) {
+    public void setStore_id(Integer store_id) {
         this.store_id = store_id;
     }
 
@@ -96,11 +96,11 @@ public class Customer {
         this.email = email;
     }
 
-    public int getAddress_id() {
+    public Integer getAddress_id() {
         return address_id;
     }
 
-    public void setAddress_id(int address_id) {
+    public void setAddress_id(Integer address_id) {
         this.address_id = address_id;
     }
 
@@ -108,7 +108,7 @@ public class Customer {
         return active;
     }
 
-    public void setActive(int active) {
+    public void setActive(Integer active) {
         this.active = active;
     }
 

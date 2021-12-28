@@ -2,6 +2,7 @@ import db.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.hibernate.Criteria;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -12,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -242,18 +244,12 @@ public class AddToDatabase {
             queryLanguage = entityManager.createNativeQuery("SELECT language_id from language WHERE name = '" + cbString + "';");
             queryCategory = entityManager.createNativeQuery("SELECT category_id from category WHERE name = '" + cbString + "';");
 
-            //Remove try?
-            try {
                 //As integer?
                 //If there is result in query -> first result is the requested ID
                 if (!queryCategory.getResultList().isEmpty()) idAsString = queryCategory.getResultList().get(0).toString();
                 if (!queryLanguage.getResultList().isEmpty()) idAsString = queryLanguage.getResultList().get(0).toString();
                 transaction.commit();
-            }catch (NoResultException ee) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-            }
+
         }catch (Exception e){
             if(transaction != null){
                 transaction.rollback();
@@ -406,5 +402,115 @@ public class AddToDatabase {
         }finally {
             entityManager.close();
         }
+    }
+
+    public void rentMovie(String sMovie, String sCustomer) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            Rental rental = new Rental();
+        Instant instant = Instant.now();
+        //Get the correct customer and film objects based on ID
+        Integer customerID = getCustomerIdFromName(sCustomer);
+        Customer customer = entityManager.find(Customer.class, customerID);
+        Integer movieID = getMovieIdFromTitle(sMovie);
+        Staff staff = entityManager.find(Staff.class, 1);
+        Inventory inventory = entityManager.find(Inventory.class, inventoryIdFromMovieId(movieID));
+
+        rental.setInventory(inventory);
+        rental.setCustomer(customer);
+        rental.setReturnDate(instant.plus(3, ChronoUnit.DAYS)); //Return date three days from now.
+        rental.setStaff(staff);
+        rental.setRentalDate(Instant.now());
+        rental.setLastUpdate(Instant.now());
+        entityManager.persist(rental);
+        entityManager.flush();
+        transaction.commit();
+    }catch (Exception e){
+        if(transaction != null){
+            transaction.rollback();
+        }
+        e.printStackTrace();
+    }finally {
+        entityManager.close();
+    }
+    }
+
+    private Object inventoryIdFromMovieId(int movieID) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int inventoryId = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryInventoryID = entityManager.createNativeQuery("SELECT inventory_id from inventory WHERE film_id = '" + movieID + "';");
+
+            inventoryId = (int) queryInventoryID.getResultList().get(0);
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return inventoryId;
+    }
+
+    private Integer getCustomerIdFromName(String firstName) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int customerId = 0;
+        short customerIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "';");
+
+            customerIdShort = (short) queryCustomerID.getResultList().get(0);
+            customerId = customerIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return customerId;
+    }
+
+    private Integer getMovieIdFromTitle(String title) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int movieId = 0;
+        short movieIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryCustomerID = entityManager.createNativeQuery("SELECT film_id from film WHERE title = '" + title + "';");
+
+            movieIdShort = (short) queryCustomerID.getResultList().get(0);
+            movieId = movieIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return movieId;
     }
 }
