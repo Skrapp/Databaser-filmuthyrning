@@ -1,3 +1,4 @@
+import attributes.MovieSearch;
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.*;
@@ -6,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fetch {
@@ -40,20 +42,45 @@ public class Fetch {
         }
     }
 
-    public void searchFromDatabase(TextField tf, ObservableList ol, String column, String table){
+    /** Main search function. Call sub searchfunctions
+     * @param movieSearch MovieSearch object containing all search parameters
+     * @return returna a list of the result
+     */
+    public List<String> searchMovies(MovieSearch movieSearch){
+        String searchCriteria = createSearchCriteriaMovie(movieSearch);
+        return searchFromDatabase(searchCriteria);
+    }
+
+    /** New searchFunction for movies. Do not handel any JavaFX stuff.
+     * @param searchCriteria The WHERE command
+     * @return Returns a list with the titles of movies
+     */
+    public List<String> searchFromDatabase(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
+        List<String> result = new ArrayList<>();
 
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Query query = entityManager.createNativeQuery("SELECT " + column + " FROM " + table + " WHERE " + column + " LIKE '%" +  tf.getText().toString() + "%';" );
-            List<String>list = query.getResultList();
-            ol.clear();
-            for(String s : list){
-                ol.add(s);
-            }
+            Query query = entityManager.createNativeQuery(
+                    "SELECT film.title" +
+                            " FROM film" +
+                            " LEFT JOIN language l ON film.language_id = l.language_id" +
+                            " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
+                            " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
+                            " LEFT JOIN film_category fc ON film.film_id = fc.film_id" +
+                            " LEFT JOIN category c ON fc.category_id = c.category_id" +
+                            " LEFT JOIN inventory i ON film.film_id = i.film_id" +
+                            " LEFT JOIN rental r ON i.inventory_id = r.inventory_id" +
+                            searchCriteria +
+                            " GROUP BY film.film_id" +
+                            " ORDER BY film.title;"
+            );
+
+            result = query.getResultList();
+
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -63,8 +90,10 @@ public class Fetch {
         }finally {
             entityManager.close();
         }
+        return result;
     }
 
+    //Ska tas bort, kund ska decouplas på samam sätt som film
     /**
      * Search in table for written search criteria
      * @param box Pane (VBox or HBox) containing searchable data
@@ -210,7 +239,7 @@ public class Fetch {
         return isInStore;
     }
 
-    //createSearchCriteria, får in massa strängvariabler, String titel = "he"
+    //Ska tas bort, kunder ska också decouplas
     /**Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
      * @param box Pane (parent to VBox and HBox) containing the searchable information
      * @param sSearchCriteria string to add search criteria
@@ -327,6 +356,150 @@ public class Fetch {
         }
         return sSearchCriteria;
     }
+
+    /** New createSearchCriteria for movies. Gets teh Where query for MySQL
+     * @param movieSearch Object containig all searchdata
+     * @return Returns a WHERE Query for MySQL
+     */
+    public String createSearchCriteriaMovie(MovieSearch movieSearch) {
+
+        String sSearchCriteria;
+        Boolean isFirst = true;
+        sSearchCriteria = exactSearch(movieSearch.getsFilmId(),"film.film_id");
+        sSearchCriteria += containsSearch(movieSearch.getsTitle(),"title");
+        sSearchCriteria += dateSearch(movieSearch.getsLastUpdate(), "film.last_update");
+        sSearchCriteria += maxSearch(movieSearch.getsLengthMax(), "film.length");
+        sSearchCriteria += minSearch(movieSearch.getsLengthMin(), "film.length");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFDeletedScenes(), "film.special_features","Deleted Scenes");
+        sSearchCriteria += inStoreSearch(movieSearch.getInStore());
+
+        System.out.println(sSearchCriteria);
+
+        sSearchCriteria = changeFirstAnd(sSearchCriteria);
+
+        return sSearchCriteria;
+    }
+
+    /** for int
+     * @param sSearchCriteria Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String exactSearch(String sSearchCriteria, String column) {
+        if (!sSearchCriteria.equals("")) {
+            if (ec.isInteger(sSearchCriteria))
+                return " AND ".concat(column).concat(" = ").concat(sSearchCriteria);
+            else {
+                //controller.error("Skriv ett  heltal i " + column);
+                System.out.println("Skriv ett heltal i " + column);
+                return "ERROR";
+            }
+        }
+        return"";
+    }
+
+    /**for date
+     * @param sSearchCriteria Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String dateSearch(String sSearchCriteria, String column) {
+        if (!sSearchCriteria.equals("")) {
+            if (ec.isDate(sSearchCriteria))
+                return " AND ".concat(column).concat(" like '%").concat(sSearchCriteria).concat("%'");
+            else {
+                //controller.error("Skriv ett  datum med formatet yyyy-mm-dd i " + column);
+                System.out.println("Skriv ett datum i " + column);
+                return "ERROR";
+            }
+        }
+        return "";
+    }
+
+    /**for minimum doubles
+     * @param sSearchCriteria Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String minSearch(String sSearchCriteria, String column) {
+        if (!sSearchCriteria.equals("")) {
+            if (ec.isDouble(sSearchCriteria)) {
+                return " AND ".concat(column).concat(" <= ").concat(sSearchCriteria);
+            } else {
+                //controller.error("Skriv ett  decimaltal i " + column);
+                System.out.println("Skriv ett decimaltal i " + column);
+                return "ERROR";
+            }
+        }
+        return "";
+    }
+
+    /**for maximum doubles
+     * @param sSearchCriteria Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String maxSearch(String sSearchCriteria, String column) {
+        if (!sSearchCriteria.equals("")) {
+            if (ec.isDouble(sSearchCriteria)) {
+                return " AND ".concat(column).concat(" >= ").concat(sSearchCriteria);
+            } else {
+                //controller.error("Skriv ett  decimaltal i " + column);
+                System.out.println("Skriv ett decimaltal i " + column);
+                return "ERROR";
+            }
+        }
+        return "";
+    }
+
+    /** for not exact searches
+     * @param sSearchCriteria Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String containsSearch(String sSearchCriteria, String column) {
+        if(sSearchCriteria != "")
+            return " AND ".concat(column).concat(" like '%").concat(sSearchCriteria).concat("%'");
+        return "";
+    }
+
+    /**If movie is in store
+     * @param inStore
+     * @return
+     */
+    private String inStoreSearch(Boolean inStore) {
+    if (inStore)
+        return " AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)";
+
+        return "";
+    }
+
+    /** for booleans
+     * @param isSelected is the checkbox selected
+     * @param contains Search data
+     * @param column what column to search from
+     * @return String for MySQL/ERROR
+     */
+    private String checkBoxSearch(Boolean isSelected,String column, String contains) {
+        if (isSelected){
+            return " AND ".concat(column).concat(" like '%").concat(contains).concat("%'");
+        }
+
+        return "";
+    }
+
+    /**Changes the first and in the WHERE query to an WHERE
+     * @param s original string
+     * @return new string
+     */
+    private String changeFirstAnd(String s) {
+        //Change first and to where
+        System.out.println(s);
+            s = s.replaceFirst("AND", "WHERE");
+        System.out.println(s);
+        return s;
+    }
+
     public void login(TextField tfUsername, TextField tfPassword, Stage primaryStage, Stage loginStage) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;

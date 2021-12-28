@@ -1,3 +1,4 @@
+import attributes.MovieSearch;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,14 +12,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import javax.persistence.*;
 
 import javafx.scene.text.FontWeight;
+
+import java.util.List;
 
 public class Main extends Application {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
+        //Classes
+        Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY);
+
+        //Observable list
         final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
         final ObservableList olStaff = FXCollections.observableArrayList();
@@ -27,8 +34,124 @@ public class Main extends Application {
         final ObservableList olRating = FXCollections.observableArrayList();
         final ObservableList olStores = FXCollections.observableArrayList();
 
+        // Combobox
+        //Movie search
+        ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
+        ComboBox cbMovieSearchLanguages = new ComboBox(olLanguages);
+        ComboBox cbMovieSearchRating = new ComboBox(olRating);
+        ComboBox cbMovieSearchOriginalLanguage = new ComboBox(olLanguages);
+        //Customer Search
+        ComboBox cbCustomerSearchStoreId = new ComboBox(olStores);
+        //Movie add
+        ComboBox cbMovieAddCategory = new ComboBox(olCategory);
+        ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
+        // Lists
+        ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
+        ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
+
+        //Text fields
+        // add customer
+        TextField tfAddCustomerFirstName = new TextField();
+        TextField tfAddCustomerLastName = new TextField();
+        TextField tfAddCustomerEmail = new TextField();
+        TextField tfAddCustomerStoreId = new TextField();
+        TextField tfAddCustomerRegistered = new TextField();
+        TextField tfAddCustomerActive = new TextField();
+        TextField tfAddCustomerAddress = new TextField();
+        TextField tfAddCustomerAddress2 = new TextField();
+        TextField tfAddCustomerPostalCode = new TextField();
+        TextField tfAddCustomerDistrict = new TextField();
+        TextField tfAddCustomerPhone = new TextField();
+        TextField tfAddCustomerCity = new TextField();
+        TextField tfAddCustomerCountrys = new TextField();
+
+        //Search Movie
+        TextField tfMovieSearchTitle = new TextField();
+        TextField tfMovieSearchReleaseYear = new TextField();
+        TextField tfMovieSearchId = new TextField();
+        TextField tfMovieSearchDescription = new TextField();
+        TextField tfMovieSearchActors = new TextField();
+        TextField tfMovieSearchLengthMin = new TextField();
+        TextField tfMovieSearchLengthMax = new TextField();
+        TextField tfMovieSearchRentalCostMin = new TextField();
+        TextField tfMovieSearchRentalCostMax = new TextField();
+        TextField tfMovieSearchReplacementCostMin = new TextField();
+        TextField tfMovieSearchReplacementCostMax = new TextField();
+        TextField tfMovieSearchRentalDurationMin = new TextField();
+        TextField tfMovieSearchRentalDurationMax = new TextField();
+        TextField tfMovieSearchLastUpdate = new TextField();
+
+        //Checkboxes
+        //Movie Search
+        CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
+        CheckBox chbMovieSearchSFCommentaries = new CheckBox("Kommentarer");
+        CheckBox chbMovieSearchSFBTS = new CheckBox("Bakom kulisserna");
+        CheckBox chbMovieSearchSFDeletedScenes = new CheckBox("Borttaget material");
+        CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
+        //Customer Search
+        CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
+
         public static void main(String[] args) {
                 launch(args);
+        }
+
+        /**
+         * Search in table for written search criteria
+         */
+        public void addResultToOL(List<String> list){
+                        olSearchResultsMovie.clear();
+                        for(String s : list){
+                                olSearchResultsMovie.add(s);
+                        }
+        }
+
+        public void executeMovieSearch(){
+                MovieSearch movieSearch = new MovieSearch();
+
+                movieSearch.setHasSFBTS(getDataCheckBox(chbMovieSearchSFBTS));
+                movieSearch.setHasSFTrailer(getDataCheckBox(chbMovieSearchSFTrailers));
+                movieSearch.setHasSFDeletedScenes(getDataCheckBox(chbMovieSearchSFDeletedScenes));
+                movieSearch.setHasSFCommentaries(getDataCheckBox(chbMovieSearchSFCommentaries));
+                movieSearch.setInStore(getDataCheckBox(chbMovieSearchInStore));
+
+                movieSearch.setsCategory(getDataComboBox(cbMovieSearchCategory));
+                movieSearch.setsLanguage(getDataComboBox(cbMovieSearchLanguages));
+                movieSearch.setsOriginalLanguage(getDataComboBox(cbMovieSearchOriginalLanguage));
+                movieSearch.setsRating(getDataComboBox(cbMovieSearchRating));
+
+                movieSearch.setsDescription(getDataTextField(tfMovieSearchDescription));
+                movieSearch.setsTitle(getDataTextField(tfMovieSearchTitle));
+                movieSearch.setsFilmId(getDataTextField(tfMovieSearchId));
+                movieSearch.setsReleaseYear(getDataTextField(tfMovieSearchReleaseYear));
+                movieSearch.setsRentalDurationMax(getDataTextField(tfMovieSearchRentalDurationMax));
+                movieSearch.setsRentalDurationMin(getDataTextField(tfMovieSearchRentalDurationMax));
+                movieSearch.setsReplacementCostMin(getDataTextField(tfMovieSearchReplacementCostMin));
+                movieSearch.setsReplacementCostMax(getDataTextField(tfMovieSearchReplacementCostMax));
+                movieSearch.setsLengthMin(getDataTextField(tfMovieSearchLengthMin));
+                movieSearch.setsLengthMax(getDataTextField(tfMovieSearchLengthMax));
+                movieSearch.setsRentalRateMin(getDataTextField(tfMovieSearchRentalCostMin));
+                movieSearch.setsRentalRateMax(getDataTextField(tfMovieSearchRentalCostMax));
+                movieSearch.setsLastUpdate(getDataTextField(tfMovieSearchLastUpdate));
+                movieSearch.setsAFirstName(getDataTextField(tfMovieSearchActors));
+                movieSearch.setsALastName(getDataTextField(tfMovieSearchActors));
+
+                List result = fetch.searchMovies(movieSearch);
+                addResultToOL(result);
+        }
+
+        public Boolean getDataCheckBox(CheckBox checkBox){
+                return checkBox.isSelected();
+        }
+
+        public String getDataComboBox(ComboBox comboBox){
+                if (comboBox.getSelectionModel().getSelectedItem() != null)
+                        return comboBox.getSelectionModel().getSelectedItem().toString();
+
+                return "";
+        }
+
+        public String getDataTextField(TextField textField){
+                return textField.getText().trim();
         }
 
         @Override
@@ -49,25 +172,17 @@ public class Main extends Application {
                 FXBuilder fxBuilder = new FXBuilder();
                 AddToDatabase addToDatabase = new AddToDatabase(ENTITY_MANAGER_FACTORY);
 
-                // Combobox
-                //Movie search
-                ComboBox cbMovieSearchCategory = new ComboBox(olCategory);
-                cbMovieSearchCategory.setPromptText("Kategori");
-                ComboBox cbMovieSearchLanguages = new ComboBox(olLanguages);
-                cbMovieSearchLanguages.setPromptText("Språk");
-                ComboBox cbMovieSearchRating = new ComboBox(olRating);
-                cbMovieSearchRating.setPromptText("Betyg");
-                ComboBox cbMovieSearchOriginalLanguage = new ComboBox(olLanguages);
+                //Combobox
                 cbMovieSearchOriginalLanguage.setPromptText("Originalspråk");
+                cbMovieSearchRating.setPromptText("Betyg");
+                cbMovieSearchCategory.setPromptText("Kategori");
+                cbMovieSearchLanguages.setPromptText("Språk");
 
                 //Customer Search
-                ComboBox cbCustomerSearchStoreId = new ComboBox(olStores);
                 cbCustomerSearchStoreId.setPromptText("Butik ID");
 
                 //Movie add
-                ComboBox cbMovieAddCategory = new ComboBox(olCategory);
                 cbMovieAddCategory.setPromptText("Kategori");
-                ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
                 cbMovieAddLanguages.setPromptText("Språk");
 
                 //Add data to observable lists
@@ -78,10 +193,6 @@ public class Main extends Application {
 
                 fetch.addToComboList(olCategory,  "name", "category");
                 fetch.addToComboList(olLanguages,  "name", "language");
-
-                // Lists
-                ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
-                ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
 
                 //Boxes
                 VBox vBoxMovieAdd = new VBox();
@@ -310,81 +421,54 @@ public class Main extends Application {
                 //Text
                 Text tRentMovie = new Text("");
 
-                //-----------------------------
-                //Checkboxes
-                //SpecialFeatures and InStore
-                CheckBox chbMovieSearchSFTrailers = new CheckBox("Trailer");
-                CheckBox chbMovieSearchSFCommentaries = new CheckBox("Kommentarer");
-                CheckBox chbMovieSearchSFBTS = new CheckBox("Bakom kulisserna");
-                CheckBox chbMovieSearchSFDeletedScenes = new CheckBox("Borttaget material");
-                CheckBox chbMovieSearchInStore = new CheckBox("Bara tillgängliga");
-                CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
-                //-----------------------------
-
                 //Text fields
                 // add customer
-                TextField tfAddCustomerFirstName = new TextField();
-                tfAddCustomerFirstName.setPromptText("Förnamn");
-                TextField tfAddCustomerLastName = new TextField();
-                tfAddCustomerLastName.setPromptText("Efternamn");
-                TextField tfAddCustomerEmail = new TextField();
-                tfAddCustomerEmail.setPromptText("Mailadress");
-                TextField tfAddCustomerStoreId = new TextField();
-                tfAddCustomerStoreId.setPromptText("Butiksid");
-                TextField tfAddCustomerRegistered = new TextField();
-                tfAddCustomerRegistered.setPromptText("Registreringsdatum?");
-                TextField tfAddCustomerActive = new TextField();
                 tfAddCustomerActive.setPromptText("Aktiv?");
-
-                TextField tfAddCustomerAddress = new TextField();
-                tfAddCustomerAddress.setPromptText("Adress");
-                TextField tfAddCustomerAddress2 = new TextField();
-                tfAddCustomerAddress2.setPromptText("Adress2");
-                TextField tfAddCustomerPostalCode = new TextField();
-                tfAddCustomerPostalCode.setPromptText("Postkod");
-                TextField tfAddCustomerDistrict = new TextField();
-                tfAddCustomerDistrict.setPromptText("Distrikt");
-                TextField tfAddCustomerPhone = new TextField();
-                tfAddCustomerPhone.setPromptText("Telefonnummer");
-                TextField tfAddCustomerCity = new TextField();
-                tfAddCustomerCity.setPromptText("Stad");
-                TextField tfAddCustomerCountrys = new TextField();
+                tfAddCustomerRegistered.setPromptText("Registreringsdatum?");
+                tfAddCustomerStoreId.setPromptText("Butiksid");
+                tfAddCustomerEmail.setPromptText("Mailadress");
+                tfAddCustomerLastName.setPromptText("Efternamn");
+                tfAddCustomerFirstName.setPromptText("Förnamn");
                 tfAddCustomerCountrys.setPromptText("Land");
+                tfAddCustomerCity.setPromptText("Stad");
+                tfAddCustomerPhone.setPromptText("Telefonnummer");
+                tfAddCustomerDistrict.setPromptText("Distrikt");
+                tfAddCustomerPostalCode.setPromptText("Postkod");
+                tfAddCustomerAddress2.setPromptText("Adress2");
+                tfAddCustomerAddress.setPromptText("Adress");
 
                 TextField tfDeleteCustomer = new TextField();
                 tfDeleteCustomer.setPromptText("Ange IDnummer");
 
 
                 //Movie search
-                TextField tfMovieSearchTitle = new TextField();
+
                 tfMovieSearchTitle.setPromptText("Sök");
-                TextField tfMovieSearchActor = new TextField();
-                tfMovieSearchActor.setPromptText("Skådespelare");
-                TextField tfMovieSearchReleaseYear = new TextField();
+
                 tfMovieSearchReleaseYear.setPromptText("yyyy");
-                TextField tfMovieSearchId = new TextField();
+
                 tfMovieSearchId.setPromptText("Film ID");
-                TextField tfMovieSearchDescription = new TextField();
+
                 tfMovieSearchDescription.setPromptText("Beskrivning");
-                TextField tfMovieSearchActors = new TextField();
+
                 tfMovieSearchActors.setPromptText("Skådespelare förnamn");
-                TextField tfMovieSearchLengthMin = new TextField();
+
                 tfMovieSearchLengthMin.setPromptText("Kortaste spellängd");
-                TextField tfMovieSearchLengthMax = new TextField();
+
                 tfMovieSearchLengthMax.setPromptText("Längsta spellängd");
-                TextField tfMovieSearchRentalCostMin = new TextField();
+
                 tfMovieSearchRentalCostMin.setPromptText("Minsta hyreskostnaden");
-                TextField tfMovieSearchRentalCostMax = new TextField();
+
                 tfMovieSearchRentalCostMax.setPromptText("Största hyreskostnaden");
-                TextField tfMovieSearchReplacementCostMin = new TextField();
+
                 tfMovieSearchReplacementCostMin.setPromptText("Minsta ersättningskostnaden");
-                TextField tfMovieSearchReplacementCostMax = new TextField();
+
                 tfMovieSearchReplacementCostMax.setPromptText("Största ersättningskostnaden");
-                TextField tfMovieSearchRentalDurationMin = new TextField();
+
                 tfMovieSearchRentalDurationMin.setPromptText("Kortaste hyrestiden");
-                TextField tfMovieSearchRentalDurationMax = new TextField();
+
                 tfMovieSearchRentalDurationMax.setPromptText("Längsta hyrestiden");
-                TextField tfMovieSearchLastUpdate = new TextField();
+
                 tfMovieSearchLastUpdate.setPromptText("yyyy-mm-dd");
 
                 TextField tfTest = new TextField();
@@ -596,7 +680,8 @@ public class Main extends Application {
 
                 bSearchMovie.setOnAction(event -> {
                         //Dela upp så GUI och databashanterare är i olika klasser. Byt ut vbox till Strängar/Array
-                        fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,"title", "film", sMovieJoin);
+                        //fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,"title", "film", sMovieJoin);
+                        executeMovieSearch();
                 });
 
                 bSearchCustomer.setOnAction(event -> {
