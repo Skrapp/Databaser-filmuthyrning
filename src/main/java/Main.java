@@ -92,19 +92,25 @@ public class Main extends Application {
                 TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<CustomerSearchResults>();
                 TableColumn colCustomerId = new TableColumn("Id");
                 colCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
-                colCustomerId.setPrefWidth(50);
-                TableColumn colCustomerName = new TableColumn("Full name");
+                colCustomerId.setPrefWidth(35);
+                TableColumn colCustomerName = new TableColumn("Namn");
                 colCustomerName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-                colCustomerName.setPrefWidth(150);
+                colCustomerName.setPrefWidth(120);
                 TableColumn colCustomerEmail = new TableColumn("Email");
                 colCustomerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-                colCustomerEmail.setPrefWidth(250);
-                TableColumn<CustomerSearchResults, Hyperlink> colEdit = new TableColumn("Edit");
-                colEdit.setCellValueFactory(new PropertyValueFactory<>("link"));
-                colEdit.setCellFactory(new EditCell());
+                colCustomerEmail.setPrefWidth(200);
+
+                TableColumn<CustomerSearchResults, Hyperlink> colCustomerEdit = new TableColumn("Redigera");
+                colCustomerEdit.setCellValueFactory(new PropertyValueFactory<>("linkEdit"));
+                colCustomerEdit.setCellFactory(new EditCell());
+
+                TableColumn<CustomerSearchResults, Hyperlink> colCustomerDelete = new TableColumn("Ta bort");
+                colCustomerDelete.setCellValueFactory(new PropertyValueFactory<>("linkDelete"));
+                colCustomerDelete.setCellFactory(new EditCell());
+
                 tvSearchResultsCustomer.setItems(olCustomerSearchResults);
                 tvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                tvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail, colEdit);
+                tvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail, colCustomerEdit, colCustomerDelete);
 
 
                 TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();

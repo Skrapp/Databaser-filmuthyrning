@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -288,6 +289,29 @@ public class FXBuilder {
         box.setPadding(new Insets(10));
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(box);
+        Scene scene2 = new Scene(borderPane);
+        p.show(stage);
+        stage.setScene(scene2);
+        stage.show();
+        p.setOnCloseRequest(e -> stage.close());
+    }
+
+    public void deleteCustomerPopup(Integer id, EntityManagerFactory entity_manager_factory) {
+        VBox vBoxDeleteCustomer = new VBox();
+        Button bDeleteCustomerAccept = new Button("Ja");
+        Button bDeleteCustomerDecline = new Button("Nej");
+        HBox hBoxDeleteCustomerButtons = new HBox();
+        hBoxDeleteCustomerButtons.setAlignment(Pos.CENTER);
+        hBoxDeleteCustomerButtons.setSpacing(20);
+        vBoxDeleteCustomer.setPadding(new Insets(10));
+        Text tDeleteCustomer = new Text("Vill du ta bort kunden BLABLAs persondata och tillhörande uppgifter???");
+        hBoxDeleteCustomerButtons.getChildren().addAll(bDeleteCustomerAccept,bDeleteCustomerDecline);
+        vBoxDeleteCustomer.getChildren().addAll(tDeleteCustomer,hBoxDeleteCustomerButtons);
+        Stage stage = new Stage();
+        Popup p = new Popup();
+        vBoxDeleteCustomer.setPadding(new Insets(10));
+        BorderPane borderPane = new BorderPane();
+        borderPane.setLeft(vBoxDeleteCustomer);
         Scene scene2 = new Scene(borderPane);
         p.show(stage);
         stage.setScene(scene2);

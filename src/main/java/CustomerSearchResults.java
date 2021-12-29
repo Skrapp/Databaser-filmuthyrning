@@ -9,7 +9,8 @@ public class CustomerSearchResults {
     Integer id;
     String fullName;
     String email;
-    Hyperlink link;
+    Hyperlink linkEdit;
+    Hyperlink linkDelete;
     AddToDatabase addToDatabase = new AddToDatabase(ENTITY_MANAGER_FACTORY);
     FXBuilder fxBuilder = new FXBuilder();
     Main main = new Main();
@@ -18,9 +19,13 @@ public class CustomerSearchResults {
         this.id = new Integer(id);
         this.fullName = new String(fullName);
         this.email = new String(email);
-        this.link = new Hyperlink("Edit");
-        this.link.setOnAction(e -> {
+        this.linkEdit = new Hyperlink("Redigera");
+        this.linkEdit.setOnAction(e -> {
             fxBuilder.createEditCustomerPopup(id, ENTITY_MANAGER_FACTORY);
+        });
+        this.linkDelete = new Hyperlink("Ta bort");
+        this.linkDelete.setOnAction(e -> {
+            fxBuilder.deleteCustomerPopup(id, ENTITY_MANAGER_FACTORY);
         });
     }
 
@@ -35,8 +40,11 @@ public class CustomerSearchResults {
         return email;
     }
 
-    public Hyperlink getLink() {
-        return link;
+    public Hyperlink getLinkEdit() {
+        return linkEdit;
+    }
+    public Hyperlink getLinkDelete() {
+        return linkDelete;
     }
 
     public void setId(Integer id) {
@@ -50,8 +58,11 @@ public class CustomerSearchResults {
         this.email = email;
     }
 
-    public void setLink(Hyperlink link) {
-        this.link = link;
+    public void setLinkEdit(Hyperlink linkEdit) {
+        this.linkEdit = linkEdit;
+    }
+    public void setLinkDelete(Hyperlink linkDelete) {
+        this.linkDelete = linkDelete;
     }
 }
 
