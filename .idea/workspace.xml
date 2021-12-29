@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9deb4e2-1dbe-48b8-8030-9288aec3ea14" name="Changes" comment="Lagt till redigering av kund, hittas i tableview för sökresultaten (ännu inte i menyn om vi ens ska ha den där).">
+    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/MovieSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/CustomerSearchResults.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CustomerSearchResults.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/FXBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FXBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,19 +46,12 @@
       <map>
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
       </map>
     </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="useMavenConfig" value="true" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -105,10 +98,8 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="Filmuthyrning" />
+      <module name="Databaser-filmuthyrning" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -153,7 +144,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b9deb4e2-1dbe-48b8-8030-9288aec3ea14" name="Changes" comment="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
+      <changelist id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Lagt till listview center, la till div prompttexter" />
       <created>1639558135521</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -172,8 +163,6 @@
       <workItem from="1640300791436" duration="8789000" />
       <workItem from="1640521988584" duration="3827000" />
       <workItem from="1640616059340" duration="10890000" />
-      <workItem from="1640663331806" duration="22778000" />
-      <workItem from="1640768177164" duration="8958000" />
     </task>
     <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
       <created>1639785458250</created>
@@ -205,11 +194,11 @@
       <option name="presentableId" value="LOCAL−00005" />
       <updated>1640473571890</updated>
     </task>
-    <task id="LOCAL−00006" summary="Lagt till funktion för att hyra film.">
-      <created>1640670420182</created>
+    <task id="LOCAL−00006" summary="Att söka kunder kan funka&#10;Måste fixa så att nullvärde kan funka, så har tagit bort">
+      <created>1640034652232</created>
       <option name="number" value="LOCAL−00006" />
       <option name="presentableId" value="LOCAL−00006" />
-      <updated>1640670420182</updated>
+      <updated>1640034652232</updated>
     </task>
     <task>
       <created>1640449044184</created>
@@ -244,19 +233,7 @@
       <option name="project" value="LOCAL" />
       <updated>1640250582309</updated>
     </task>
-    <task id="LOCAL−00007" summary="Bytt ut listviews till tableviews för att få in mer information på sökningarna.">
-      <created>1640676302156</created>
-      <option name="number" value="LOCAL−00007" />
-      <option name="presentableId" value="LOCAL−00007" />
-      <updated>1640676302156</updated>
-    </task>
-    <task id="LOCAL−00008" summary="Lagt till redigering av kund, hittas i tableview för sökresultaten (ännu inte i menyn om vi ens ska ha den där).">
-      <created>1640773836031</created>
-      <option name="number" value="LOCAL−00008" />
-      <option name="presentableId" value="LOCAL−00008" />
-      <updated>1640773836031</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,23 +256,25 @@
     <MESSAGE value="Erik löste problemet med geometry. Ändrat i persistence filen och bytt location från point till geometry" />
     <MESSAGE value="Pågående arbete med funktion för att lägga till film, funkar i det stora, behöver putsas i det lilla." />
     <MESSAGE value="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
-    <MESSAGE value="Lagt till funktion för att hyra film." />
-    <MESSAGE value="Bytt ut listviews till tableviews för att få in mer information på sökningarna." />
-    <MESSAGE value="Lagt till redigering av kund, hittas i tableview för sökresultaten (ännu inte i menyn om vi ens ska ha den där)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Lagt till redigering av kund, hittas i tableview för sökresultaten (ännu inte i menyn om vi ens ska ha den där)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>202</line>
+          <line>177</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>200</line>
+          <line>175</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
+          <line>446</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
