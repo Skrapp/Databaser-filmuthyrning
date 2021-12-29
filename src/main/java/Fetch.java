@@ -1,9 +1,9 @@
+import attributes.CustomerSearch;
 import attributes.MovieSearch;
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.*;
 
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
@@ -12,12 +12,13 @@ import java.util.List;
 
 public class Fetch {
 
-    Controller controller = new Controller();
+    Controller controller;
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
     EntityManagerFactory em;
 
-    public Fetch(EntityManagerFactory em) {
+    public Fetch(EntityManagerFactory em,Controller controller) {
         this.em = em;
+        this.controller = controller;
     }
 
     public void addToComboList (ObservableList ol, String column, String table) {
@@ -49,14 +50,23 @@ public class Fetch {
      */
     public List<String> searchMovies(MovieSearch movieSearch){
         String searchCriteria = createSearchCriteriaMovie(movieSearch);
-        return searchFromDatabase(searchCriteria);
+        return searchFromDatabaseFilm(searchCriteria);
+    }
+
+    /** Main search function. Call sub searchfunctions
+     * @param customerSearch CustomerSearch object containing all search parameters
+     * @return returna a list of the result
+     */
+    public List<String> searchCustomers(CustomerSearch customerSearch){
+        String searchCriteria = createSearchCriteriaCustomer(customerSearch);
+        return searchFromDatabaseCustomer(searchCriteria);
     }
 
     /** New searchFunction for movies. Do not handel any JavaFX stuff.
      * @param searchCriteria The WHERE command
      * @return Returns a list with the titles of movies
      */
-    public List<String> searchFromDatabase(String searchCriteria){
+    public List<String> searchFromDatabaseFilm(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
         List<String> result = new ArrayList<>();
@@ -94,38 +104,27 @@ public class Fetch {
         }
         return result;
     }
-
-    //Ska tas bort, kund ska decouplas på samam sätt som film
-    /**
-     * Search in table for written search criteria
-     * @param box Pane (VBox or HBox) containing searchable data
-     * @param ol where data is written out
-     * @param column what column in table to show in search results
-     * @param table what table in database to use
-     * @param join String of what other tables should be joined
-     */
-    public void searchFromDatabase(Pane box, ObservableList ol, String column, String table, String join){
+    public List<String> searchFromDatabaseCustomer(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
+        List<String> result = new ArrayList<>();
 
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-                    "SELECT " + column +
-                    " FROM " + table +
-                    join +
-                    createSearchCriteria(box, "") +
-                    " GROUP BY " + table + "." + table + "_id" +
-                    " ORDER BY " + table + "." + column +";"
+                    "SELECT customer.first_name" +
+                            " FROM customer" +
+                            " LEFT JOIN address a ON customer.address_id = a.address_id"+
+                            " LEFT JOIN city ci ON ci.city_id = a.city_id" +
+                            searchCriteria +
+                            " GROUP BY customer.customer_id" +
+                            " ORDER BY customer.first_name;"
             );
 
-            List<String>list = query.getResultList();
-            ol.clear();
-            for(String s : list){
-                ol.add(s);
-            }
+            result = query.getResultList();
+
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -135,6 +134,78 @@ public class Fetch {
         }finally {
             entityManager.close();
         }
+        return result;
+    }
+
+    /** New createSearchCriteria for movies. Gets the Where query for MySQL
+     * @param movieSearch Object containig all searchdata
+     * @return Returns a WHERE Query for MySQL
+     */
+    public String createSearchCriteriaMovie(MovieSearch movieSearch) {
+
+        String sSearchCriteria;
+
+        sSearchCriteria = exactSearchInt(movieSearch.getsFilmId(),"film.film_id");
+        sSearchCriteria += exactSearchInt(movieSearch.getsReleaseYear(),"film.release_year");
+
+        sSearchCriteria += containsSearch(movieSearch.getsTitle(),"title");
+        sSearchCriteria += containsSearch(movieSearch.getsDescription(), "film.description");
+        sSearchCriteria += containsSearch(movieSearch.getsAFirstName(),"a.first_name");
+        sSearchCriteria += containsSearch(movieSearch.getsRating(),"film.rating");
+        sSearchCriteria += containsSearch(movieSearch.getsOriginalLanguage(),"ol.name");
+        sSearchCriteria += containsSearch(movieSearch.getsLanguage(),"l.name");
+        sSearchCriteria += containsSearch(movieSearch.getsCategory(),"c.name");
+
+        sSearchCriteria += dateSearch(movieSearch.getsLastUpdate(),"film.last_update");
+
+        sSearchCriteria += maxSearch(movieSearch.getsLengthMax(),"film.length");
+        sSearchCriteria += minSearch(movieSearch.getsReplacementCostMin(),"film.replacement_cost");
+        sSearchCriteria += maxSearch(movieSearch.getsReplacementCostMax(),"film.replacement_cost");
+        sSearchCriteria += minSearch(movieSearch.getsRentalDurationMin(),"film.rental_duration");
+        sSearchCriteria += maxSearch(movieSearch.getsRentalDurationMax(),"film.rental_duration");
+        sSearchCriteria += minSearch(movieSearch.getsRentalRateMin(),"film.rental_rate");
+        sSearchCriteria += maxSearch(movieSearch.getsRentalRateMax(),"film.rental_rate");
+        sSearchCriteria += minSearch(movieSearch.getsLengthMin(),"film.length");
+
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFDeletedScenes(),"film.special_features","Deleted Scenes");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFTrailer(),"film.special_features","Trailers");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFCommentaries(),"film.special_features","Commentaries");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFBTS(),"film.special_features","Behind The Scenes");
+
+        sSearchCriteria += inStoreSearch(movieSearch.getInStore());
+
+        System.out.println(sSearchCriteria);  //Debug
+
+        sSearchCriteria = changeFirstAnd(sSearchCriteria);
+
+        return sSearchCriteria;
+    }
+
+    /** New createSearchCriteria for customer. Gets the Where query for MySQL
+     * @param customerSearch Object containing all searchData
+     * @return Returns a WHERE Query for MySQL
+     */
+    public String createSearchCriteriaCustomer(CustomerSearch customerSearch) {
+
+        String sSearchCriteria;
+
+        sSearchCriteria = exactSearchInt(customerSearch.getsId(),"customer.customer_id");
+        sSearchCriteria += exactSearchInt(customerSearch.getsStoreId(),"customer.store_id");
+        sSearchCriteria += containsSearch(customerSearch.getsFirstName(),"customer.first_name");
+        sSearchCriteria += containsSearch(customerSearch.getsEmail(),"customer.email");
+        sSearchCriteria += containsSearch(customerSearch.getsCity(),"ci.city");
+        sSearchCriteria += containsSearch(customerSearch.getsAddress(),"a.address");
+        sSearchCriteria += containsSearch(customerSearch.getsPhone(),"a.phone");
+        sSearchCriteria += dateSearch(customerSearch.getsRegistered(),"customer.create_date");
+        sSearchCriteria += dateSearch(customerSearch.getsUpdate(),"customer.last_update");
+
+        sSearchCriteria += checkBoxSearch(customerSearch.getIsActive(),"customer.active","1");
+
+        System.out.println(sSearchCriteria); //Debug
+
+        sSearchCriteria = changeFirstAnd(sSearchCriteria);
+
+        return sSearchCriteria;
     }
 
     //On going
@@ -239,164 +310,6 @@ public class Fetch {
             entityManager.close();
         }
         return isInStore;
-    }
-
-    //Ska tas bort, kunder ska också decouplas
-    /**Searches all data in children to a Pane and returns a string with searchCriteria formatted for mysql
-     * @param box Pane (parent to VBox and HBox) containing the searchable information
-     * @param sSearchCriteria string to add search criteria
-     * @return search criteria
-     */
-    public String createSearchCriteria (Pane box, String sSearchCriteria) {
-        for (int i = 0; i < box.getChildren().size(); i++) {
-            //See if object is a pane
-            if (box.getChildren().get(i) instanceof Pane)
-            {
-                sSearchCriteria = createSearchCriteria((Pane) box.getChildren().get(i), sSearchCriteria);
-                //If there is an error do not continue
-                if(sSearchCriteria.contains("ERROR")){
-                    return sSearchCriteria;
-                }
-            }
-
-            //See if object is a textField
-            else if(box.getChildren().get(i) instanceof TextField){
-                String sTextField = ((TextField) box.getChildren().get(i)).getText().trim();
-
-                if(!sTextField.equals("")) {
-                    if (sSearchCriteria.equals(""))
-                        sSearchCriteria += " WHERE ";
-                    else
-                        sSearchCriteria += " AND ";
-
-                    //exact search and not surrounded by '' (int)
-                    if (box.getChildren().get(i).getId().contains("id") ||
-                        box.getChildren().get(i).getId().contains("year") ){
-
-                        try {
-                            int parsed = Integer.parseInt(sTextField);
-                        } catch (NumberFormatException nfe) {
-                            //Should call for an Error popup method
-                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
-                            return "ERROR";
-                        }
-                            sSearchCriteria += box.getChildren().get(i).getId().concat(" = ")
-                                .concat(sTextField);
-                    }
-                    //Date search
-                    else if(box.getChildren().get(i).getId().contains("create_date") ||
-                            box.getChildren().get(i).getId().contains("last_update")){
-                        if(ec.isDate(sTextField))
-                        sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")
-                                .concat(sTextField).concat("%'");
-                        else{
-                            //Should call for an Error popup method
-                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
-                            return "ERROR";
-                        }
-                    }
-                    //Max search
-                    else if(box.getChildren().get(i).getId().contains("max_value")){
-                        if(ec.isDouble(sTextField))
-                        sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" <= ")
-                                .concat(sTextField);
-                        else{
-                            //Should call for an Error popup method
-                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
-                            return "ERROR";
-                        }
-                    }
-                    //Min search
-                    else if(box.getChildren().get(i).getId().contains("min_value")){
-                        if(ec.isDouble(sTextField))
-                        sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" >= ")
-                                .concat(sTextField);
-                        else{
-                            //Should call for an Error popup method
-                            System.out.println("Error Meddelande: Fel inmatning i " + box.getChildren().get(i).getId());
-                            return "ERROR";
-                        }
-                    }
-                    //Search with "like '% %'"
-                    else
-                        sSearchCriteria += box.getChildren().get(i).getId().concat(" like '%")
-                                .concat(sTextField).concat("%'");
-                }
-            }
-            //See if object is combobox
-            else if(box.getChildren().get(i) instanceof ComboBox){
-                if (((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem() != null) {
-                    String sSelectedItem = ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem().toString();
-
-                    if (sSearchCriteria.equals(""))
-                        sSearchCriteria += " WHERE ";
-                    else
-                        sSearchCriteria += " AND ";
-                    //exact search and surrounded by ''
-                    sSearchCriteria += box.getChildren().get(i).getId().concat(" = '")
-                            .concat(sSelectedItem).concat("'");
-                }
-            }
-            //Hur ska denna del utformas så den ser "bra" ut?
-            //See if object is checkbox
-            else if(box.getChildren().get(i) instanceof CheckBox){
-                if (((CheckBox) box.getChildren().get(i)).isSelected()) {
-                    if (sSearchCriteria.equals(""))
-                        sSearchCriteria += " WHERE ";
-                    else
-                        sSearchCriteria += " AND ";
-                    //Special search for inStore
-                    if(box.getChildren().get(i).getId().equals("InStore"))
-                        sSearchCriteria += "(r.return_date IS NOT NULL OR r.rental_date IS NULL)";
-                    else
-                    //exact search and surrounded by ''. ID example: ("film.special_features,behind the scenes")
-                    sSearchCriteria += box.getChildren().get(i).getId().split(",")[0].concat(" like '%")
-                            .concat(box.getChildren().get(i).getId().split(",")[1]).concat("%'");
-                }
-            }
-            System.out.println(sSearchCriteria); //Debug
-        }
-        return sSearchCriteria;
-    }
-
-    /** New createSearchCriteria for movies. Gets the Where query for MySQL
-     * @param movieSearch Object containig all searchdata
-     * @return Returns a WHERE Query for MySQL
-     */
-    public String createSearchCriteriaMovie(MovieSearch movieSearch) {
-
-        String sSearchCriteria;
-        Boolean isFirst = true;
-        sSearchCriteria = exactSearchInt(movieSearch.getsFilmId(),"film.film_id");
-        sSearchCriteria += exactSearchInt(movieSearch.getsReleaseYear(),"film.release_year");
-        sSearchCriteria += containsSearch(movieSearch.getsTitle(),"title");
-        sSearchCriteria += containsSearch(movieSearch.getsDescription(), "film.description");
-        //sSearchCriteria += containsSearch(movieSearch.getsALastName(),"a.last_name");
-        sSearchCriteria += containsSearch(movieSearch.getsAFirstName(),"a.first_name");
-        sSearchCriteria += containsSearch(movieSearch.getsRating(),"film.rating");
-        sSearchCriteria += containsSearch(movieSearch.getsOriginalLanguage(),"ol.name");
-        sSearchCriteria += containsSearch(movieSearch.getsLanguage(),"l.name");
-        sSearchCriteria += containsSearch(movieSearch.getsCategory(),"c.name");
-        sSearchCriteria += dateSearch(movieSearch.getsLastUpdate(),"film.last_update");
-        sSearchCriteria += maxSearch(movieSearch.getsLengthMax(),"film.length");
-        sSearchCriteria += minSearch(movieSearch.getsReplacementCostMin(),"film.replacement_cost");
-        sSearchCriteria += maxSearch(movieSearch.getsReplacementCostMax(),"film.replacement_cost");
-        sSearchCriteria += minSearch(movieSearch.getsRentalDurationMin(),"film.rental_duration");
-        sSearchCriteria += maxSearch(movieSearch.getsRentalDurationMax(),"film.rental_duration");
-        sSearchCriteria += minSearch(movieSearch.getsRentalRateMin(),"film.rental_rate");
-        sSearchCriteria += maxSearch(movieSearch.getsRentalRateMax(),"film.rental_rate");
-        sSearchCriteria += minSearch(movieSearch.getsLengthMin(),"film.length");
-        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFDeletedScenes(),"film.special_features","Deleted Scenes");
-        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFTrailer(),"film.special_features","Trailers");
-        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFCommentaries(),"film.special_features","Commentaries");
-        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFBTS(),"film.special_features","Behind The Scenes");
-        sSearchCriteria += inStoreSearch(movieSearch.getInStore());
-
-        System.out.println(sSearchCriteria);
-
-        sSearchCriteria = changeFirstAnd(sSearchCriteria);
-
-        return sSearchCriteria;
     }
 
     /** for int
@@ -563,4 +476,27 @@ public class Fetch {
         }
     }
 
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public ErrorCheck getEc() {
+        return ec;
+    }
+
+    public void setEc(ErrorCheck ec) {
+        this.ec = ec;
+    }
+
+    public EntityManagerFactory getEm() {
+        return em;
+    }
+
+    public void setEm(EntityManagerFactory em) {
+        this.em = em;
+    }
 }
