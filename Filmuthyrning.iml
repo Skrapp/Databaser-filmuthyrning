@@ -80,8 +80,8 @@
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-entitymanager:5.6.2.Final" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.27" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
-    <orderEntry type="library" name="Maven: org.hibernate:hibernate-spatial:5.5.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.geolatte:geolatte-geom:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate:hibernate-spatial:5.6.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.geolatte:geolatte-geom:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.locationtech.jts:jts-core:1.18.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.2.16" level="project" />

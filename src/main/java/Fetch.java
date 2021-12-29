@@ -2,8 +2,7 @@
 import attributes.CustomerSearch;
 import attributes.MovieSearch;
 
-import db.Customer;
-import db.Film;
+import db.*;
 
 import javafx.collections.ObservableList;
 
@@ -77,7 +76,7 @@ public class Fetch {
     public List<FilmSearchResults> searchFromDatabaseFilm(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
-        List<FilmSearchResults> result = null;
+        List<FilmSearchResults> result = new ArrayList<>();
 
         try{
             transaction = entityManager.getTransaction();
@@ -141,11 +140,11 @@ public class Fetch {
 
             for(String s : list){
                     Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
-                    Hyperlink link = new Hyperlink("Edit");
+                    /*Hyperlink link = new Hyperlink("Edit");
                     link.setOnAction(e -> {
                         //fxBuilder.createPopUp();
-                    });
-                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), new Hyperlink("Edit"));
+                    });*/
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), em);
                     result.add(srCustomer);
             }
             transaction.commit();

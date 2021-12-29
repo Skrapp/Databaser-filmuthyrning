@@ -33,8 +33,6 @@ public class View extends Application {
         final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
         final ObservableList olStaff = FXCollections.observableArrayList();
-        final ObservableList olSearchResultsMovie = FXCollections.observableArrayList();
-        final ObservableList olSearchResultsCustomer = FXCollections.observableArrayList();
         final ObservableList olRating = FXCollections.observableArrayList();
         final ObservableList olStores = FXCollections.observableArrayList();
         final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList();
@@ -52,10 +50,11 @@ public class View extends Application {
         //Movie add
         ComboBox cbMovieAddCategory = new ComboBox(olCategory);
         ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
-        // Lists
+
+        /*// Lists
         ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
         ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
-
+*/
         //Text fields
         // add customer
         TextField tfAddCustomerFirstName = new TextField();
@@ -145,7 +144,7 @@ public class View extends Application {
                 customerSearch.setIsActive(getDataCheckBox(chbCustomerSearchActive));
 
                 List result = fetch.searchCustomers(customerSearch);
-                addResultToOL(result,olSearchResultsCustomer);
+                addResultToOL(result,olCustomerSearchResults);
         }
 
         public void executeMovieSearch(){
@@ -179,7 +178,7 @@ public class View extends Application {
                 //movieSearch.setsALastName(getDataTextField(tfMovieSearchActors));
 
                 List result = fetch.searchMovies(movieSearch);
-                addResultToOL(result,olSearchResultsMovie);
+                addResultToOL(result,olMovieSearchResults);
         }
 
         public Boolean getDataCheckBox(CheckBox checkBox){
@@ -762,9 +761,10 @@ public class View extends Application {
                 bRentMovie.setOnAction(event -> {
                         //Funktion?
                         FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sMovie = filmSearchResults.getTitle();
                         CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
-                        String sCustomer = customerSearchResults.fullName;if(sMovie != null && sCustomer != null){
+                        if(filmSearchResults != null && customerSearchResults != null){
+                                String sMovie = filmSearchResults.getTitle();
+                                String sCustomer = customerSearchResults.getFullName();
 
                                 //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet,
                                 // annars blir det strul nånstans pga flera likadana förnamn?
@@ -787,7 +787,7 @@ public class View extends Application {
                         FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sMovie = filmSearchResults.getTitle();
                         CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
-                        String sCustomer = customerSearchResults.fullName;
+                        String sCustomer = customerSearchResults.getFullName();
                         addToDatabase.rentMovie(sMovie, sCustomer);
                         ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
                 });
@@ -797,7 +797,8 @@ public class View extends Application {
                 });
 
                 bInfoMovie.setOnAction(event -> {
-                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.getTitle();
                         if (sMovie != null){
                                 TableView tvInfo = new TableView(olCategory);
                                 fetch.findBaseDataForFilm(sMovie,"film",sMovieJoin);

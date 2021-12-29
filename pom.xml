@@ -36,17 +36,14 @@
         </dependency>
 
 
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-spatial -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
             <version>5.6.0.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-spatial</artifactId>
-            <version>5.5.7.Final</version>
-        </dependency>
+
     </dependencies>
 
 </project>

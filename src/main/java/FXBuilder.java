@@ -237,9 +237,10 @@ public class FXBuilder {
         p.setOnCloseRequest(e -> stage.close());
     }
 
+/*
     public void createEditMoviePopup(Integer id) {
         // id is customerId.
-        Main main = new Main();
+        View main = new View();
         Label lMovieHeader = new Label("Filmsektion");
         lMovieHeader.setFont(new Font(40));
         Label lMovieAddTitle = new Label("Titel");
@@ -294,6 +295,7 @@ public class FXBuilder {
         stage.show();
         p.setOnCloseRequest(e -> stage.close());
     }
+*/
 
     public void deleteCustomerPopup(Integer id, EntityManagerFactory entity_manager_factory) {
         VBox vBoxDeleteCustomer = new VBox();
