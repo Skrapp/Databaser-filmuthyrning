@@ -73,7 +73,7 @@ public class AddToDatabase {
      * @param cityID City ID of Customer/Staff
      * @return Return Adress ID
      */
-    public int addAdressId(                           TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
+    public int addAdressId(TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
                            TextField tfAddCustomerDistrict, TextField tfAddCustomerPhone, int cityID){
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
@@ -396,6 +396,60 @@ public class AddToDatabase {
 
                 entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
             }
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+    }
+    public void updateCustomer(EntityManagerFactory entityManagerFactory, TextField tfUpdateCustomerFirstName, TextField tfUpdateCustomerLastName,
+                               TextField tfUpdateCustomerEmail, TextField tfUpdateCustomerStoreId,
+                               TextField tfUpdateCustomerActive, TextField tfUpdateCustomerUpdateAddress,
+                               TextField tfUpdateCustomerUpdateAddress2, TextField tfUpdateCustomerPostalCode,
+                               TextField tfUpdateCustomerDistrict, TextField tfUpdateCustomerPhone, int cityID, TextField tfCustomerUpdateSearch){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Coordinate coord = new Coordinate(1, 2);
+            Geometry geometry = null;
+            geometry = geometryFactory.createPoint(coord);
+
+            Customer customer = entityManager.find(Customer.class,Integer.parseInt(tfCustomerUpdateSearch.getText()));
+            if (customer == null) {
+                throw new EntityNotFoundException("Can't find customer for ID ");
+            }
+
+            int addressId = customer.getAddress_id();
+
+            customer.setFirst_name(tfUpdateCustomerFirstName.getText());
+            customer.setLast_name(tfUpdateCustomerLastName.getText());
+            customer.setEmail(tfUpdateCustomerEmail.getText());
+            customer.setActive(Integer.parseInt(tfUpdateCustomerActive.getText()));
+            customer.setStore_id(Integer.parseInt(tfUpdateCustomerStoreId.getText()));
+            customer.setLast_update(Instant.now());
+            customer.setAddress(0);
+            customer.setAddress_id(addressId);
+
+            Address address = entityManager.find(Address.class, addressId);
+            address.setAddress(tfUpdateCustomerUpdateAddress.getText());
+            address.setAddress2(tfUpdateCustomerUpdateAddress2.getText());
+            address.setDistrict(tfUpdateCustomerDistrict.getText());
+            address.setPhone(tfUpdateCustomerPhone.getText());
+            address.setPostal_code(tfUpdateCustomerPostalCode.getText());
+            address.setCity_id(cityID);
+            address.setLast_update(Instant.now());
+            address.setLocation(geometry);
+
+
 
             transaction.commit();
         }catch (Exception e){

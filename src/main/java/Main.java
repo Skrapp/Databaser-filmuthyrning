@@ -212,6 +212,10 @@ public class Main extends Application {
                 hBoxButtonInfo.setSpacing(5);
                 hBoxButtonInfo.setAlignment(Pos.CENTER);
 
+                //CustomerUpdateVbox
+                VBox vBoxCustomerIDSearch = new VBox();
+                VBox vBoxCustomerUpdate = new VBox();
+
                 //Advanced search
                 HBox hBoxAdvancedSearchMovies = new HBox();
                 hBoxAdvancedSearchMovies.setPadding(new Insets(10));
@@ -291,6 +295,10 @@ public class Main extends Application {
                 //Delete buttons
                 Button bDeleteCustomer = new Button("Radera");
                 Button bDeleteStaff = new Button("Radera");
+
+                //Update buttons
+                Button bCustomerUpdateSearch = new Button("Sök");
+                Button bCustomerUpdate = new Button("Redigera");
 
 
                 //Meny
@@ -394,6 +402,25 @@ public class Main extends Application {
                 Label lAddCustomerAdress2 = new Label("Adress");
 
                 Label lDeleteCustomer = new Label("Ange kundID");
+
+
+                // Update customer
+                Label lUpdateCustomer = new Label("Ange kundID");
+
+                Label lUpdateCustomerFirstName = new Label("Förnamn");
+                Label lUpdateCustomerLastName = new Label("Efternamn");
+                Label lUpdateCustomerEmail = new Label("Kundmail");
+                Label lUpdateCustomerStoreId = new Label("ButikID");
+                Label lUpdateCustomerRegistered = new Label("Registrerad");
+                Label lUpdateCustomerActive = new Label("Aktiv");
+
+                Label lUpdateCustomerAddress = new Label("Adress");
+                Label lUpdateCustomerPostalCode = new Label("Postkod");
+                Label lUpdateCustomerDistrict = new Label("Distrikt");
+                Label lUpdateCustomerPhone = new Label("Telefonnummer");
+                Label lUpdateCustomerCity = new Label("Stad");
+                Label lUpdateCustomerCountry = new Label("Land");
+                Label lUpdateCustomerAddress2 = new Label("Adress");
 
                 //Staff
                 Label lStaffAddHeader = new Label("Lägg till arbetare");
@@ -506,6 +533,40 @@ public class Main extends Application {
                 tfCustomerSearchRegistered.setPromptText("Registrerad");
                 TextField tfCustomerSearchUpdate = new TextField();
                 tfCustomerSearchUpdate.setPromptText("Uppdaterad");
+
+                //Update Customer
+                TextField tfCustomerUpdateSearch = new TextField();
+                tfCustomerUpdateSearch.setPromptText("ID");
+
+                TextField tfUpdateCustomerAddress = new TextField();
+                tfUpdateCustomerAddress.setPromptText("Adress");
+                TextField tfUpdateCustomerAddress2 = new TextField();
+                tfUpdateCustomerAddress2.setPromptText("Adress2");
+                TextField tfUpdateCustomerPostalCode = new TextField();
+                tfUpdateCustomerPostalCode.setPromptText("Postkod");
+                TextField tfUpdateCustomerDistrict = new TextField();
+                tfUpdateCustomerDistrict.setPromptText("Distrikt");
+                TextField tfUpdateCustomerPhone = new TextField();
+                tfUpdateCustomerPhone.setPromptText("Telefonnummer");
+                TextField tfUpdateCustomerCity = new TextField();
+                tfUpdateCustomerCity.setPromptText("Stad");
+                TextField tfUpdateCustomerCountrys = new TextField();
+                tfUpdateCustomerCountrys.setPromptText("Land");
+
+                TextField tfUpdateCustomerFirstName = new TextField();
+                tfUpdateCustomerFirstName.setPromptText("Förnamn");
+                TextField tfUpdateCustomerLastName = new TextField();
+                tfUpdateCustomerLastName.setPromptText("Efternamn");
+                TextField tfUpdateCustomerEmail = new TextField();
+                tfUpdateCustomerEmail.setPromptText("Mailadress");
+                TextField tfUpdateCustomerStoreId = new TextField();
+                tfUpdateCustomerStoreId.setPromptText("Butiksid");
+                TextField tfUpdateCustomerRegistered = new TextField();
+                tfUpdateCustomerRegistered.setPromptText("Registreringsdatum?");
+                TextField tfUpdateCustomerActive = new TextField();
+                tfUpdateCustomerActive.setPromptText("Aktiv?");
+
+
 
                 // Staff Add Textfields
                 TextField tfStaffAddFirstName = new TextField();
@@ -633,6 +694,10 @@ public class Main extends Application {
                         fxBuilder.createPopUp(vBoxExit);
                 });
 
+                miCustomerEdit.setOnAction(event -> {
+                        fxBuilder.createPopUp(vBoxCustomerIDSearch);
+                });
+
                 //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
                         hBoxAdvancedSearchCustomer.setVisible(!hBoxAdvancedSearchCustomer.isVisible());
@@ -700,6 +765,21 @@ public class Main extends Application {
                 });
                 bStaffAddClear.setOnAction(event -> {
                         fxBuilder.clearFields(vBoxStaffAdd);
+                });
+                bCustomerUpdateSearch.setOnAction(event -> {
+                        fxBuilder.createPopUp(vBoxCustomerUpdate);
+                        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+
+
+                });
+                bCustomerUpdate.setOnAction(event -> {
+                        int countryID = addToDatabase.addCountryID(tfUpdateCustomerCountrys);
+                        int cityID = addToDatabase.addCityID(tfUpdateCustomerCity, countryID);
+
+                        addToDatabase.updateCustomer(ENTITY_MANAGER_FACTORY,tfUpdateCustomerFirstName,tfUpdateCustomerLastName,
+                                tfUpdateCustomerEmail,tfUpdateCustomerStoreId,tfUpdateCustomerActive, tfUpdateCustomerAddress,tfUpdateCustomerAddress2,
+                                tfUpdateCustomerPostalCode,tfUpdateCustomerDistrict,tfUpdateCustomerPhone, cityID, tfCustomerUpdateSearch);
+                        fxBuilder.clearFields(vBoxCustomerUpdate);
                 });
 
                 //Rent movie
@@ -820,6 +900,18 @@ public class Main extends Application {
                         tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone,
                         tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity, lAddCustomerCountry,
                         tfAddCustomerCountrys, bCreateCustomer, bCustomerAddClear);
+
+                //Update customer
+                vBoxCustomerIDSearch.getChildren().addAll(lUpdateCustomer,tfCustomerUpdateSearch,bCustomerUpdateSearch);
+
+                vBoxCustomerUpdate.getChildren().addAll(lUpdateCustomerFirstName, tfUpdateCustomerFirstName, lUpdateCustomerLastName,
+                        tfUpdateCustomerLastName, lUpdateCustomerEmail, tfUpdateCustomerEmail, lUpdateCustomerStoreId,
+                        tfUpdateCustomerStoreId, lUpdateCustomerActive,
+                        tfUpdateCustomerActive, lUpdateCustomerAddress, tfUpdateCustomerAddress,lUpdateCustomerAddress2,
+                        tfUpdateCustomerAddress2, lUpdateCustomerPostalCode,
+                        tfUpdateCustomerPostalCode, lUpdateCustomerDistrict, tfUpdateCustomerDistrict, lUpdateCustomerPhone,
+                        tfUpdateCustomerPhone, lUpdateCustomerCity, tfUpdateCustomerCity, lUpdateCustomerCountry,
+                        tfUpdateCustomerCountrys, bCustomerUpdate);
 
                 //Delete customer
                 vBoxDeleteCustomer.getChildren().addAll(lDeleteCustomer,tfDeleteCustomer, bDeleteCustomer);
