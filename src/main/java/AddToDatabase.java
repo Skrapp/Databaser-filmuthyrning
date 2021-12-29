@@ -75,7 +75,7 @@ public class AddToDatabase {
      * @param cityID City ID of Customer/Staff
      * @return Return Adress ID
      */
-    public int addAdressId(                           TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
+    public int addAdressId(TextField tfAddCustomerAddress,TextField tfAddCustomerAddress2, TextField tfAddCustomerPostalCode,
                            TextField tfAddCustomerDistrict, TextField tfAddCustomerPhone, int cityID){
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
@@ -227,6 +227,58 @@ public class AddToDatabase {
         }
     }
 
+    public void editCustomer(VBox box) {
+        EntityManager emAddMovie = em.createEntityManager();
+        EntityTransaction transaction = null;
+        String[] sInfoField = new String[box.getChildren().size()];
+        try{
+            transaction = emAddMovie.getTransaction();
+            transaction.begin();
+
+            for(int i = 0; i < box.getChildren().size() - 1; i++) {
+                //Checks if child is textbox
+                if (box.getChildren().get(i) instanceof TextField) {
+                    sInfoField[i] = ((TextField) box.getChildren().get(i)).getText().trim();
+                    System.out.println(i + "tf     " + sInfoField[i]); //Debug
+                }
+                //Checks if child is combobox
+                else if (box.getChildren().get(i) instanceof ComboBox) {
+                    String cbString = (String) ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem();
+                    sInfoField[i] = getCorrespondingId(cbString); // Gets the corresponding ID for whatever is chosen in combobox
+                    System.out.println(i + "cb     " + sInfoField[i]); //Debug
+                }
+            }
+            Film newFilm = new Film();
+            //Objects for entity Language (new and original) created where corresponding language_id for whatever
+            // language chosen is set to the object, object is then set to newFilm Film object.
+            Language language = new Language();
+            language.setId(Integer.valueOf(sInfoField[13])); //sTextField[13] is language_id value of language combobox
+            newFilm.setTitle(sInfoField[1]);
+            newFilm.setDescription(sInfoField[6]);
+            newFilm.setLanguage(language);
+            newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously. Removed the textbox.
+            newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sInfoField[8])));
+            newFilm.setRentalRate(BigDecimal.valueOf(Long.parseLong(sInfoField[3])));
+            newFilm.setReplacementCost(BigDecimal.valueOf(Long.parseLong(sInfoField[21])));
+            newFilm.setRating(sInfoField[10]);
+            newFilm.setOriginalLanguage(language);
+            newFilm.setReleaseYear(2002); //Ska lägga till textbox
+            newFilm.setSpecialFeatures(sInfoField[17]);
+
+            emAddMovie.persist(newFilm);
+            newFilm.setCategory(Integer.valueOf(sInfoField[4]), emAddMovie, newFilm);
+            emAddMovie.flush();
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            emAddMovie.close();
+        }
+    }
 
     /** Get ID of category or Language
      * @param cbString Data from Combobox

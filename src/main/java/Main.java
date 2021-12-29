@@ -31,13 +31,15 @@ public class Main extends Application {
         final ObservableList olSearchResultsCustomer = FXCollections.observableArrayList();
         final ObservableList olRating = FXCollections.observableArrayList();
         final ObservableList olStores = FXCollections.observableArrayList();
+        final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList();
+        final ObservableList<FilmSearchResults> olMovieSearchResults = FXCollections.observableArrayList();
 
         public static void main(String[] args) {
                 launch(args);
         }
 
         @Override
-        //Flytta ut alla variabler,
+        //Flytta ut alla variabler,Jon
         //gör om Main till View (Allt som har med gränssnitt att göra)
         //Flytta main metoden till ny Main
         public void start(Stage primaryStage) throws Exception {
@@ -85,13 +87,9 @@ public class Main extends Application {
                 fetch.addToComboList(olLanguages,  "name", "language");
 
                 // Lists
-                // ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
-                // ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
-                TableView<CustomerSearchResults> lvSearchResultsCustomer = new TableView<CustomerSearchResults>();
-                final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList(
-                        new CustomerSearchResults(1, "Erik Johansson", "email@email.mejl"),
-                        new CustomerSearchResults(2, "Någon Annan", "annanemail@annanemail.annanmejl")
-                );
+                // ListView tvSearchResultsMovie = new ListView(olSearchResultsMovie);
+                // ListView tvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
+                TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<CustomerSearchResults>();
                 TableColumn colCustomerId = new TableColumn("Id");
                 colCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 colCustomerId.setPrefWidth(50);
@@ -101,15 +99,15 @@ public class Main extends Application {
                 TableColumn colCustomerEmail = new TableColumn("Email");
                 colCustomerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
                 colCustomerEmail.setPrefWidth(250);
-                lvSearchResultsCustomer.setItems(olCustomerSearchResults);
-                lvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                lvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail);
+                TableColumn<CustomerSearchResults, Hyperlink> colEdit = new TableColumn("Edit");
+                colEdit.setCellValueFactory(new PropertyValueFactory<>("link"));
+                colEdit.setCellFactory(new EditCell());
+                tvSearchResultsCustomer.setItems(olCustomerSearchResults);
+                tvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                tvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail, colEdit);
 
-                TableView<FilmSearchResults> lvSearchResultsMovie = new TableView<FilmSearchResults>();
-                final ObservableList<FilmSearchResults> olMovieSearchResults = FXCollections.observableArrayList(
-                        new FilmSearchResults(1, "Erik Johansson", "email@email.mejl"),
-                        new FilmSearchResults(2, "Någon Annan", "annanemail@annanemail.annanmejl")
-                );
+
+                TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
                 TableColumn colMovieId = new TableColumn("Id");
                 colMovieId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 colMovieId.setPrefWidth(50);
@@ -119,9 +117,9 @@ public class Main extends Application {
                 TableColumn colMovieDescription = new TableColumn("Description");
                 colMovieDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
                 colMovieDescription.setPrefWidth(250);
-                lvSearchResultsMovie.setItems(olMovieSearchResults);
-                lvSearchResultsMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                lvSearchResultsMovie.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
+                tvSearchResultsMovie.setItems(olMovieSearchResults);
+                tvSearchResultsMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                tvSearchResultsMovie.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
 
 
                 //Boxes
@@ -661,9 +659,9 @@ public class Main extends Application {
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
                         //Funktion?
-                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sMovie = filmSearchResults.getTitle();
-                        CustomerSearchResults customerSearchResults = lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         String sCustomer = customerSearchResults.fullName;
                         //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet, annars blir det strul nånstans pga flera likadana förnamn?
                         if(sMovie != null && sCustomer != null){
@@ -682,9 +680,9 @@ public class Main extends Application {
                 });
 
                 bRentMovieAccept.setOnAction(e -> {
-                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sMovie = filmSearchResults.getTitle();
-                        CustomerSearchResults customerSearchResults = lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         String sCustomer = customerSearchResults.fullName;
                         addToDatabase.rentMovie(sMovie, sCustomer);
                         ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
@@ -695,7 +693,7 @@ public class Main extends Application {
                 });
 
                 bInfoMovie.setOnAction(event -> {
-                        FilmSearchResults filmSearchResults = lvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         String sMovie = filmSearchResults.title;
                         if (sMovie != null){
                                 TableView tvInfo = new TableView(olCategory);
@@ -729,7 +727,7 @@ public class Main extends Application {
 
                 vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies,bMovieSearchClear);
 
-                vBoxCenter.getChildren().addAll(lMovieResult,lvSearchResultsMovie,vBoxCenterButtons,lCustomerResult,lvSearchResultsCustomer);
+                vBoxCenter.getChildren().addAll(lMovieResult,tvSearchResultsMovie,vBoxCenterButtons,lCustomerResult,tvSearchResultsCustomer);
 
                 vBoxCenterButtons.getChildren().addAll(hBoxButtonRent,hBoxButtonInfo);
                 hBoxButtonInfo.getChildren().addAll(bInfoMovie,bInfoCustomer);

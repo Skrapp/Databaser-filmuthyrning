@@ -14,6 +14,7 @@ public class Fetch {
 
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
     EntityManagerFactory em;
+    FXBuilder fxBuilder = new FXBuilder();
 
     public Fetch(EntityManagerFactory em) {
         this.em = em;
@@ -97,7 +98,11 @@ public class Fetch {
             for(String s : list){
                 if (table == "customer") {
                     Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
-                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getCustomer_id(), customer.getFirst_name() + " " + customer.getLast_name(), customer.getEmail());
+                    Hyperlink link = new Hyperlink("Edit");
+                    link.setOnAction(e -> {
+//                        fxBuilder.createPopUp();
+                    });
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getCustomer_id(), customer.getFirst_name() + " " + customer.getLast_name(), customer.getEmail(), new Hyperlink("Edit"));
                     ol.add(srCustomer);
                 } else if (table == "film") {
                     Film film = entityManager.find(Film.class, getFilmIdFromTitle(s));
