@@ -120,6 +120,7 @@ public class Main extends Application {
 
                 VBox vBoxAddCustomer = new VBox();
                 VBox vBoxDeleteCustomer = new VBox();
+                VBox vBoxJeppeSjuk = new VBox();
 
                 VBox vBoxLeft = new VBox();
 
@@ -175,6 +176,9 @@ public class Main extends Application {
                 //Delete buttons
                 Button bDeleteCustomer = new Button("Radera");
                 Button bDeleteStaff = new Button("Radera");
+
+                //Update buttons
+                Button bCustomerSearch = new Button("Sök");
 
 
                 //Meny
@@ -278,6 +282,7 @@ public class Main extends Application {
                 Label lAddCustomerAdress2 = new Label("Adress");
 
                 Label lDeleteCustomer = new Label("Ange kundID");
+                Label lUpdateCustomer = new Label("Ange kundID");
 
                 //Staff
                 Label lStaffAddHeader = new Label("Lägg till arbetare");
@@ -417,6 +422,8 @@ public class Main extends Application {
                 tfCustomerSearchRegistered.setPromptText("Registrerad");
                 TextField tfCustomerSearchUpdate = new TextField();
                 tfCustomerSearchUpdate.setPromptText("Uppdaterad");
+                TextField tfCustomerUpdate = new TextField();
+                tfCustomerUpdate.setPromptText("KundID");
 
                 // Staff Add Textfields
                 TextField tfStaffAddFirstName = new TextField();
@@ -542,6 +549,13 @@ public class Main extends Application {
                 miFileExit.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxExit);
                 });
+
+                miCustomerEdit.setOnAction(event -> {
+                        fxBuilder.createPopUp(vBoxJeppeSjuk);
+                });
+
+
+
 
                 //Button function
                 bAdvancedSearchCustomer.setOnAction(event -> {
@@ -721,6 +735,9 @@ public class Main extends Application {
 
                 //Delete customer
                 vBoxDeleteCustomer.getChildren().addAll(lDeleteCustomer,tfDeleteCustomer, bDeleteCustomer);
+
+                //Update customer
+                vBoxJeppeSjuk.getChildren().addAll(lUpdateCustomer,tfCustomerUpdate,bCustomerSearch);
 
                 //Add staff
                 vBoxStaffAdd.getChildren().addAll(lStaffAddHeader, lStaffAddFirstName, tfStaffAddFirstName,

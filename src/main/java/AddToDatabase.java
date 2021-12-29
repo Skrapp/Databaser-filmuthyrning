@@ -277,7 +277,6 @@ public class AddToDatabase {
             transaction.begin();
 
             Country country = new Country();
-            Instant instant = Instant.now();
 
             String Country = tfAddCountryName.getText();
 
@@ -286,7 +285,7 @@ public class AddToDatabase {
             //If list is empty add country
             if (query.getResultList().isEmpty()) {
                 country.setCountry(Country);
-                country.setLast_update(instant);
+                country.setLast_update(Instant.now());
                 entityManager.persist(country);
                 Query query1 = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
                 List<Short> chosenCountry1 = query1.getResultList();
@@ -323,7 +322,6 @@ public class AddToDatabase {
 
             City city = new City();
 
-            Instant instant = Instant.now();
 
             String City = tfAddCityName.getText();
 
@@ -333,7 +331,7 @@ public class AddToDatabase {
             if (query.getResultList().isEmpty()) {
                 city.setCity(City);
                 city.setCountry_id(countryID);
-                city.setLast_update(instant);
+                city.setLast_update(Instant.now());
                 entityManager.persist(city);
                 Query query1 = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
                 List<Short> chosenCountry1 = query1.getResultList();
@@ -395,6 +393,52 @@ public class AddToDatabase {
 
                 entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
             }
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+    }
+
+    public void updateCustomer(EntityManagerFactory entityManagerFactory){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = null;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Coordinate coord = new Coordinate(1, 2);
+            Geometry geometry = null;
+            geometry = geometryFactory.createPoint(coord);
+
+            Customer customer = entityManager.find(Customer.class, 612);
+
+            int addressId = customer.getAddress_id();
+
+            customer.setFirst_name("Jesper");
+            customer.setLast_name("Sämst");
+            customer.setEmail("Sjukling@hotmail.com");
+            customer.setActive(1);
+            customer.setStore_id(1);
+            customer.setLast_update(Instant.now());
+            customer.setAddress(0);
+            customer.setAddress_id(addressId);
+
+            Address address = entityManager.find(Address.class, addressId);
+            address.setAddress("CoronaVägen");
+            address.setPhone("0706637877");
+            address.setPostal_code("75597");
+            address.setCity_id(27);
+            address.setLast_update(Instant.now());
+            address.setLocation(geometry);
+
+
 
             transaction.commit();
         }catch (Exception e){
