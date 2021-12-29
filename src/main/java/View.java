@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,6 +37,9 @@ public class View extends Application {
         final ObservableList olSearchResultsCustomer = FXCollections.observableArrayList();
         final ObservableList olRating = FXCollections.observableArrayList();
         final ObservableList olStores = FXCollections.observableArrayList();
+        final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList();
+        final ObservableList<FilmSearchResults> olMovieSearchResults = FXCollections.observableArrayList();
+
 
         // Combobox
         //Movie search
@@ -115,14 +119,14 @@ public class View extends Application {
                         ol.add(o);
                 }
         }
-/*
-        public void addResultToOL(List<String> list, ObservableList ol){
+
+        public void addFilmResultToOL(List<String> list, ObservableList ol){
                         ol.clear();
                         for(String s : list){
                                 ol.add(s);
                         }
         }
-*/
+
 
         public void executeCustomerSearch(){
                 CustomerSearch customerSearch = new CustomerSearch();
@@ -194,9 +198,6 @@ public class View extends Application {
         }
 
         @Override
-        //Flytta ut alla variabler,
-        //gör om Main till View (Allt som har med gränssnitt att göra)
-        //Flytta main metoden till ny Main
         public void start(Stage primaryStage) throws Exception {
 
                 Stage loginStage = new Stage(); //To login
@@ -224,24 +225,58 @@ public class View extends Application {
                 addResultToOL(fetch.getSimpleList("rating","film"),olRating);
                 addResultToOL(fetch.getSimpleList("store_id","store"),olStores);
 
-                addResultToOL(fetch.getSimpleList("name","category"),olCategory);
-                addResultToOL(fetch.getSimpleList("name","language"),olLanguages);
-
+                //Add default selection, user can manually deselect
                 olCategory.add(0,null);
                 olLanguages.add(0,null);
                 olRating.add(0,null);
                 olStores.add(0,null);
 
+                // Lists
+                // ListView tvSearchResultsMovie = new ListView(olSearchResultsMovie);
+                // ListView tvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
+
+                //Table View
+                TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<>();
+                TableColumn colCustomerId = new TableColumn("Id");
+                colCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
+                colCustomerId.setPrefWidth(35);
+                TableColumn colCustomerName = new TableColumn("Namn");
+                colCustomerName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+                colCustomerName.setPrefWidth(120);
+                TableColumn colCustomerEmail = new TableColumn("Email");
+                colCustomerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+                colCustomerEmail.setPrefWidth(200);
+
+                TableColumn<CustomerSearchResults, Hyperlink> colCustomerEdit = new TableColumn("Redigera");
+                colCustomerEdit.setCellValueFactory(new PropertyValueFactory<>("linkEdit"));
+                colCustomerEdit.setCellFactory(new EditCell());
+
+                TableColumn<CustomerSearchResults, Hyperlink> colCustomerDelete = new TableColumn("Ta bort");
+                colCustomerDelete.setCellValueFactory(new PropertyValueFactory<>("linkDelete"));
+                colCustomerDelete.setCellFactory(new EditCell());
+
+                tvSearchResultsCustomer.setItems(olCustomerSearchResults);
+                tvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                tvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail, colCustomerEdit, colCustomerDelete);
+
+                TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
+                TableColumn colMovieId = new TableColumn("Id");
+                colMovieId.setCellValueFactory(new PropertyValueFactory<>("id"));
+                colMovieId.setPrefWidth(50);
+                TableColumn colMovieTitle = new TableColumn("Title");
+                colMovieTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+                colMovieTitle.setPrefWidth(150);
+                TableColumn colMovieDescription = new TableColumn("Description");
+                colMovieDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+                colMovieDescription.setPrefWidth(250);
+                tvSearchResultsMovie.setItems(olMovieSearchResults);
+                tvSearchResultsMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                tvSearchResultsMovie.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
+
                 //Boxes
-                VBox vBoxMovieAdd = new VBox();
-                VBox vBoxMovieSearch = new VBox();
-                vBoxMovieSearch.setPadding(new Insets(10));
-                VBox vBoxCustomerSearch = new VBox();
-                vBoxCustomerSearch.setPadding(new Insets(10));
+                //Center
                 VBox vBoxCenter = new VBox();
                 vBoxCenter.setPadding(new Insets(10));
-                VBox vBoxRight = new VBox();
-                vBoxRight.setPadding(new Insets(10));
                 VBox vBoxCenterButtons = new VBox();
                 HBox hBoxButtonRent = new HBox();
                 hBoxButtonRent.setSpacing(5);
@@ -249,6 +284,17 @@ public class View extends Application {
                 HBox hBoxButtonInfo = new HBox();
                 hBoxButtonInfo.setSpacing(5);
                 hBoxButtonInfo.setAlignment(Pos.CENTER);
+
+                //Left/Right
+                VBox vBoxRight = new VBox();
+                vBoxRight.setPadding(new Insets(10));
+                VBox vBoxLeft = new VBox();
+
+                //Search
+                VBox vBoxMovieSearch = new VBox();
+                vBoxMovieSearch.setPadding(new Insets(10));
+                VBox vBoxCustomerSearch = new VBox();
+                vBoxCustomerSearch.setPadding(new Insets(10));
 
                 //Advanced search
                 HBox hBoxAdvancedSearchMovies = new HBox();
@@ -265,14 +311,17 @@ public class View extends Application {
                 vBoxMovieSearchLeft.setPadding(new Insets(0,5,0,0));
                 VBox vBoxMovieSearchRight = new VBox();
 
+                //Staff
                 VBox vBoxStaffAdd = new VBox();
                 vBoxStaffAdd.setPadding(new Insets(10));
                 VBox vBoxDeleteStaff = new VBox();
 
+                //Movie
+                VBox vBoxMovieAdd = new VBox();
+
+                //Customer
                 VBox vBoxAddCustomer = new VBox();
                 VBox vBoxDeleteCustomer = new VBox();
-
-                VBox vBoxLeft = new VBox();
 
                 //Logout och EXIT
                 VBox vBoxExit = new VBox();
@@ -712,9 +761,14 @@ public class View extends Application {
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
                         //Funktion?
-                        String sMovie = (String)lvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sCustomer = (String)lvSearchResultsCustomer.getSelectionModel().getSelectedItem();
-                        if(sMovie != null && sCustomer != null){
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.getTitle();
+                        CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        String sCustomer = customerSearchResults.fullName;if(sMovie != null && sCustomer != null){
+
+                                //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet,
+                                // annars blir det strul nånstans pga flera likadana förnamn?
+                                // Håller helt med
                                 if(fetch.isInStore(sMovie,sMovieJoin)) {
                                         //Popup for renting movie
                                         tRentMovie.setText("Vill " + sCustomer + " hyra " + sMovie);
@@ -727,6 +781,19 @@ public class View extends Application {
                         else
                                 //Create popup for error
                                 fxBuilder.createErrorPopup("Markera både kund och film \nför att kunna hyra.");
+                });
+
+                bRentMovieAccept.setOnAction(e -> {
+                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                        String sMovie = filmSearchResults.getTitle();
+                        CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                        String sCustomer = customerSearchResults.fullName;
+                        addToDatabase.rentMovie(sMovie, sCustomer);
+                        ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
+                });
+
+                bRentMovieDecline.setOnAction(e -> {
+                        ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
                 });
 
                 bInfoMovie.setOnAction(event -> {
@@ -763,7 +830,7 @@ public class View extends Application {
 
                 vBoxLeft.getChildren().addAll(vBoxMovieSearch, hBoxAdvancedSearchMovies,bMovieSearchClear);
 
-                vBoxCenter.getChildren().addAll(lMovieResult,lvSearchResultsMovie,vBoxCenterButtons,lCustomerResult,lvSearchResultsCustomer);
+                vBoxCenter.getChildren().addAll(lMovieResult,tvSearchResultsMovie,vBoxCenterButtons,lCustomerResult,tvSearchResultsCustomer);
 
                 vBoxCenterButtons.getChildren().addAll(hBoxButtonRent,hBoxButtonInfo);
                 hBoxButtonInfo.getChildren().addAll(bInfoMovie,bInfoCustomer);

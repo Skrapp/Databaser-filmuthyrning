@@ -3,7 +3,7 @@ import attributes.CustomerSearch;
 import attributes.MovieSearch;
 
 import db.Customer;
-import db.*;
+import db.Film;
 
 import javafx.collections.ObservableList;
 
