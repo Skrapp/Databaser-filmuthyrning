@@ -11,7 +11,7 @@ public class Staff {
     @Id
     @Column(name = "staff_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int staffID;
+    private Integer staffID;
 
     @Column(name = "first_name")
     private String firstName;
@@ -20,7 +20,7 @@ public class Staff {
     private String lastName;
 
     @Column(name ="address_id")
-    private int adressID;
+    private Integer adressID;
 
     @Column(name = "picture")
     private byte[] picture;
@@ -29,10 +29,10 @@ public class Staff {
     private String email;
 
     @Column(name = "store_id")
-    private int storeID;
+    private Integer storeID;
 
     @Column(name = "active")
-    private int active;
+    private Integer active;
 
     @Column(name = "username")
     private String username;
@@ -44,20 +44,20 @@ public class Staff {
     private Instant lastUpdate;
 
     @Column(name = "addressId")
-    private int addressId;
+    private Integer addressId;
 
     @Column(name = "storeId")
-    private int storeId;
+    private Integer storeId;
 
 
     public Staff() {
     }
 
-    public int getStaffID() {
+    public Integer getStaffID() {
         return staffID;
     }
 
-    public void setStaffID(int staffID) {
+    public void setStaffID(Integer staffID) {
         this.staffID = staffID;
     }
 
@@ -77,11 +77,11 @@ public class Staff {
         this.lastName = lastName;
     }
 
-    public int getAdressID() {
+    public Integer getAdressID() {
         return adressID;
     }
 
-    public void setAdressID(int adressID) {
+    public void setAdressID(Integer adressID) {
         this.adressID = adressID;
     }
 
@@ -101,19 +101,19 @@ public class Staff {
         this.email = email;
     }
 
-    public int getStoreID() {
+    public Integer getStoreID() {
         return storeID;
     }
 
-    public void setStoreID(int storeID) {
+    public void setStoreID(Integer storeID) {
         this.storeID = storeID;
     }
 
-    public int getActive() {
+    public Integer getActive() {
         return active;
     }
 
-    public void setActive(int active) {
+    public void setActive(Integer active) {
         this.active = active;
     }
 
@@ -143,19 +143,19 @@ public class Staff {
 
     }
 
-    public int getAddressId() {
+    public Integer getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(int addressId) {
+    public void setAddressId(Integer addressId) {
         this.addressId = addressId;
     }
 
-    public int getStoreId() {
+    public Integer getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(int storeId) {
+    public void setStoreId(Integer storeId) {
         this.storeId = storeId;
     }
 }

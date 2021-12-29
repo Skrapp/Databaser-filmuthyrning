@@ -1,5 +1,10 @@
+
 import attributes.CustomerSearch;
 import attributes.MovieSearch;
+
+import db.Customer;
+import db.*;
+
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.*;
@@ -12,9 +17,10 @@ import java.util.List;
 
 public class Fetch {
 
-    Controller controller;
-    ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
-    EntityManagerFactory em;
+    private Controller controller;
+    private ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
+    private EntityManagerFactory em;
+    //FXBuilder fxBuilder = new FXBuilder();
 
     public Fetch(EntityManagerFactory em,Controller controller) {
         this.em = em;
@@ -48,18 +54,18 @@ public class Fetch {
 
     /** Main search function. Call sub searchfunctions
      * @param movieSearch MovieSearch object containing all search parameters
-     * @return returna a list of the result
+     * @return return a list of the result
      */
-    public List<String> searchMovies(MovieSearch movieSearch){
+    public List<FilmSearchResults> searchMovies(MovieSearch movieSearch){
         String searchCriteria = createSearchCriteriaMovie(movieSearch);
         return searchFromDatabaseFilm(searchCriteria);
     }
 
     /** Main search function. Call sub searchfunctions
      * @param customerSearch CustomerSearch object containing all search parameters
-     * @return returna a list of the result
+     * @return return a list of the result
      */
-    public List<String> searchCustomers(CustomerSearch customerSearch){
+    public List<CustomerSearchResults> searchCustomers(CustomerSearch customerSearch){
         String searchCriteria = createSearchCriteriaCustomer(customerSearch);
         return searchFromDatabaseCustomer(searchCriteria);
     }
@@ -68,10 +74,10 @@ public class Fetch {
      * @param searchCriteria The WHERE command
      * @return Returns a list with the titles of movies
      */
-    public List<String> searchFromDatabaseFilm(String searchCriteria){
+    public List<FilmSearchResults> searchFromDatabaseFilm(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
-        List<String> result = new ArrayList<>();
+        List<FilmSearchResults> result = null;
 
         try{
             transaction = entityManager.getTransaction();
@@ -93,8 +99,13 @@ public class Fetch {
                             " ORDER BY film.title;"
             );
 
-            result = query.getResultList();
+            List<String> list = query.getResultList();
 
+            for (String s : list) {
+                Film film = entityManager.find(Film.class, getFilmIdFromTitle(s));
+                FilmSearchResults srFilm = new FilmSearchResults(film.getId(), film.getTitle(), film.getDescription());
+                result.add(srFilm);
+            }
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -106,10 +117,11 @@ public class Fetch {
             return result;
         }
     }
-    public List<String> searchFromDatabaseCustomer(String searchCriteria){
+
+    public List<CustomerSearchResults> searchFromDatabaseCustomer(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
-        List<String> result = new ArrayList<>();
+        List<CustomerSearchResults> result = new ArrayList<>();
 
         try{
             transaction = entityManager.getTransaction();
@@ -125,8 +137,17 @@ public class Fetch {
                             " ORDER BY customer.first_name;"
             );
 
-            result = query.getResultList();
+            List<String> list = query.getResultList();
 
+            for(String s : list){
+                    Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
+                    Hyperlink link = new Hyperlink("Edit");
+                    link.setOnAction(e -> {
+                        //fxBuilder.createPopUp();
+                    });
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), new Hyperlink("Edit"));
+                    result.add(srCustomer);
+            }
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -191,23 +212,74 @@ public class Fetch {
 
         String sSearchCriteria;
 
-        sSearchCriteria = exactSearchInt(customerSearch.getsId(),"customer.customer_id");
-        sSearchCriteria += exactSearchInt(customerSearch.getsStoreId(),"customer.store_id");
-        sSearchCriteria += containsSearch(customerSearch.getsFirstName(),"customer.first_name");
-        sSearchCriteria += containsSearch(customerSearch.getsEmail(),"customer.email");
-        sSearchCriteria += containsSearch(customerSearch.getsCity(),"ci.city");
-        sSearchCriteria += containsSearch(customerSearch.getsAddress(),"a.address");
-        sSearchCriteria += containsSearch(customerSearch.getsPhone(),"a.phone");
-        sSearchCriteria += dateSearch(customerSearch.getsRegistered(),"customer.create_date");
-        sSearchCriteria += dateSearch(customerSearch.getsUpdate(),"customer.last_update");
+        sSearchCriteria = exactSearchInt(customerSearch.getsId(), "customer.customer_id");
+        sSearchCriteria += exactSearchInt(customerSearch.getsStoreId(), "customer.store_id");
+        sSearchCriteria += containsSearch(customerSearch.getsFirstName(), "customer.first_name");
+        sSearchCriteria += containsSearch(customerSearch.getsEmail(), "customer.email");
+        sSearchCriteria += containsSearch(customerSearch.getsCity(), "ci.city");
+        sSearchCriteria += containsSearch(customerSearch.getsAddress(), "a.address");
+        sSearchCriteria += containsSearch(customerSearch.getsPhone(), "a.phone");
+        sSearchCriteria += dateSearch(customerSearch.getsRegistered(), "customer.create_date");
+        sSearchCriteria += dateSearch(customerSearch.getsUpdate(), "customer.last_update");
 
-        sSearchCriteria += checkBoxSearch(customerSearch.getIsActive(),"customer.active","1");
+        sSearchCriteria += checkBoxSearch(customerSearch.getIsActive(), "customer.active", "1");
 
         System.out.println(sSearchCriteria); //Debug
 
         sSearchCriteria = changeFirstAnd(sSearchCriteria);
 
         return sSearchCriteria;
+    }
+    private Integer getFilmIdFromTitle(String title) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int filmId = 0;
+        short filmIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryFilmID = entityManager.createNativeQuery("SELECT film_id from film WHERE title = '" + title + "';");
+
+            filmIdShort = (short) queryFilmID.getResultList().get(0);
+            filmId = filmIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return filmId;
+    }
+
+    private Integer getCustomerIdFromName(String firstName) {
+        EntityManager entityManager = em.createEntityManager();
+        EntityTransaction transaction = null;
+        int customerId = 0;
+        short customerIdShort = 0;
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "';");
+
+            customerIdShort = (short) queryCustomerID.getResultList().get(0);
+            customerId = customerIdShort;
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+        return customerId;
     }
 
     //On going

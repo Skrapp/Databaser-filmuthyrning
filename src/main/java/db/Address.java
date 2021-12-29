@@ -16,7 +16,7 @@ public class Address {
     @Id
     @Column(name = "address_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int address_id;
+    private Integer address_id;
 
     @Column(name = "address")
     private String address;
@@ -28,7 +28,7 @@ public class Address {
     private String district;
 
     @Column(name = "city_id")
-    private int city_id;
+    private Integer city_id;
 
     @Column(name = "postal_code")
     private String postal_code;
@@ -51,7 +51,7 @@ public class Address {
 
 
 
-    public Address(int address_id, String address, String address2, String district, int city_id, String postal_code, String phone, Geometry location, Instant last_update) {
+    public Address(Integer address_id, String address, String address2, String district, Integer city_id, String postal_code, String phone, Geometry location, Instant last_update) {
         GeometryFactory geometryFactory = new GeometryFactory();
         this.address_id = address_id;
         this.address = address;
@@ -69,7 +69,7 @@ public class Address {
         return address_id;
     }
 
-    public void setAddress_id(int address_id) {
+    public void setAddress_id(Integer address_id) {
         this.address_id = address_id;
     }
 
@@ -101,7 +101,7 @@ public class Address {
         return city_id;
     }
 
-    public void setCity_id(int city_id) {
+    public void setCity_id(Integer city_id) {
         this.city_id = city_id;
     }
 
