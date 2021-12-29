@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Fetch {
 
+    Controller controller = new Controller();
     ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
     EntityManagerFactory em;
 
@@ -68,6 +69,7 @@ public class Fetch {
                     "SELECT film.title" +
                             " FROM film" +
                             " LEFT JOIN language l ON film.language_id = l.language_id" +
+                            " LEFT JOIN language ol ON film.original_language_id = ol.language_id" +
                             " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
                             " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
                             " LEFT JOIN film_category fc ON film.film_id = fc.film_id" +
@@ -357,7 +359,7 @@ public class Fetch {
         return sSearchCriteria;
     }
 
-    /** New createSearchCriteria for movies. Gets teh Where query for MySQL
+    /** New createSearchCriteria for movies. Gets the Where query for MySQL
      * @param movieSearch Object containig all searchdata
      * @return Returns a WHERE Query for MySQL
      */
@@ -365,12 +367,29 @@ public class Fetch {
 
         String sSearchCriteria;
         Boolean isFirst = true;
-        sSearchCriteria = exactSearch(movieSearch.getsFilmId(),"film.film_id");
+        sSearchCriteria = exactSearchInt(movieSearch.getsFilmId(),"film.film_id");
+        sSearchCriteria += exactSearchInt(movieSearch.getsReleaseYear(),"film.release_year");
         sSearchCriteria += containsSearch(movieSearch.getsTitle(),"title");
-        sSearchCriteria += dateSearch(movieSearch.getsLastUpdate(), "film.last_update");
-        sSearchCriteria += maxSearch(movieSearch.getsLengthMax(), "film.length");
-        sSearchCriteria += minSearch(movieSearch.getsLengthMin(), "film.length");
-        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFDeletedScenes(), "film.special_features","Deleted Scenes");
+        sSearchCriteria += containsSearch(movieSearch.getsDescription(), "film.description");
+        //sSearchCriteria += containsSearch(movieSearch.getsALastName(),"a.last_name");
+        sSearchCriteria += containsSearch(movieSearch.getsAFirstName(),"a.first_name");
+        sSearchCriteria += containsSearch(movieSearch.getsRating(),"film.rating");
+        sSearchCriteria += containsSearch(movieSearch.getsOriginalLanguage(),"ol.name");
+        sSearchCriteria += containsSearch(movieSearch.getsLanguage(),"l.name");
+        sSearchCriteria += containsSearch(movieSearch.getsCategory(),"c.name");
+        sSearchCriteria += dateSearch(movieSearch.getsLastUpdate(),"film.last_update");
+        sSearchCriteria += maxSearch(movieSearch.getsLengthMax(),"film.length");
+        sSearchCriteria += minSearch(movieSearch.getsReplacementCostMin(),"film.replacement_cost");
+        sSearchCriteria += maxSearch(movieSearch.getsReplacementCostMax(),"film.replacement_cost");
+        sSearchCriteria += minSearch(movieSearch.getsRentalDurationMin(),"film.rental_duration");
+        sSearchCriteria += maxSearch(movieSearch.getsRentalDurationMax(),"film.rental_duration");
+        sSearchCriteria += minSearch(movieSearch.getsRentalRateMin(),"film.rental_rate");
+        sSearchCriteria += maxSearch(movieSearch.getsRentalRateMax(),"film.rental_rate");
+        sSearchCriteria += minSearch(movieSearch.getsLengthMin(),"film.length");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFDeletedScenes(),"film.special_features","Deleted Scenes");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFTrailer(),"film.special_features","Trailers");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFCommentaries(),"film.special_features","Commentaries");
+        sSearchCriteria += checkBoxSearch(movieSearch.getHasSFBTS(),"film.special_features","Behind The Scenes");
         sSearchCriteria += inStoreSearch(movieSearch.getInStore());
 
         System.out.println(sSearchCriteria);
@@ -385,12 +404,12 @@ public class Fetch {
      * @param column what column to search from
      * @return String for MySQL/ERROR
      */
-    private String exactSearch(String sSearchCriteria, String column) {
+    private String exactSearchInt(String sSearchCriteria, String column) {
         if (!sSearchCriteria.equals("")) {
             if (ec.isInteger(sSearchCriteria))
                 return " AND ".concat(column).concat(" = ").concat(sSearchCriteria);
             else {
-                //controller.error("Skriv ett  heltal i " + column);
+                controller.callError("Skriv ett  heltal i " + column);
                 System.out.println("Skriv ett heltal i " + column);
                 return "ERROR";
             }
@@ -408,7 +427,7 @@ public class Fetch {
             if (ec.isDate(sSearchCriteria))
                 return " AND ".concat(column).concat(" like '%").concat(sSearchCriteria).concat("%'");
             else {
-                //controller.error("Skriv ett  datum med formatet yyyy-mm-dd i " + column);
+                controller.callError("Skriv ett  datum med formatet yyyy-mm-dd i " + column);
                 System.out.println("Skriv ett datum i " + column);
                 return "ERROR";
             }
@@ -424,9 +443,9 @@ public class Fetch {
     private String minSearch(String sSearchCriteria, String column) {
         if (!sSearchCriteria.equals("")) {
             if (ec.isDouble(sSearchCriteria)) {
-                return " AND ".concat(column).concat(" <= ").concat(sSearchCriteria);
+                return " AND ".concat(column).concat(" >= ").concat(sSearchCriteria);
             } else {
-                //controller.error("Skriv ett  decimaltal i " + column);
+                controller.callError("Skriv ett  decimaltal i " + column);
                 System.out.println("Skriv ett decimaltal i " + column);
                 return "ERROR";
             }
@@ -442,9 +461,9 @@ public class Fetch {
     private String maxSearch(String sSearchCriteria, String column) {
         if (!sSearchCriteria.equals("")) {
             if (ec.isDouble(sSearchCriteria)) {
-                return " AND ".concat(column).concat(" >= ").concat(sSearchCriteria);
+                return " AND ".concat(column).concat(" <= ").concat(sSearchCriteria);
             } else {
-                //controller.error("Skriv ett  decimaltal i " + column);
+                controller.callError("Skriv ett  decimaltal i " + column);
                 System.out.println("Skriv ett decimaltal i " + column);
                 return "ERROR";
             }
@@ -458,7 +477,7 @@ public class Fetch {
      * @return String for MySQL/ERROR
      */
     private String containsSearch(String sSearchCriteria, String column) {
-        if(sSearchCriteria != "")
+        if(!sSearchCriteria.equals(""))
             return " AND ".concat(column).concat(" like '%").concat(sSearchCriteria).concat("%'");
         return "";
     }
@@ -488,12 +507,12 @@ public class Fetch {
         return "";
     }
 
-    /**Changes the first and in the WHERE query to an WHERE
+    /**Changes the first AND to WHERE in a String
      * @param s original string
      * @return new string
      */
     private String changeFirstAnd(String s) {
-        //Change first and to where
+        //creates new string where first AND is replaced with WHERE
         System.out.println(s);
             s = s.replaceFirst("AND", "WHERE");
         System.out.println(s);
