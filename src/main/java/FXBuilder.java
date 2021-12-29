@@ -1,7 +1,4 @@
-import db.Address;
-import db.City;
-import db.Country;
-import db.Customer;
+import db.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -142,18 +139,18 @@ public class FXBuilder {
             transaction = entityManager.getTransaction();
             transaction.begin();
             Customer customer = entityManager.find(Customer.class, id);
-            String firstName = customer.getFirst_name();
-            String lastName = customer.getLast_name();
+            String firstName = customer.getFirstName();
+            String lastName = customer.getLastName();
             String email = customer.getEmail();
-            int storeId = customer.getStore_id();
-            int active = customer.getActive();
-            Address address = entityManager.find(Address.class, customer.getAddress_id());
+            int storeId = customer.getStore().getId();
+            boolean active = customer.getActive();
+            Address address = customer.getAddress();
             String address1 = address.getAddress();
             String address2 = address.getAddress2();
             String postalCode = address.getPostal_code();
             String district = address.getDistrict();
             String phone = address.getPhone();
-            Date registered = customer.getCreate_date();
+            Instant registered = customer.getCreateDate();
             City cityem = entityManager.find(City.class, address.getCity_id());
             String city = cityem.getCity();
             Country countryem = entityManager.find(Country.class, cityem.getCountry_id());
@@ -194,18 +191,20 @@ public class FXBuilder {
                 transactionAdd = entityManagerAdd.getTransaction();
                 transactionAdd.begin();
                 Customer customer = entityManagerAdd.find(Customer.class, id);
-                Address address = entityManagerAdd.find(Address.class, customer.getAddress_id());
+                Address address = customer.getAddress();
                 City city = entityManagerAdd.find(City.class, address.getCity_id());
                 Country country = entityManagerAdd.find(Country.class, city.getCountry_id());
-                customer.setFirst_name(tfAddCustomerFirstName.getText());
-                customer.setLast_name(tfAddCustomerLastName.getText());
+                Store store = new Store();
+                store.setId(1);
+                customer.setFirstName(tfAddCustomerFirstName.getText());
+                customer.setLastName(tfAddCustomerLastName.getText());
                 customer.setEmail(tfAddCustomerEmail.getText());
-                customer.setStore_id(Integer.valueOf(tfAddCustomerStoreId.getText()));
-                customer.setActive(Integer.valueOf(tfAddCustomerActive.getText()));
+                customer.setStore(store);
+                customer.setActive(true);
                 address.setAddress(tfAddCustomerAddress.getText());
                 address.setAddress2(tfAddCustomerAddress2.getText());
                 address.setLast_update(Instant.now());
-                customer.setLast_update(Instant.now());
+                customer.setLastUpdate(Instant.now());
                 city.setLast_update(Instant.now());
                 country.setLast_update(Instant.now());
                 address.setPostal_code(tfAddCustomerPostalCode.getText());
@@ -313,6 +312,40 @@ public class FXBuilder {
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(vBoxDeleteCustomer);
         Scene scene2 = new Scene(borderPane);
+        bDeleteCustomerAccept.setOnAction(e -> {
+            //Kod för att ta bort kund med kund-id id.
+            EntityManager em = entity_manager_factory.createEntityManager();
+            EntityTransaction transaction = null;
+            try{
+                transaction = em.getTransaction();
+                transaction.begin();
+            Customer customer = em.find(Customer.class, 1);
+
+                //delete payment so you can delete customer
+            em.createNativeQuery("DELETE payment FROM payment WHERE customer_id ='" + id + "'").executeUpdate();
+                //delete rental so you kan delete customer - To do, dont delete if they havent returned a movie
+            em.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '"+id +"'").executeUpdate();
+            //Delete customer
+                em.createNativeQuery("DELETE customer FROM customer WHERE customer_id = '"+id +"'").executeUpdate();
+                // em.remove(customer);
+            // em.persist(customer);
+                em.flush();
+                transaction.commit();
+            }catch (Exception eee){
+                if(transaction != null){
+                    transaction.rollback();
+                }
+                eee.printStackTrace();
+            }finally {
+                em.close();
+            }
+
+        });
+
+        bDeleteCustomerDecline.setOnAction(e -> {
+            // Stänger bara fönstret.
+            ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
+        });
         p.show(stage);
         stage.setScene(scene2);
         stage.show();

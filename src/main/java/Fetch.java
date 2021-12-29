@@ -102,7 +102,7 @@ public class Fetch {
                     link.setOnAction(e -> {
 //                        fxBuilder.createPopUp();
                     });
-                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getCustomer_id(), customer.getFirst_name() + " " + customer.getLast_name(), customer.getEmail(), new Hyperlink("Edit"));
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), new Hyperlink("Edit"));
                     ol.add(srCustomer);
                 } else if (table == "film") {
                     Film film = entityManager.find(Film.class, getFilmIdFromTitle(s));

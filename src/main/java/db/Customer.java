@@ -1,91 +1,83 @@
 package db;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.Instant;
 
 @Entity
-@Table
+@Table(name = "customer")
 public class Customer {
-
     @Id
-    @Column(name = "customer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer customer_id;
+    @Column(name = "customer_id", nullable = false)
+    private Integer id;
 
-    @Column(name = "store_id")
-    private Integer store_id;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
 
-    @Column(name = "first_name")
-    private String first_name;
+    @Column(name = "first_name", nullable = false, length = 45)
+    private String firstName;
 
-    @Column(name = "last_name")
-    private String last_name;
+    @Column(name = "last_name", nullable = false, length = 45)
+    private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "address_id")
-    private Integer address_id;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
-    @Column(name = "active")
-    private Integer active;
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
 
-    @Column(name = "create_date")
-    private Date create_date;
+    @Column(name = "create_date", nullable = false)
+    private Instant createDate;
 
     @Column(name = "last_update")
-    private Instant last_update;
+    private Instant lastUpdate;
 
     @Column(name = "address")
-    private Integer address;
+    private Integer address1;
 
-    public Customer() {
+    public Integer getAddress1() {
+        return address1;
     }
 
-    public Customer(Integer customer_id, Integer store_id, String first_name, String last_name, String email, Integer address_id, Integer active, Date create_date, Instant last_update, Integer address) {
-        this.customer_id = customer_id;
-        this.store_id = store_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
-        this.address_id = address_id;
+    public void setAddress1(Integer address1) {
+        this.address1 = address1;
+    }
+
+    public Instant getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Instant lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Instant getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Instant createDate) {
+        this.createDate = createDate;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
         this.active = active;
-        this.create_date = create_date;
-        this.last_update = last_update;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public Integer getCustomer_id() {
-        return customer_id;
-    }
-
-    public void setCustomer_id(Integer customer_id) {
-        this.customer_id = customer_id;
-    }
-
-    public Integer getStore_id() {
-        return store_id;
-    }
-
-    public void setStore_id(Integer store_id) {
-        this.store_id = store_id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
     }
 
     public String getEmail() {
@@ -96,43 +88,35 @@ public class Customer {
         this.email = email;
     }
 
-    public Integer getAddress_id() {
-        return address_id;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setAddress_id(Integer address_id) {
-        this.address_id = address_id;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public int getActive() {
-        return active;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setActive(Integer active) {
-        this.active = active;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public Date getCreate_date() {
-        return create_date;
+    public Store getStore() {
+        return store;
     }
 
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
-    public Instant getLast_update() {
-        return last_update;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLast_update(Instant last_update) {
-        this.last_update = last_update;
-    }
-
-    public int getAddress() {
-        return address;
-    }
-
-    public void setAddress(int address) {
-        this.address = address;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

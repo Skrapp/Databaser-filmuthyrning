@@ -43,16 +43,17 @@ public class AddToDatabase {
             transaction = entityManager.getTransaction();
             transaction.begin();
             Customer customer = new Customer();
-
+            Address address = entityManager.find(Address.class, addressID);
+            Store store = entityManager.find(Store.class, tfAddCustomerStoreId);
             Instant instant = Instant.now();
 
-            customer.setFirst_name(tfAddCustomerFirstName.getText());
-            customer.setLast_name(tfAddCustomerLastName.getText());
-            customer.setAddress_id(addressID);
-            customer.setStore_id(Integer.parseInt(tfAddCustomerStoreId.getText()));
-            customer.setActive(Integer.parseInt(tfAddCustomerActive.getText()));
+            customer.setFirstName(tfAddCustomerFirstName.getText());
+            customer.setLastName(tfAddCustomerLastName.getText());
+            customer.setAddress(address);
+            customer.setStore(store);
+            customer.setActive(true);
             customer.setEmail(tfAddCustomerEmail.getText());
-            customer.setLast_update(instant);
+            customer.setLastUpdate(instant);
 
             entityManager.persist(customer);
             transaction.commit();
