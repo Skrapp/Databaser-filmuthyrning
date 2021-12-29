@@ -185,10 +185,6 @@ public class View extends Application {
                 return textField.getText().trim();
         }
 
-        public void callError(String errorMessage){
-                fxBuilder.createErrorPopup(errorMessage);
-        }
-
         @Override
         //Flytta ut alla variabler,
         //gör om Main till View (Allt som har med gränssnitt att göra)
@@ -475,7 +471,6 @@ public class View extends Application {
 
 
                 //Movie search
-
                 tfMovieSearchTitle.setPromptText("Sök");
                 tfMovieSearchReleaseYear.setPromptText("yyyy");
                 tfMovieSearchId.setPromptText("Film ID");
@@ -509,22 +504,14 @@ public class View extends Application {
                 TextField tfMovieAddRentalDuration = new TextField();
                 TextField tfMovieAddLastUpdate = new TextField();
 
-                //Customer
-
+                //Customer Search
                 tfCustomerSearchFirstName.setPromptText("Kundnamn");
-
                 tfCustomerSearchId.setPromptText("KundID");
-
                 tfCustomerSearchEmail.setPromptText("Kundmail");
-
                 tfCustomerSearchCity.setPromptText("Stad");
-
                 tfCustomerSearchAddress.setPromptText("Adress");
-
                 tfCustomerSearchPhone.setPromptText("Telefonnummer");
-
                 tfCustomerSearchRegistered.setPromptText("Registrerad");
-
                 tfCustomerSearchUpdate.setPromptText("Uppdaterad");
 
                 // Staff Add Textfields
@@ -616,10 +603,6 @@ public class View extends Application {
                                 " LEFT JOIN inventory i ON film.film_id = i.film_id" +
                                 " LEFT JOIN rental r ON i.inventory_id = r.inventory_id";
 
-                String sCustomerJoin =
-                        " LEFT JOIN address a ON customer.address_id = a.address_id"+
-                                " LEFT JOIN city ci ON ci.city_id = a.city_id";
-
                 //Popup
                 //Movie - Add
                 miFilmAdd.setOnAction(event -> {
@@ -663,7 +646,6 @@ public class View extends Application {
                 });
 
                 bCreateCustomer.setOnAction(event -> {
-                        //Change test -> addToDatabase
                         int countryID = addToDatabase.addCountryID(tfAddCustomerCountrys);
                         int cityID = addToDatabase.addCityID(tfAddCustomerCity, countryID);
                         int adressID = addToDatabase.addAdressId( tfAddCustomerAddress, tfAddCustomerAddress2,
@@ -699,13 +681,10 @@ public class View extends Application {
                 });
 
                 bSearchMovie.setOnAction(event -> {
-                        //Dela upp så GUI och databashanterare är i olika klasser. Byt ut vbox till Strängar/Array
-                        //fetch.searchFromDatabase(vBoxLeft,olSearchResultsMovie,"title", "film", sMovieJoin);
                         executeMovieSearch();
                 });
 
                 bSearchCustomer.setOnAction(event -> {
-                        //fetch.searchFromDatabaseCustomer(vBoxRight,olSearchResultsCustomer,"first_name","customer",sCustomerJoin);
                         executeCustomerSearch();
                 });
 

@@ -425,7 +425,7 @@ public class Fetch {
      * @return new string
      */
     private String changeFirstAnd(String s) {
-        //creates new string where first AND is replaced with WHERE
+        //saves new string where first AND is replaced with WHERE
         System.out.println(s);
             s = s.replaceFirst("AND", "WHERE");
         System.out.println(s);
