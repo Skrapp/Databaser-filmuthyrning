@@ -21,26 +21,28 @@ public class Fetch {
         this.controller = controller;
     }
 
-    public void addToComboList (ObservableList ol, String column, String table) {
+
+    public List<Object> getSimpleList (String column, String table) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
+        List<Object> list = new ArrayList();
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
             Query query = entityManager.createNativeQuery("SELECT "+ column +" FROM "+ table +" GROUP BY " + column + ";");
-            List<Object>list = query.getResultList();
-            for (Object p : list){
-                ol.add(p);
-            }
+            list = query.getResultList();
+
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
                 transaction.rollback();
             }
+            controller.callError("Något gick fel i laddningen av datan");
             e.printStackTrace();
         }finally {
             entityManager.close();
+            return list;
         }
     }
 
@@ -101,8 +103,8 @@ public class Fetch {
             e.printStackTrace();
         }finally {
             entityManager.close();
+            return result;
         }
-        return result;
     }
     public List<String> searchFromDatabaseCustomer(String searchCriteria){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
@@ -133,8 +135,8 @@ public class Fetch {
             e.printStackTrace();
         }finally {
             entityManager.close();
+            return result;
         }
-        return result;
     }
 
     /** New createSearchCriteria for movies. Gets the Where query for MySQL

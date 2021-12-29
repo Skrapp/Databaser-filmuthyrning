@@ -109,12 +109,20 @@ public class View extends Application {
         /**
          * Search in table for written search criteria
          */
+        public void addResultToOL(List<Object> list, ObservableList ol){
+                ol.clear();
+                for(Object o : list){
+                        ol.add(o);
+                }
+        }
+/*
         public void addResultToOL(List<String> list, ObservableList ol){
                         ol.clear();
                         for(String s : list){
                                 ol.add(s);
                         }
         }
+*/
 
         public void executeCustomerSearch(){
                 CustomerSearch customerSearch = new CustomerSearch();
@@ -190,10 +198,6 @@ public class View extends Application {
         //gör om Main till View (Allt som har med gränssnitt att göra)
         //Flytta main metoden till ny Main
         public void start(Stage primaryStage) throws Exception {
-                olCategory.add(0,null);
-                olLanguages.add(0,null);
-                olRating.add(0,null);
-                olStores.add(0,null);
 
                 Stage loginStage = new Stage(); //To login
 
@@ -215,13 +219,18 @@ public class View extends Application {
                 cbMovieAddLanguages.setPromptText("Språk");
 
                 //Add data to observable lists
-                fetch.addToComboList(olCategory, "name","category");
-                fetch.addToComboList(olLanguages, "name","language");
-                fetch.addToComboList(olRating, "rating","film");
-                fetch.addToComboList(olStores, "store_id","store");
+                addResultToOL(fetch.getSimpleList("name","category"),olCategory);
+                addResultToOL(fetch.getSimpleList("name","language"),olLanguages);
+                addResultToOL(fetch.getSimpleList("rating","film"),olRating);
+                addResultToOL(fetch.getSimpleList("store_id","store"),olStores);
 
-                fetch.addToComboList(olCategory,  "name", "category");
-                fetch.addToComboList(olLanguages,  "name", "language");
+                addResultToOL(fetch.getSimpleList("name","category"),olCategory);
+                addResultToOL(fetch.getSimpleList("name","language"),olLanguages);
+
+                olCategory.add(0,null);
+                olLanguages.add(0,null);
+                olRating.add(0,null);
+                olStores.add(0,null);
 
                 //Boxes
                 VBox vBoxMovieAdd = new VBox();
@@ -411,7 +420,6 @@ public class View extends Application {
                 Label lAddCustomerLastName = new Label("Efternamn");
                 Label lAddCustomerEmail = new Label("Kundmail");
                 Label lAddCustomerStoreId = new Label("ButikID");
-                Label lAddCustomerRegistered = new Label("Registrerad");
                 Label lAddCustomerActive = new Label("Aktiv");
 
                 Label lAddCustomerAddress = new Label("Adress");
@@ -490,7 +498,6 @@ public class View extends Application {
 
 
                 //Movie add
-                TextField tfAddTitle = new TextField();
                 TextField tfMovieAddTitle = new TextField();
                 TextField tfMovieAddDescription = new TextField();
                 TextField tfMovieAddActors = new TextField();
