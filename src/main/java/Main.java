@@ -11,6 +11,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        view.start(primaryStage);
+        view.buildInterface(primaryStage);
     }
 }

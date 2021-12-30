@@ -1,17 +1,19 @@
 
 import attributes.CustomerSearch;
+import attributes.MovieInfo;
 import attributes.MovieSearch;
 
 import db.*;
-
-import javafx.collections.ObservableList;
 
 import javafx.scene.control.*;
 
 import javafx.stage.Stage;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Fetch {
@@ -140,10 +142,6 @@ public class Fetch {
 
             for(String s : list){
                     Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
-                    /*Hyperlink link = new Hyperlink("Edit");
-                    link.setOnAction(e -> {
-                        //fxBuilder.createPopUp();
-                    });*/
                     CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), em);
                     result.add(srCustomer);
             }
@@ -283,27 +281,130 @@ public class Fetch {
 
     //On going
     //Funktion för varje datadel (film base data, actor, inventory, inStore)
-    public void findBaseDataForFilm(String sSelectedTitle, String table, String join){
+    public MovieInfo findBaseDataForFilm(int selectedId){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
+        MovieInfo movieInfo = new MovieInfo();
 
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-                    "SELECT film.*" +
-                    " FROM " + table +
-                    join +
-                    " WHERE film.title = " + sSelectedTitle +
-                    " GROUP BY " + table + "." + table + "_id;"
+            "SELECT film.title,film.description,film.rating,ol.name ol_name,l.name l_name," +
+                    "c.name c_name,film.special_features, film.length, film.replacement_cost, film.rental_duration, " +
+                    "film.rental_rate, film.last_update, film.film_id, film.release_year" +
+                    "/*INVENTORY*/ /*IN STORE*//*ACTORS*/"  +
+                    " FROM film" +
+                    " LEFT JOIN language l ON film.language_id = l.language_id" +
+                    " LEFT JOIN language ol ON film.original_language_id = ol.language_id" +
+                    " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
+                    " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
+                    " LEFT JOIN film_category fc ON film.film_id = fc.film_id" +
+                    " LEFT JOIN category c ON fc.category_id = c.category_id" +
+                    " LEFT JOIN inventory i ON film.film_id = i.film_id" +
+                    " LEFT JOIN rental r ON i.inventory_id = r.inventory_id" +
+                    " WHERE film.film_id = " + selectedId +
+                    " GROUP BY film.film_id;"
             );
 
-            List<Object[]>list = query.getResultList();
-            for(Object[] o : list){
-                //Add to ObservableList
-                System.out.println(o[1]);//Test
+            List <Object[]> list = query.getResultList();
+
+            for (Object[] o : list){
+                movieInfo = setMovieInfo(o);
             }
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            controller.callError("Kunde inte hitta informationen om filmen.");
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+            return movieInfo;
+        }
+    }
+//Byt så detta är funktionen som anropas från View
+    private MovieInfo setMovieInfo(Object[] infoArray) {
+        MovieInfo movieInfo = new MovieInfo();
+
+        movieInfo.setTitle((String)infoArray[0]);
+        movieInfo.setDescription((String)infoArray[1]);
+        movieInfo.setRating((String)infoArray[2]);
+        movieInfo.setOriginalLanguage((String)infoArray[3]);
+        movieInfo.setLanguage((String)infoArray[4]);
+        movieInfo.setCategory((String)infoArray[5]);
+        movieInfo.setSpecialFeatures((String)infoArray[6]);
+        movieInfo.setLength((Short)infoArray[7]);
+        movieInfo.setReplacementCost((BigDecimal)infoArray[8]);
+        movieInfo.setRentalDuration((Byte)infoArray[9]);
+        movieInfo.setRentalRate((BigDecimal)infoArray[10]);
+        movieInfo.setLastUpdate((Timestamp)infoArray[11]);
+        movieInfo.setFilmId((Short)infoArray[12]);
+        movieInfo.setReleaseYear((Date)infoArray[13]);
+
+        movieInfo.setActorList(getMovieActorInfo(movieInfo.getFilmId()));
+        movieInfo.setInventoryList(getMovieInventoryInfo(movieInfo.getFilmId()));
+        movieInfo.setStoreIdList(getMovieStoreIDInfo(movieInfo.getFilmId()));
+
+        return movieInfo;
+    }
+
+    private List<Integer> getMovieInventoryInfo(int selectedId) {
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        List<Integer> result = new ArrayList<>();
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+        "SELECT i.inventory_id" +
+                " FROM film" +
+                " LEFT JOIN inventory i ON film.film_id = i.film_id" +
+                " WHERE film.film_id = " + selectedId +
+                " GROUP BY i.inventory_id" +
+                " ORDER BY i.inventory_id;"
+            );
+
+            result = query.getResultList();
+
+            transaction.commit();
+
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+            return result;
+        }
+    }
+
+    private List<Short> getMovieStoreIDInfo(int selectedId) {
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        List<Short> result = new ArrayList<>();
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+                    "SELECT i.store_id" +
+                            " FROM film" +
+                            " LEFT JOIN inventory i ON film.film_id = i.film_id" +
+                            " WHERE film.film_id = " + selectedId +
+                            " GROUP BY i.inventory_id" +
+                            " ORDER BY i.inventory_id;"
+            );
+
+            result = query.getResultList();
+
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -312,6 +413,44 @@ public class Fetch {
             e.printStackTrace();
         }finally {
             entityManager.close();
+            return result;
+        }
+    }
+
+
+    private List<String> getMovieActorInfo(int selectedId){
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        List<String> result = new ArrayList<>();
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+                    "SELECT a.first_name, a.last_name" +
+                            " FROM film" +
+                            " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
+                            " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
+                            " WHERE film.film_id = " + selectedId +
+                            " GROUP BY a.actor_id;"
+            );
+
+            List <Object[]> list = query.getResultList();
+
+            //Gör nullable
+                for (Object[] o : list) {
+                    result.add(o[0].toString() + " " + o[1].toString());
+                }
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+            return result;
         }
     }
 

@@ -1,7 +1,9 @@
 import attributes.CustomerSearch;
+import attributes.MovieInfo;
 import attributes.MovieSearch;
-import javafx.application.Application;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,9 +21,12 @@ import javax.persistence.*;
 
 import javafx.scene.text.FontWeight;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
-public class View extends Application {
+public class View {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
 
         //Classes
@@ -51,6 +56,10 @@ public class View extends Application {
         ComboBox cbMovieAddCategory = new ComboBox(olCategory);
         ComboBox cbMovieAddLanguages = new ComboBox(olLanguages);
 
+
+        //Table view
+        TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<>();
+        TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
         /*// Lists
         ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
         ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
@@ -107,8 +116,6 @@ public class View extends Application {
         //Customer Search
         CheckBox chbCustomerSearchActive = new CheckBox("Bara aktiva");
 
-
-
         /**
          * Search in table for written search criteria
          */
@@ -118,14 +125,6 @@ public class View extends Application {
                         ol.add(o);
                 }
         }
-
-        public void addFilmResultToOL(List<String> list, ObservableList ol){
-                        ol.clear();
-                        for(String s : list){
-                                ol.add(s);
-                        }
-        }
-
 
         public void executeCustomerSearch(){
                 CustomerSearch customerSearch = new CustomerSearch();
@@ -181,6 +180,34 @@ public class View extends Application {
                 addResultToOL(result,olMovieSearchResults);
         }
 
+        public void executeMovieInfo(){
+                FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
+                if (filmSearchResults != null){
+                        int movieId = filmSearchResults.getId();
+                        MovieInfo movieInfo = fetch.findBaseDataForFilm(movieId);
+
+                        fxBuilder.createInfoPopUp(movieInfo);
+                        /*
+                        TableView tvInfo = new TableView();
+                        TableColumn colMovieId = new TableColumn("Id");
+                        colMovieId.setCellValueFactory(new PropertyValueFactory<>("filmId"));
+                        colMovieId.setPrefWidth(50);
+                        TableColumn colMovieTitle = new TableColumn("Title");
+                        colMovieTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+                        colMovieTitle.setPrefWidth(150);
+                        TableColumn colMovieDescription = new TableColumn("Description");
+                        colMovieDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+                        colMovieDescription.setPrefWidth(250);
+                        tvInfo.setItems(olInfo);
+                        tvInfo.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                        tvInfo.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
+                        */
+
+                }
+                else
+                        fxBuilder.createErrorPopup("Välj en film för att kunna visa information om den.");
+        }
+
         public Boolean getDataCheckBox(CheckBox checkBox){
                 return checkBox.isSelected();
         }
@@ -196,8 +223,7 @@ public class View extends Application {
                 return textField.getText().trim();
         }
 
-        @Override
-        public void start(Stage primaryStage) throws Exception {
+        public void buildInterface(Stage primaryStage) throws Exception {
 
                 Stage loginStage = new Stage(); //To login
 
@@ -235,7 +261,7 @@ public class View extends Application {
                 // ListView tvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
 
                 //Table View
-                TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<>();
+                //Customer
                 TableColumn colCustomerId = new TableColumn("Id");
                 colCustomerId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 colCustomerId.setPrefWidth(35);
@@ -258,7 +284,7 @@ public class View extends Application {
                 tvSearchResultsCustomer.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                 tvSearchResultsCustomer.getColumns().addAll(colCustomerId, colCustomerName, colCustomerEmail, colCustomerEdit, colCustomerDelete);
 
-                TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
+                //Movie
                 TableColumn colMovieId = new TableColumn("Id");
                 colMovieId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 colMovieId.setPrefWidth(50);
@@ -650,7 +676,7 @@ public class View extends Application {
 
                 //Join text for mySQL for search
                 String sMovieJoin =
-                        " JOIN language l ON film.language_id = l.language_id" +
+                        " LEFT JOIN language l ON film.language_id = l.language_id" +
                                 " LEFT JOIN film_actor fa ON film.film_id = fa.film_id" +
                                 " LEFT JOIN actor a ON fa.actor_id = a.actor_id" +
                                 " LEFT JOIN film_category fc ON film.film_id = fc.film_id" +
@@ -797,13 +823,7 @@ public class View extends Application {
                 });
 
                 bInfoMovie.setOnAction(event -> {
-                        FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sMovie = filmSearchResults.getTitle();
-                        if (sMovie != null){
-                                TableView tvInfo = new TableView(olCategory);
-                                fetch.findBaseDataForFilm(sMovie,"film",sMovieJoin);
-                                fxBuilder.createInformationPopup(tvInfo);
-                        }
+                        executeMovieInfo();
                 });
 
                 //Log out

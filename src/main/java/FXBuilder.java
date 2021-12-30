@@ -1,12 +1,11 @@
+import attributes.MovieInfo;
 import db.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -15,8 +14,9 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import java.sql.Date;
 import java.time.Instant;
+import java.util.Date;
+import java.util.List;
 
 public class FXBuilder {
     public void createPopUp(Pane box){
@@ -352,5 +352,76 @@ public class FXBuilder {
         stage.setScene(scene2);
         stage.show();
         p.setOnCloseRequest(e -> stage.close());
+    }
+
+    public void createInfoPopUp(MovieInfo movieInfo){
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(5);
+
+        Label lTitle = new Label("Titel:");
+        Label lDescription = new Label("Beskrivning:");
+        Label lRating = new Label("Betyg:");
+        Label lOriginalLanguage = new Label("Original språk:");
+        Label lLanguage = new Label("Språk:");
+        Label lCategory = new Label("Kategori:");
+        Label lSpecialFeatures = new Label("Extra material:");
+        Label lLength = new Label("Längd:");
+        Label lReplacementCost = new Label("Ersättningskostnad:");
+        Label lRentalDuration = new Label("Hyrestid:");
+        Label lRentalRate = new Label("Hyreskostnad:");
+        Label lLastUpdate = new Label("Senats uppdaterad:");
+        Label lFilmId = new Label("Film ID:");
+        Label lReleaseYear = new Label("Släpptes år:");
+        Label lActorList = new Label("Skådespelare:");
+        Label lInventoryList = new Label("Lagernummer:");
+        Label lInStoreIdList = new Label("Butik ID:");
+
+        lActorList.setAlignment(Pos.TOP_LEFT);
+
+        Text tTitle = new Text(movieInfo.getTitle());
+        Text tDescription = new Text(movieInfo.getDescription());
+        Text tRating = new Text(movieInfo.getRating());
+        Text tOriginalLanguage = new Text(movieInfo.getOriginalLanguage());
+        Text tLanguage = new Text(movieInfo.getLanguage());
+        Text tCategory = new Text(movieInfo.getCategory());
+        Text tSpecialFeatures = new Text(movieInfo.getSpecialFeatures());
+        Text tLength = new Text(movieInfo.getLength().toString());
+        Text tReplacementCost = new Text(movieInfo.getReplacementCost().toString());
+        Text tRentalDuration = new Text(movieInfo.getRentalDuration().toString());
+        Text tRentalRate = new Text(movieInfo.getRentalRate().toString());
+        Text tLastUpdate = new Text(movieInfo.getLastUpdate().toString());
+        Text tFilmId = new Text(String.valueOf(movieInfo.getFilmId()));
+        Text tReleaseYear = new Text(String.valueOf(movieInfo.getReleaseYear()));
+
+        int i = 0;
+        gridPane.addRow(i++,lTitle,tTitle);
+        gridPane.addRow(i++,lFilmId,tFilmId);
+        gridPane.addRow(i++,lDescription,tDescription);
+        gridPane.addRow(i++,lCategory,tCategory);
+        gridPane.addRow(i++,lRentalRate,tRentalRate);
+        gridPane.addRow(i++,lRentalDuration,tRentalDuration);
+        gridPane.addRow(i++,lRating,tRating);
+        gridPane.addRow(i++,lReplacementCost,tReplacementCost);
+        gridPane.add(lActorList,0,i++,1,movieInfo.getActorList().size());
+        for (String s :movieInfo.getActorList()){
+            Text tActor = new Text(s);
+            gridPane.add(tActor,1,i++);
+        }
+
+        //Table or Gridpane for inventory?
+
+        gridPane.addRow(i++,lLength,tLength);
+        gridPane.addRow(i++,lReleaseYear,tReleaseYear);
+        gridPane.addRow(i++,lSpecialFeatures,tSpecialFeatures);
+        gridPane.addRow(i++,lLanguage,tLanguage);
+        gridPane.addRow(i++,lOriginalLanguage,tOriginalLanguage);
+        gridPane.addRow(i++,lLastUpdate,tLastUpdate);
+
+        createPopUp(gridPane);
+
+        //Text tInventoryList = new Text();
+        //Text tInStoreIdList = new Text();
+        //Text tActorList = new Text(movieInfo.getActorList());
     }
 }
