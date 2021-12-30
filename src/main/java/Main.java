@@ -734,14 +734,14 @@ public class Main extends Application {
                 });
 
                 bDeleteCustomer.setOnAction(event -> {
-                        addToDatabase.deleteCustomer(tfDeleteCustomer, "customer", "customer_id");
+                        addToDatabase.deleteCustomer(tfDeleteCustomer);
                         fxBuilder.clearFields(vBoxDeleteCustomer);
                 });
 
-                bDeleteStaff.setOnAction(event -> {
+                /*bDeleteStaff.setOnAction(event -> {
                         addToDatabase.deleteCustomer(tfDeleteStaff, "staff", "staff_id");
                         fxBuilder.clearFields(vBoxDeleteStaff);
-                });
+                });*/
 
                 bSearchMovie.setOnAction(event -> {
                         //Dela upp så GUI och databashanterare är i olika klasser. Byt ut vbox till Strängar/Array

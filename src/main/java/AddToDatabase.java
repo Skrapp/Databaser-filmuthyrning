@@ -1,4 +1,5 @@
 import db.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -358,45 +359,46 @@ public class AddToDatabase {
 
     /**Deletes Customer or Staff
      * @param tfID ID of customer/Staff
-     * @param staffOrCustomer Table where adress ID is, Staff/Customer
-     * @param customer_idOrstaff_id Either Customer_id or Staff_id
      * //@param deleteFromTable Table to delete from (Same as staffOrCustomer)
      * //@param whereCustomerOrStaffID Either Customer_id or Staff_id (Same as customer_idOrstaff_id)
      */
-    public void deleteCustomer(TextField tfID, String staffOrCustomer, String customer_idOrstaff_id){
+    public void deleteCustomer(TextField tfID){
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         try{
             transaction = entityManager.getTransaction();
             transaction.begin();
 
+            Boolean payedAll = true;
             //Add errorCheck
             short deleteID = (short) Integer.parseInt(tfID.getText());
 
-            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM "+staffOrCustomer+" WHERE "+customer_idOrstaff_id+" = '"+deleteID+"'");
+            Query queryAdressID = entityManager.createNativeQuery("SELECT address_id FROM customer WHERE customer_id = '"+deleteID+"'");
             List<Short> aid = queryAdressID.getResultList();
             short addressID = aid.get(0);
 
-            System.out.println(addressID); //Debug
-
-
-            if (staffOrCustomer.equals("customer")) {
-
+            Query queryRental = entityManager.createNativeQuery("SELECT return_date FROM rental WHERE customer_id = '" + deleteID + "'");
+            List rentalDates = queryRental.getResultList();
+            for (Object rental : rentalDates) {
+                if (rental == null) {
+                    payedAll = false;
+                }
+            }
+            if (payedAll) {
                 //delete payment so you can delete customer
                 entityManager.createNativeQuery("DELETE payment FROM payment WHERE customer_id ='" + deleteID + "'").executeUpdate();
                 //delete rental so you kan delete customer - To do, dont delete if they havent returned a movie
-                entityManager.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '"+deleteID+"'").executeUpdate();
+                entityManager.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '" + deleteID + "'").executeUpdate();
                 //Delete customer before address so you can it
                 entityManager.createNativeQuery("DELETE customer FROM customer where customer_id = '" + deleteID + "'").executeUpdate();
                 //delete address
                 entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
-
             } else {
-                entityManager.createNativeQuery("DELETE staff FROM staff where staff_id = '" + deleteID + "'").executeUpdate();
-
-                entityManager.createNativeQuery("DELETE address FROM address WHERE address_id = '" + addressID + "'").executeUpdate();
+                System.out.println("Kunden har inte lämnat tillbaka alla sina filmer. Det går därför ej att radera kund.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Kunden har inte lämnat tillbaka alla sina filmer. Det går därför ej att radera kund.");
+                alert.show();
             }
-
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -406,7 +408,7 @@ public class AddToDatabase {
         }finally {
             entityManager.close();
         }
-    }
+}
     public void updateCustomer(EntityManagerFactory entityManagerFactory, TextField tfUpdateCustomerFirstName, TextField tfUpdateCustomerLastName,
                                TextField tfUpdateCustomerEmail, TextField tfUpdateCustomerStoreId,
                                TextField tfUpdateCustomerActive, TextField tfUpdateCustomerUpdateAddress,
