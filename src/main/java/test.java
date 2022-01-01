@@ -1,19 +1,62 @@
+import attributes.MovieInfo;
+import attributes.MovieSearch;
 import db.City;
 import db.Country;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.List;
 
 public class test {
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
+    FXBuilder fxBuilder = new FXBuilder();
+    Controller controller = new Controller(fxBuilder);
     public static void main(String[] args) {
-        int countryID = addCountryID();
-        System.out.println(countryID);
-        int cityID = addCityID();
-        System.out.println(cityID);
-        deleteCustomer();
+        MovieInfo movieInfo = new MovieInfo("Hej", "Epic Adventure", "G", "Englisg", "English", "Comedy","Trailer, Deleted Scenes");
+        movieInfo.setFilmId((short) 2);
+        getObject(movieInfo);
     }
+
+/*
+    public static void getObject(Object obj) {
+        Class cls = obj.getClass();
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            //field.setAccessible(true); // if you want to modify private fields
+            try {
+                Method getString = cls.getDeclaredMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1));
+
+                System.out.println(field.getName()
+                        + " - " + field.getType()
+                        + " - " + getString.invoke(obj));
+            } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+*/
+
+    public static void getObject(Object obj) {
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            field.setAccessible(true); // if you want to modify private fields
+            try {
+                System.out.println(field.getName()
+                        + " - " + field.getType()
+                        + " - " + field.get(obj));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY,controller);
+    MovieInfo movieInfo = new MovieInfo();
 
     public static int addCountryID(){
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();

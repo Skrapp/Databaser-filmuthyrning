@@ -281,10 +281,10 @@ public class Fetch {
 
     //On going
     //Funktion för varje datadel (film base data, actor, inventory, inStore)
-    public MovieInfo findBaseDataForFilm(int selectedId){
+    public Object [] findBaseDataForFilm(int selectedId){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
-        MovieInfo movieInfo = new MovieInfo();
+        Object[] result = null;
 
         try{
             transaction = entityManager.getTransaction();
@@ -310,9 +310,7 @@ public class Fetch {
 
             List <Object[]> list = query.getResultList();
 
-            for (Object[] o : list){
-                movieInfo = setMovieInfo(o);
-            }
+            result = list.get(0);
 
             transaction.commit();
         }catch (Exception e){
@@ -323,13 +321,17 @@ public class Fetch {
             e.printStackTrace();
         }finally {
             entityManager.close();
-            return movieInfo;
+            return result;
         }
     }
 //Byt så detta är funktionen som anropas från View
-    private MovieInfo setMovieInfo(Object[] infoArray) {
+    public MovieInfo setMovieInfo(int selectedId) {
         MovieInfo movieInfo = new MovieInfo();
 
+        Object[] infoArray = findBaseDataForFilm(selectedId);
+
+        //Gör till forLoop som FXBuilder.createInfoPopUp
+        // If type is List, continue
         movieInfo.setTitle((String)infoArray[0]);
         movieInfo.setDescription((String)infoArray[1]);
         movieInfo.setRating((String)infoArray[2]);
@@ -346,6 +348,7 @@ public class Fetch {
         movieInfo.setReleaseYear((Date)infoArray[13]);
 
         movieInfo.setActorList(getMovieActorInfo(movieInfo.getFilmId()));
+        //Koppla samman så man ser inventoryID, StoreID och Om filmen finns i butik i en och samma "tabell"
         movieInfo.setInventoryList(getMovieInventoryInfo(movieInfo.getFilmId()));
         movieInfo.setStoreIdList(getMovieStoreIDInfo(movieInfo.getFilmId()));
 
@@ -399,8 +402,7 @@ public class Fetch {
                             " FROM film" +
                             " LEFT JOIN inventory i ON film.film_id = i.film_id" +
                             " WHERE film.film_id = " + selectedId +
-                            " GROUP BY i.inventory_id" +
-                            " ORDER BY i.inventory_id;"
+                            " GROUP BY i.store_id;"
             );
 
             result = query.getResultList();

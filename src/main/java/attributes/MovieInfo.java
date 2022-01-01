@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MovieInfo {
+    //If changed, remember to change in MovieOperatingLanguage
     private String title,
             description,
             rating,
@@ -30,6 +31,18 @@ public class MovieInfo {
     private List<Integer> inventoryList;
 
     private List<Short> StoreIdList;
+
+    public MovieInfo(String title, String description, String rating, String originalLanguage, String language, String category, String specialFeatures) {
+        this.title = title;
+        this.description = description;
+        this.rating = rating;
+        this.originalLanguage = originalLanguage;
+        this.language = language;
+        this.category = category;
+        this.specialFeatures = specialFeatures;
+    }
+
+
 
     public String getTitle() {
         return title;

@@ -1,9 +1,8 @@
 import attributes.CustomerSearch;
 import attributes.MovieInfo;
 import attributes.MovieSearch;
-import javafx.beans.InvalidationListener;
+import attributes.MovieOperatingLanguage;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,10 +20,7 @@ import javax.persistence.*;
 
 import javafx.scene.text.FontWeight;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class View {
         private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("hibernate");
@@ -34,6 +30,8 @@ public class View {
         Controller controller = new Controller(fxBuilder);
         Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY,controller);
 
+        MovieOperatingLanguage movieSwedish = new MovieOperatingLanguage("Titel", "Beskrivning", "Betyg", "Originalspråk","Språk", "Kategori", "Extramaterial", "Skådespelare", "Ersättningskostnad", "Hyreskostnad", "Filmlängd", "Film ID", "Hyreslängd", "Släpptes år", "Senast uppdaterad", "Lager", "Finns i butik");
+
         //Observable list
         final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
@@ -42,7 +40,6 @@ public class View {
         final ObservableList olStores = FXCollections.observableArrayList();
         final ObservableList<CustomerSearchResults> olCustomerSearchResults = FXCollections.observableArrayList();
         final ObservableList<FilmSearchResults> olMovieSearchResults = FXCollections.observableArrayList();
-
 
         // Combobox
         //Movie search
@@ -184,24 +181,9 @@ public class View {
                 FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                 if (filmSearchResults != null){
                         int movieId = filmSearchResults.getId();
-                        MovieInfo movieInfo = fetch.findBaseDataForFilm(movieId);
+                        MovieInfo movieInfo = fetch.setMovieInfo(movieId);
 
-                        fxBuilder.createInfoPopUp(movieInfo);
-                        /*
-                        TableView tvInfo = new TableView();
-                        TableColumn colMovieId = new TableColumn("Id");
-                        colMovieId.setCellValueFactory(new PropertyValueFactory<>("filmId"));
-                        colMovieId.setPrefWidth(50);
-                        TableColumn colMovieTitle = new TableColumn("Title");
-                        colMovieTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-                        colMovieTitle.setPrefWidth(150);
-                        TableColumn colMovieDescription = new TableColumn("Description");
-                        colMovieDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-                        colMovieDescription.setPrefWidth(250);
-                        tvInfo.setItems(olInfo);
-                        tvInfo.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                        tvInfo.getColumns().addAll(colMovieId, colMovieTitle, colMovieDescription);
-                        */
+                        fxBuilder.createInfoPopUp(movieInfo, movieSwedish);
 
                 }
                 else
