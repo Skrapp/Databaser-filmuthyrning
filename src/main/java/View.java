@@ -55,7 +55,7 @@ public class View {
 
         //Table view
         TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<>();
-        TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
+        TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<>();
 
         //Text fields
         // add customer
@@ -116,9 +116,8 @@ public class View {
          */
         public void addResultToOL(List<Object> list, ObservableList ol){
                 ol.clear();
-                for(Object o : list){
-                        ol.add(o);
-                }
+                //Adds all results to the observable List
+                ol.addAll(list);
         }
 
         public void executeCustomerSearch(){
@@ -397,20 +396,17 @@ public class View {
                 mbFile.getItems().addAll(miFileLogOut, miFileExit);
                 Menu mbStaff = new Menu("Anställda");
                 MenuItem miStaffAdd = new MenuItem("Lägg till");
-                MenuItem miStaffEdit = new MenuItem("Redigera");
                 MenuItem miStaffDelete = new MenuItem("Ta bort");
-                mbStaff.getItems().addAll(miStaffAdd, miStaffEdit, miStaffDelete);
+                mbStaff.getItems().addAll(miStaffAdd, miStaffDelete);
                 Menu mbCustomer = new Menu("Kund");
                 MenuItem miCustomerAdd = new MenuItem("Lägg till");
-                MenuItem miCustomerEdit = new MenuItem("Redigera");
                 MenuItem miCustomerDelete = new MenuItem("Ta bort");
                 MenuItem miCustomerRentedBy = new MenuItem("Vem hyr?");
-                mbCustomer.getItems().addAll(miCustomerAdd, miCustomerEdit,miCustomerDelete, miCustomerRentedBy);
+                mbCustomer.getItems().addAll(miCustomerAdd, miCustomerDelete, miCustomerRentedBy);
                 Menu mbFilm = new Menu("Film");
                 MenuItem miFilmAdd = new MenuItem("Lägg till");
-                MenuItem miFilmEdit = new MenuItem("Redigera");
                 MenuItem miFilmDelete = new MenuItem("Ta bort");
-                mbFilm.getItems().addAll(miFilmAdd, miFilmEdit, miFilmDelete);
+                mbFilm.getItems().addAll(miFilmAdd, miFilmDelete);
 
                 menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm);
 
