@@ -1,4 +1,3 @@
-
 import attributes.CustomerInfo;
 import attributes.CustomerSearch;
 import attributes.MovieInfo;
@@ -20,7 +19,6 @@ public class Fetch {
     private Controller controller;
     private ErrorCheck ec = new ErrorCheck("yyyy-mm-dd");
     private EntityManagerFactory em;
-    //FXBuilder fxBuilder = new FXBuilder();
 
     public Fetch(EntityManagerFactory em,Controller controller) {
         this.em = em;
@@ -226,57 +224,6 @@ public class Fetch {
 
         return sSearchCriteria;
     }
-    private Integer getFilmIdFromTitle(String title) {
-        EntityManager entityManager = em.createEntityManager();
-        EntityTransaction transaction = null;
-        int filmId = 0;
-        short filmIdShort = 0;
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            Query queryFilmID = entityManager.createNativeQuery("SELECT film_id from film WHERE title = '" + title + "';");
-
-            filmIdShort = (short) queryFilmID.getResultList().get(0);
-            filmId = filmIdShort;
-            transaction.commit();
-
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
-        }
-        return filmId;
-    }
-
-    private Integer getCustomerIdFromName(String firstName) {
-        EntityManager entityManager = em.createEntityManager();
-        EntityTransaction transaction = null;
-        int customerId = 0;
-        short customerIdShort = 0;
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "';");
-
-            customerIdShort = (short) queryCustomerID.getResultList().get(0);
-            customerId = customerIdShort;
-            transaction.commit();
-
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
-        }
-        return customerId;
-    }
 
     /**Get data from customer
      * @param selectedId What customer to get data from
@@ -405,7 +352,6 @@ public class Fetch {
         Object[] infoArray = findBaseDataForFilm(selectedId);
 
         movieInfo.setActorList(getMovieActorInfo(selectedId));
-        //Koppla samman så man ser inventoryID, StoreID och Om filmen finns i butik i en och samma "tabell"
         movieInfo.setInventoryList(getMovieInventoryInfo(selectedId));
         movieInfo.setStoreIdList(getMovieStoreIDInfo(selectedId));
 
@@ -525,10 +471,11 @@ public class Fetch {
 
             List <Object[]> list = query.getResultList();
 
-            //Gör nullable
-                for (Object[] o : list) {
-                    result.add(o[0].toString() + " " + o[1].toString());
-                }
+
+            for (Object[] o : list) {
+                result.add(o[0].toString() + " " + o[1].toString());
+            }
+
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -541,9 +488,8 @@ public class Fetch {
         }
     }
 
-    //Gör om så den tar emot ID
     /**Checks if film is in any store
-     * @param movieId Title of movie //Change to ID
+     * @param movieId ID of movie
      * @param join String of what other tables should be joined
      * @return
      */
@@ -590,7 +536,7 @@ public class Fetch {
      * @return String for MySQL/ERROR
      */
     private String exactSearchInt(String sSearchCriteria, String column) {
-        if (!sSearchCriteria.equals("")) {
+        if (!sSearchCriteria.equals("")) { //If not empty
             if (ec.isInteger(sSearchCriteria))
                 return " AND ".concat(column).concat(" = ").concat(sSearchCriteria);
             else {
@@ -673,7 +619,7 @@ public class Fetch {
      */
     private String inStoreSearch(Boolean inStore) {
     if (inStore)
-        return " AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)";
+        return " AND (r.return_date IS NOT NULL OR r.rental_date IS NULL) AND i.inventory_id IS NOT NULL";
 
         return "";
     }

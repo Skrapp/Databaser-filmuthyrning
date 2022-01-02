@@ -81,4 +81,20 @@ public class CustomerInfo implements Info {
     public void setUpdate(Timestamp update) {
         this.update = update;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Timestamp getRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(Timestamp registered) {
+        this.registered = registered;
+    }
 }

@@ -1,12 +1,9 @@
 import attributes.MovieInfo;
-import attributes.MovieSearch;
 import db.City;
 import db.Country;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,28 +17,6 @@ public class test {
         movieInfo.setFilmId((short) 2);
         getObject(movieInfo);
     }
-
-/*
-    public static void getObject(Object obj) {
-        Class cls = obj.getClass();
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            //field.setAccessible(true); // if you want to modify private fields
-            try {
-                Method getString = cls.getDeclaredMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1));
-
-                System.out.println(field.getName()
-                        + " - " + field.getType()
-                        + " - " + getString.invoke(obj));
-            } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-*/
 
     public static void getObject(Object obj) {
         for (Field field : obj.getClass().getDeclaredFields()) {

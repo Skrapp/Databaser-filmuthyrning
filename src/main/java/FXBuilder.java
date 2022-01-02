@@ -1,6 +1,4 @@
 import attributes.Info;
-import attributes.MovieInfo;
-import attributes.MovieOperatingLanguage;
 import attributes.OperatingLanguage;
 import db.*;
 import javafx.geometry.Insets;
@@ -237,66 +235,6 @@ public class FXBuilder {
         p.setOnCloseRequest(e -> stage.close());
     }
 
-/*
-    public void createEditMoviePopup(Integer id) {
-        // id is customerId.
-        View main = new View();
-        Label lMovieHeader = new Label("Filmsektion");
-        lMovieHeader.setFont(new Font(40));
-        Label lMovieAddTitle = new Label("Titel");
-        Label lMovieAddDescription = new Label("Beskrivning");
-        Label lMovieAddActors = new Label("Skådespelare");
-        Label lMovieAddOriginalLanguage = new Label("Originalspråk");
-        Label lMovieAddLength = new Label("Längd");
-        Label lMovieAddRating = new Label("Betyg");
-        Label lMovieAddRentalCost = new Label("Hyreskostnad");
-        Label lMovieAddReplacementCost = new Label("Ersättningskostnad");
-        Label lMovieAddInStore = new Label("Tillgänglighet");
-        Label lMovieAddSpecialFeatures = new Label("Extramaterial");
-        Label lMovieAddRentalDuration = new Label("Hyrestid");
-        Label lMovieAddLastUpdate = new Label("Senast uppdaterad");
-        TextField tfAddTitle = new TextField();
-        TextField tfMovieAddTitle = new TextField();
-        TextField tfMovieAddDescription = new TextField();
-        TextField tfMovieAddActors = new TextField();
-        TextField tfMovieAddOriginalLanguage = new TextField();
-        TextField tfMovieAddLength = new TextField();
-        TextField tfMovieAddRating = new TextField();
-        TextField tfMovieAddRentalCost = new TextField();
-        TextField tfMovieAddReplacementCost = new TextField();
-        TextField tfMovieAddInStore = new TextField();
-        TextField tfMovieAddSpecialFeatures = new TextField();
-        TextField tfMovieAddRentalDuration = new TextField();
-        TextField tfMovieAddLastUpdate = new TextField();
-        ComboBox cbMovieAddCategory = new ComboBox(main.olCategory);
-        cbMovieAddCategory.setPromptText("Kategori");
-        ComboBox cbMovieAddLanguages = new ComboBox(main.olLanguages);
-        cbMovieAddLanguages.setPromptText("Språk");
-        Button bCreateMovie = new Button("Lägg till");
-
-        Stage stage = new Stage();
-        Popup p = new Popup();
-        VBox box = new VBox();
-
-        box.getChildren().addAll(lMovieHeader, lMovieAddTitle, tfMovieAddTitle, lMovieAddRentalCost,
-                tfMovieAddRentalCost, cbMovieAddCategory,lMovieAddDescription, tfMovieAddDescription,
-                lMovieAddLength, tfMovieAddLength, lMovieAddRating,tfMovieAddRating, lMovieAddOriginalLanguage,
-                tfMovieAddOriginalLanguage, cbMovieAddLanguages,lMovieAddActors, tfMovieAddActors,
-                lMovieAddSpecialFeatures, tfMovieAddSpecialFeatures, lMovieAddRentalDuration, tfMovieAddRentalDuration,
-                lMovieAddReplacementCost, tfMovieAddReplacementCost, lMovieAddInStore, tfMovieAddInStore,
-                lMovieAddLastUpdate, tfMovieAddLastUpdate, bCreateMovie);
-
-        box.setPadding(new Insets(10));
-        BorderPane borderPane = new BorderPane();
-        borderPane.setLeft(box);
-        Scene scene2 = new Scene(borderPane);
-        p.show(stage);
-        stage.setScene(scene2);
-        stage.show();
-        p.setOnCloseRequest(e -> stage.close());
-    }
-*/
-
     public void deleteCustomerPopup(Integer id, EntityManagerFactory entity_manager_factory) {
         VBox vBoxDeleteCustomer = new VBox();
         Button bDeleteCustomerAccept = new Button("Ja");
@@ -329,8 +267,7 @@ public class FXBuilder {
                 em.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '" + id + "'").executeUpdate();
                 //Delete customer
                 em.createNativeQuery("DELETE customer FROM customer WHERE customer_id = '" + id + "'").executeUpdate();
-                // em.remove(customer);
-                // em.persist(customer);
+
                 em.flush();
                 transaction.commit();
             } catch (Exception eee) {
@@ -345,7 +282,7 @@ public class FXBuilder {
         });
 
         bDeleteCustomerDecline.setOnAction(e -> {
-            // Stänger bara fönstret.
+            // Closes stage (the popup window)
             ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
         });
         p.show(stage);

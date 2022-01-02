@@ -35,6 +35,8 @@ public class MovieInfo implements Info {
     private Timestamp lastUpdate;
 
     //Constructors
+    public MovieInfo() {}
+
     public MovieInfo(String title, String description, String rating, String originalLanguage, String language, String category, String specialFeatures) {
         this.title = title;
         this.description = description;
@@ -181,6 +183,4 @@ public class MovieInfo implements Info {
         this.StoreIdList = storeIdList;
     }
 
-    public MovieInfo() {
-    }
 }

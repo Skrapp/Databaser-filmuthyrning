@@ -393,12 +393,8 @@ public class View {
                 MenuBar menuBar = new MenuBar();
                 Menu mbFile = new Menu("Arkiv");
                 MenuItem miFileLogOut = new MenuItem("Logga ut");
-                MenuItem miFileOptions = new MenuItem("Alternativ");
-                MenuItem miFileOptionsFontsize = new MenuItem("Ställ in fontstorlek");
-                MenuItem miFileOptionsShortcut = new MenuItem("Genvägar");
-                MenuItem miFilePrint = new MenuItem("Skriv ut");
                 MenuItem miFileExit = new MenuItem("Avsluta");
-                mbFile.getItems().addAll(miFileLogOut, miFileOptions, miFileOptionsFontsize, miFileOptionsShortcut, miFilePrint, miFileExit);
+                mbFile.getItems().addAll(miFileLogOut, miFileExit);
                 Menu mbStaff = new Menu("Anställda");
                 MenuItem miStaffAdd = new MenuItem("Lägg till");
                 MenuItem miStaffEdit = new MenuItem("Redigera");
@@ -415,14 +411,8 @@ public class View {
                 MenuItem miFilmEdit = new MenuItem("Redigera");
                 MenuItem miFilmDelete = new MenuItem("Ta bort");
                 mbFilm.getItems().addAll(miFilmAdd, miFilmEdit, miFilmDelete);
-                Menu mbHelp = new Menu("Hjälp");
-                MenuItem miHelpInstructions = new MenuItem("Instruktioner");
-                MenuItem miHelpMovieOfTheDay = new MenuItem("Dagens filmtips");
-                MenuItem miHelpContactSupport = new MenuItem("Kontakta supporten");
-                MenuItem miHelpAboutTheService = new MenuItem("Om tjänsten");
-                mbHelp.getItems().addAll(miHelpInstructions, miHelpMovieOfTheDay, miHelpContactSupport, miHelpAboutTheService);
 
-                menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm, mbHelp);
+                menuBar.getMenus().addAll(mbFile, mbCustomer, mbStaff, mbFilm);
 
                 //Labels
                 //Center

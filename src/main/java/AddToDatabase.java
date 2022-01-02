@@ -208,7 +208,7 @@ public class AddToDatabase {
             newFilm.setReplacementCost(BigDecimal.valueOf(Double.parseDouble(sInfoField[21])));
             newFilm.setRating(sInfoField[10]);
             newFilm.setOriginalLanguage(language);
-            newFilm.setReleaseYear(2002); //Ska lägga till textbox
+            newFilm.setReleaseYear(2002); //Kan lägga till textBox
             newFilm.setSpecialFeatures(sInfoField[17]);
 
             emAddMovie.persist(newFilm);
@@ -226,47 +226,38 @@ public class AddToDatabase {
         }
     }
 
-    public void editCustomer(VBox box) {
-        EntityManager emAddMovie = em.createEntityManager();
+
+   /**Adds Customer to Database
+     * @param tfEditCustomerFirstName First name of customer
+     * @param tfEditCustomerLastName Last Name of customer
+     * @param tfEditCustomerEmail Email of customer
+     * @param tfEditCustomerStoreId StoreID of customer
+     * @param tfEditCustomerActive If customer is Active
+     * @param addressID AdressID of customer
+     *//*
+    public void editCustomer (TextField tfEditCustomerFirstName, TextField tfEditCustomerLastName,
+                             TextField tfEditCustomerEmail, TextField tfEditCustomerStoreId,
+                             TextField tfEditCustomerActive, int addressID, int customerId) {
+        EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
-        String[] sInfoField = new String[box.getChildren().size()];
         try{
-            transaction = emAddMovie.getTransaction();
+            transaction = entityManager.getTransaction();
             transaction.begin();
+            Customer customer = entityManager.find(Customer.class, customerId);
+            Address address = entityManager.find(Address.class, addressID);
+            Store store = entityManager.find(Store.class, Integer.valueOf(tfEditCustomerStoreId.getText()));
+            Instant instant = Instant.now();
 
-            for(int i = 0; i < box.getChildren().size() - 1; i++) {
-                //Checks if child is textbox
-                if (box.getChildren().get(i) instanceof TextField) {
-                    sInfoField[i] = ((TextField) box.getChildren().get(i)).getText().trim();
-                    System.out.println(i + "tf     " + sInfoField[i]); //Debug
-                }
-                //Checks if child is combobox
-                else if (box.getChildren().get(i) instanceof ComboBox) {
-                    String cbString = (String) ((ComboBox) box.getChildren().get(i)).getSelectionModel().getSelectedItem();
-                    sInfoField[i] = getCorrespondingId(cbString); // Gets the corresponding ID for whatever is chosen in combobox
-                    System.out.println(i + "cb     " + sInfoField[i]); //Debug
-                }
-            }
-            Film newFilm = new Film();
-            //Objects for entity Language (new and original) created where corresponding language_id for whatever
-            // language chosen is set to the object, object is then set to newFilm Film object.
-            Language language = new Language();
-            language.setId(Integer.valueOf(sInfoField[13])); //sTextField[13] is language_id value of language combobox
-            newFilm.setTitle(sInfoField[1]);
-            newFilm.setDescription(sInfoField[6]);
-            newFilm.setLanguage(language);
-            newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously. Removed the textbox.
-            newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sInfoField[8])));
-            newFilm.setRentalRate(BigDecimal.valueOf(Long.parseLong(sInfoField[3])));
-            newFilm.setReplacementCost(BigDecimal.valueOf(Long.parseLong(sInfoField[21])));
-            newFilm.setRating(sInfoField[10]);
-            newFilm.setOriginalLanguage(language);
-            newFilm.setReleaseYear(2002); //Ska lägga till textbox
-            newFilm.setSpecialFeatures(sInfoField[17]);
-
-            emAddMovie.persist(newFilm);
-            newFilm.setCategory(Integer.valueOf(sInfoField[4]), emAddMovie, newFilm);
-            emAddMovie.flush();
+            customer.setFirstName(tfEditCustomerFirstName.getText());
+            customer.setLastName(tfEditCustomerLastName.getText());
+            customer.setAddress(address);
+            customer.setStore(store);
+            customer.setActive(true);
+            customer.setEmail(tfEditCustomerEmail.getText());
+            customer.setLastUpdate(instant);
+            customer.setCreateDate(instant);
+            entityManager.persist(customer);
+            entityManager.flush();
 
             transaction.commit();
         }catch (Exception e){
@@ -275,9 +266,9 @@ public class AddToDatabase {
             }
             e.printStackTrace();
         }finally {
-            emAddMovie.close();
+            entityManager.close();
         }
-    }
+    }*/
 
     /** Get ID of category or Language
      * @param cbString Data from Combobox
@@ -406,9 +397,7 @@ public class AddToDatabase {
     /**Deletes Customer or Staff
      * @param tfID ID of customer/Staff
      * @param staffOrCustomer Table where adress ID is, Staff/Customer
-     * @param customer_idOrstaff_id Either Customer_id or Staff_id
-     * //@param deleteFromTable Table to delete from (Same as staffOrCustomer)
-     * //@param whereCustomerOrStaffID Either Customer_id or Staff_id (Same as customer_idOrstaff_id)
+     * @param customer_idOrstaff_id Either Customer_id or Staff_id)
      */
     public void deleteCustomer(TextField tfID, String staffOrCustomer, String customer_idOrstaff_id){
         EntityManager entityManager = em.createEntityManager();
@@ -462,29 +451,29 @@ public class AddToDatabase {
             transaction = entityManager.getTransaction();
             transaction.begin();
             Rental rental = new Rental();
-        Instant instant = Instant.now();
-        //Get the correct customer and film objects based on ID
-        Customer customer = entityManager.find(Customer.class, customerId);
-        Staff staff = entityManager.find(Staff.class, 1);
-        Inventory inventory = entityManager.find(Inventory.class, inventoryIdFromMovieId(movieId));
+            Instant instant = Instant.now();
+            //Get the correct customer and film objects based on ID
+            Customer customer = entityManager.find(Customer.class, customerId);
+            Staff staff = entityManager.find(Staff.class, 1);
+            Inventory inventory = entityManager.find(Inventory.class, inventoryIdFromMovieId(movieId));
 
-        //Rents and returns directly
-        rental.setInventory(inventory);
-        rental.setCustomer(customer);
-        rental.setReturnDate(instant.plus(3, ChronoUnit.DAYS)); //Return date three days from now.
-        rental.setStaff(staff);
-        rental.setRentalDate(Instant.now());
-        rental.setLastUpdate(Instant.now());
-        entityManager.persist(rental);
-        entityManager.flush();
-        transaction.commit();
-    }catch (Exception e){
-        if(transaction != null){
-            transaction.rollback();
-        }
-        e.printStackTrace();
-    }finally {
-        entityManager.close();
+            //Rents and returns directly
+            rental.setInventory(inventory);
+            rental.setCustomer(customer);
+            rental.setReturnDate(instant.plus(3, ChronoUnit.DAYS)); //Return date three days from now.
+            rental.setStaff(staff);
+            rental.setRentalDate(Instant.now());
+            rental.setLastUpdate(Instant.now());
+            entityManager.persist(rental);
+            entityManager.flush();
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
     }
     }
 
@@ -512,59 +501,11 @@ public class AddToDatabase {
         return inventoryId;
     }
 
-    private Integer getCustomerIdFromName(String fullName) {
-        EntityManager entityManager = em.createEntityManager();
-        EntityTransaction transaction = null;
-        int customerId = 0;
-        short customerIdShort = 0;
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            String[] split = fullName.split(" ");
-            String firstName = split[0];
-            String lastName = split[1];
-
-            Query queryCustomerID = entityManager.createNativeQuery("SELECT customer_id from customer WHERE first_name = '" + firstName + "' AND last_name = '" + lastName + "';");
-
-            customerIdShort = (short) queryCustomerID.getResultList().get(0);
-            customerId = customerIdShort;
-            transaction.commit();
-
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
-        }
-        return customerId;
+    public EntityManagerFactory getEm() {
+        return em;
     }
 
-    private Integer getMovieIdFromTitle(String title) {
-        EntityManager entityManager = em.createEntityManager();
-        EntityTransaction transaction = null;
-        int movieId = 0;
-        short movieIdShort = 0;
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            Query queryCustomerID = entityManager.createNativeQuery("SELECT film_id from film WHERE title = '" + title + "';");
-
-            movieIdShort = (short) queryCustomerID.getResultList().get(0);
-            movieId = movieIdShort;
-            transaction.commit();
-
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
-        }
-        return movieId;
+    public void setEm(EntityManagerFactory em) {
+        this.em = em;
     }
 }

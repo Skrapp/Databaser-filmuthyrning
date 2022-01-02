@@ -29,6 +29,30 @@ public class CustomerSearchResults {
         });
     }
 
+    public EntityManagerFactory getENTITY_MANAGER_FACTORY() {
+        return ENTITY_MANAGER_FACTORY;
+    }
+
+    public void setENTITY_MANAGER_FACTORY(EntityManagerFactory ENTITY_MANAGER_FACTORY) {
+        this.ENTITY_MANAGER_FACTORY = ENTITY_MANAGER_FACTORY;
+    }
+
+    public AddToDatabase getAddToDatabase() {
+        return addToDatabase;
+    }
+
+    public void setAddToDatabase(AddToDatabase addToDatabase) {
+        this.addToDatabase = addToDatabase;
+    }
+
+    public FXBuilder getFxBuilder() {
+        return fxBuilder;
+    }
+
+    public void setFxBuilder(FXBuilder fxBuilder) {
+        this.fxBuilder = fxBuilder;
+    }
+
     public int getId() {
         return id;
     }
