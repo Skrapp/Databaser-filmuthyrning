@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Skapar infobox med info om filmen">
-      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/MovieOperatingLanguage.java" afterDir="false" />
+    <list default="true" id="fe9aa716-0d95-4c4c-89f0-7e810fabde99" name="Changes" comment="Gjorde forloop (:D) av createInfoPopUp, ska vara lätt att fixa så det kan användas till kunder också">
+      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/CustomerInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/CustomerOperatingLanguage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/Info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/attributes/OperatingLanguage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FXBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FXBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Fetch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Fetch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/attributes/MovieInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/attributes/MovieInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/attributes/MovieOperatingLanguage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/attributes/MovieOperatingLanguage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -92,7 +97,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.test">
     <configuration name="Login" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Login" />
       <module name="Databaser-filmuthyrning" />
@@ -136,8 +141,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.test" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.test2" />
         <item itemvalue="Application.Test" />
         <item itemvalue="Application.Login" />
@@ -169,7 +174,7 @@
       <workItem from="1640777673792" duration="6071000" />
       <workItem from="1640865373115" duration="21101000" />
       <workItem from="1640952830796" duration="596000" />
-      <workItem from="1641040118892" duration="7906000" />
+      <workItem from="1641040118892" duration="17098000" />
     </task>
     <task id="LOCAL−00001" summary="Påbörjat createSearchCriteria i Fetch. just nu bara användbar för film och VBoxar.">
       <created>1639785458250</created>
@@ -246,7 +251,13 @@
       <option name="presentableId" value="LOCAL−00007" />
       <updated>1640905714643</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL−00008" summary="Gjorde forloop (:D) av createInfoPopUp, ska vara lätt att fixa så det kan användas till kunder också">
+      <created>1641049610023</created>
+      <option name="number" value="LOCAL−00008" />
+      <option name="presentableId" value="LOCAL−00008" />
+      <updated>1641049610023</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,24 +287,9 @@
     <MESSAGE value="Lagt till metoden setCategory i Film för att lägga till filmen och dess kategori i FilmCategory när filmen skapas." />
     <MESSAGE value="Nu ska allt funka&#10;Uppdatera Hibernate-spatial 5.5.7 -&gt; 5.6.0" />
     <MESSAGE value="Skapar infobox med info om filmen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skapar infobox med info om filmen" />
+    <MESSAGE value="Gjorde forloop (:D) av createInfoPopUp, ska vara lätt att fixa så det kan användas till kunder också" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gjorde forloop (:D) av createInfoPopUp, ska vara lätt att fixa så det kan användas till kunder också" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>161</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Fetch.java</url>
-          <line>159</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

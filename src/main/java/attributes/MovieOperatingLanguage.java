@@ -1,45 +1,45 @@
 package attributes;
 
-public class MovieOperatingLanguage {
+public class MovieOperatingLanguage implements OperatingLanguage {
 
-    private String svtitle,
-            svdescription,
-            svrating,
-            svoriginalLanguage,
-            svlanguage,
-            svcategory,
-            svspecialFeatures,
-            svActorList,
-            svreplacementCost,
-            svrentalRate,
-            svlength,
-            svfilmId,
-            svrentalDuration,
-            svreleaseYear,
-            svlastUpdate,
-            svinventoryList,
-            svStoreIdList;
+    private String title,
+            filmId,
+            description,
+            rating,
+            category,
+            originalLanguage,
+            language,
+            specialFeatures,
+            ActorList,
+            rentalRate,
+            replacementCost,
+            rentalDuration,
+            length,
+            releaseYear,
+            inventoryList,
+            StoreIdList,
+            lastUpdate;
 
     public MovieOperatingLanguage() {
     }
 
-    public MovieOperatingLanguage(String svtitle, String svdescription, String svrating, String svoriginalLanguage, String svlanguage, String svcategory, String svspecialFeatures, String svActorList, String svreplacementCost, String svrentalRate, String svlength, String svfilmId, String svrentalDuration, String svreleaseYear, String svlastUpdate, String svinventoryList, String svStoreIdList) {
-        this.svtitle = svtitle;
-        this.svdescription = svdescription;
-        this.svrating = svrating;
-        this.svoriginalLanguage = svoriginalLanguage;
-        this.svlanguage = svlanguage;
-        this.svcategory = svcategory;
-        this.svspecialFeatures = svspecialFeatures;
-        this.svActorList = svActorList;
-        this.svreplacementCost = svreplacementCost;
-        this.svrentalRate = svrentalRate;
-        this.svlength = svlength;
-        this.svfilmId = svfilmId;
-        this.svrentalDuration = svrentalDuration;
-        this.svreleaseYear = svreleaseYear;
-        this.svlastUpdate = svlastUpdate;
-        this.svinventoryList = svinventoryList;
-        this.svStoreIdList = svStoreIdList;
+    public MovieOperatingLanguage(String title, String description, String rating, String originalLanguage, String language, String category, String specialFeatures, String ActorList, String replacementCost, String rentalRate, String length, String filmId, String rentalDuration, String releaseYear, String lastUpdate, String inventoryList, String StoreIdList) {
+        this.title = title;
+        this.description = description;
+        this.rating = rating;
+        this.originalLanguage = originalLanguage;
+        this.language = language;
+        this.category = category;
+        this.specialFeatures = specialFeatures;
+        this.ActorList = ActorList;
+        this.replacementCost = replacementCost;
+        this.rentalRate = rentalRate;
+        this.length = length;
+        this.filmId = filmId;
+        this.rentalDuration = rentalDuration;
+        this.releaseYear = releaseYear;
+        this.lastUpdate = lastUpdate;
+        this.inventoryList = inventoryList;
+        this.StoreIdList = StoreIdList;
     }
 }

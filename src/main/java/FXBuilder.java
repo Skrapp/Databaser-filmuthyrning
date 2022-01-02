@@ -1,5 +1,7 @@
+import attributes.Info;
 import attributes.MovieInfo;
 import attributes.MovieOperatingLanguage;
+import attributes.OperatingLanguage;
 import db.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,51 +20,50 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 
 public class FXBuilder {
-    public void createPopUp(Pane box){
+    public void createPopUp(Pane box) {
         Stage stage = new Stage();
         Popup p = new Popup();
-            box.setPadding(new Insets(10));
+        box.setPadding(new Insets(10));
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(box);
         Scene scene2 = new Scene(borderPane);
-            p.show(stage);
-            stage.setScene(scene2);
-            stage.show();
-            p.setOnCloseRequest(e -> stage.close());
+        p.show(stage);
+        stage.setScene(scene2);
+        stage.show();
+        p.setOnCloseRequest(e -> stage.close());
     }
 
     public void clearFields(Pane box) {
         for (int i = 0; i < box.getChildren().size(); i++) {
-        if (box.getChildren().get(i) instanceof Pane)
-        {
-            clearFields((Pane) box.getChildren().get(i));
-        }
-        //See if object is a textField
-        if(box.getChildren().get(i) instanceof TextField){
-            ((TextField) box.getChildren().get(i)).clear();
-        }
-        //See if object is combobox
-        if(box.getChildren().get(i) instanceof ComboBox){
-            ((ComboBox) box.getChildren().get(i)).getSelectionModel().clearSelection();
-        }
-        //See if object is checkbox
-        if(box.getChildren().get(i) instanceof CheckBox){
-            ((CheckBox) box.getChildren().get(i)).setSelected(false);
+            if (box.getChildren().get(i) instanceof Pane) {
+                clearFields((Pane) box.getChildren().get(i));
+            }
+            //See if object is a textField
+            if (box.getChildren().get(i) instanceof TextField) {
+                ((TextField) box.getChildren().get(i)).clear();
+            }
+            //See if object is combobox
+            if (box.getChildren().get(i) instanceof ComboBox) {
+                ((ComboBox) box.getChildren().get(i)).getSelectionModel().clearSelection();
+            }
+            //See if object is checkbox
+            if (box.getChildren().get(i) instanceof CheckBox) {
+                ((CheckBox) box.getChildren().get(i)).setSelected(false);
 
             }
         }
     }
 
     //Errorpopup
-    public void createErrorPopup(String errorMessage){
+    public void createErrorPopup(String errorMessage) {
         Text tError = new Text(errorMessage);
 
         Button bClose = new Button("Stäng");
         bClose.setOnAction(event -> {
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
         });
 
-        VBox vBoxError = new VBox(tError,bClose);
+        VBox vBoxError = new VBox(tError, bClose);
         vBoxError.setAlignment(Pos.CENTER);
         vBoxError.setPrefWidth(300);
         vBoxError.setPrefHeight(50);
@@ -71,7 +72,7 @@ public class FXBuilder {
         createPopUp(vBoxError);
     }
 
-    public void createInformationPopup(TableView tableView){
+    public void createInformationPopup(TableView tableView) {
         VBox vBoxInfo = new VBox(tableView);
         vBoxInfo.setAlignment(Pos.CENTER);
         vBoxInfo.setSpacing(10);
@@ -120,21 +121,21 @@ public class FXBuilder {
         Popup p = new Popup();
         VBox box = new VBox();
 
-        box.getChildren().addAll(lAddCustomerHeader,lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName,
+        box.getChildren().addAll(lAddCustomerHeader, lAddCustomerFirstName, tfAddCustomerFirstName, lAddCustomerLastName,
                 tfAddCustomerLastName, lAddCustomerEmail, tfAddCustomerEmail, lAddCustomerStoreId,
                 tfAddCustomerStoreId, lAddCustomerActive,
-                tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress,lAddCustomerAdress2, tfAddCustomerAddress2, lAddCustomerPostalCode,
+                tfAddCustomerActive, lAddCustomerAddress, tfAddCustomerAddress, lAddCustomerAdress2, tfAddCustomerAddress2, lAddCustomerPostalCode,
                 tfAddCustomerPostalCode, lAddCustomerDistrict, tfAddCustomerDistrict, lAddCustomerPhone,
                 tfAddCustomerPhone, lAddCustomerCity, tfAddCustomerCity, lAddCustomerCountry,
                 tfAddCustomerCountrys, bAddCustomer, bCustomerAddCancel);
 
         bCustomerAddCancel.setOnAction(event -> {
-            ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
         });
 
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
-        try{
+        try {
             transaction = entityManager.getTransaction();
             transaction.begin();
             Customer customer = entityManager.find(Customer.class, id);
@@ -175,18 +176,18 @@ public class FXBuilder {
             entityManager.persist(countryem);
             entityManager.flush();
             transaction.commit();
-        }catch (Exception e){
-            if(transaction != null){
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        }finally {
+        } finally {
             entityManager.close();
         }
         bAddCustomer.setOnAction(e -> {
             EntityManager entityManagerAdd = em.createEntityManager();
             EntityTransaction transactionAdd = null;
-            try{
+            try {
                 transactionAdd = entityManagerAdd.getTransaction();
                 transactionAdd.begin();
                 Customer customer = entityManagerAdd.find(Customer.class, id);
@@ -217,12 +218,12 @@ public class FXBuilder {
                 entityManagerAdd.persist(country);
                 entityManagerAdd.flush();
                 transactionAdd.commit();
-            }catch (Exception ee){
-                if(transactionAdd != null){
+            } catch (Exception ee) {
+                if (transactionAdd != null) {
                     transactionAdd.rollback();
                 }
                 ee.printStackTrace();
-            }finally {
+            } finally {
                 entityManagerAdd.close();
             }
         });
@@ -305,8 +306,8 @@ public class FXBuilder {
         hBoxDeleteCustomerButtons.setSpacing(20);
         vBoxDeleteCustomer.setPadding(new Insets(10));
         Text tDeleteCustomer = new Text("Vill du ta bort kunden BLABLAs persondata och tillhörande uppgifter???");
-        hBoxDeleteCustomerButtons.getChildren().addAll(bDeleteCustomerAccept,bDeleteCustomerDecline);
-        vBoxDeleteCustomer.getChildren().addAll(tDeleteCustomer,hBoxDeleteCustomerButtons);
+        hBoxDeleteCustomerButtons.getChildren().addAll(bDeleteCustomerAccept, bDeleteCustomerDecline);
+        vBoxDeleteCustomer.getChildren().addAll(tDeleteCustomer, hBoxDeleteCustomerButtons);
         Stage stage = new Stage();
         Popup p = new Popup();
         vBoxDeleteCustomer.setPadding(new Insets(10));
@@ -317,27 +318,27 @@ public class FXBuilder {
             //Kod för att ta bort kund med kund-id id.
             EntityManager em = entity_manager_factory.createEntityManager();
             EntityTransaction transaction = null;
-            try{
+            try {
                 transaction = em.getTransaction();
                 transaction.begin();
-            Customer customer = em.find(Customer.class, 1);
+                Customer customer = em.find(Customer.class, 1);
 
                 //delete payment so you can delete customer
-            em.createNativeQuery("DELETE payment FROM payment WHERE customer_id ='" + id + "'").executeUpdate();
+                em.createNativeQuery("DELETE payment FROM payment WHERE customer_id ='" + id + "'").executeUpdate();
                 //delete rental so you kan delete customer - To do, dont delete if they havent returned a movie
-            em.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '"+id +"'").executeUpdate();
-            //Delete customer
-                em.createNativeQuery("DELETE customer FROM customer WHERE customer_id = '"+id +"'").executeUpdate();
+                em.createNativeQuery("DELETE rental FROM rental WHERE customer_id = '" + id + "'").executeUpdate();
+                //Delete customer
+                em.createNativeQuery("DELETE customer FROM customer WHERE customer_id = '" + id + "'").executeUpdate();
                 // em.remove(customer);
-            // em.persist(customer);
+                // em.persist(customer);
                 em.flush();
                 transaction.commit();
-            }catch (Exception eee){
-                if(transaction != null){
+            } catch (Exception eee) {
+                if (transaction != null) {
                     transaction.rollback();
                 }
                 eee.printStackTrace();
-            }finally {
+            } finally {
                 em.close();
             }
 
@@ -345,7 +346,7 @@ public class FXBuilder {
 
         bDeleteCustomerDecline.setOnAction(e -> {
             // Stänger bara fönstret.
-            ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
+            ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
         });
         p.show(stage);
         stage.setScene(scene2);
@@ -353,41 +354,54 @@ public class FXBuilder {
         p.setOnCloseRequest(e -> stage.close());
     }
 
-    public void createInfoPopUp(MovieInfo movieInfo, MovieOperatingLanguage movieOperatingLanguage){
+    /**Creates Popup containing information of a specific customer or movie
+     * @param info Object containing all information needed
+     * @param operatingLanguage Object containing text for lables, attributes in the same order as info object
+     * @param title The text on the top of the information block
+     */
+    public void createInfoPopUp(Info info, OperatingLanguage operatingLanguage, String title) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(5);
 
-        int row = 0;
+        //Adds title
+        Label lTitle = new Label(title);
+        lTitle.setAlignment(Pos.CENTER);
+        lTitle.setFont(new Font(30));
 
-        //Add Swedish lables
-        for (Field field : movieOperatingLanguage.getClass().getDeclaredFields()) {
+        gridPane.add(lTitle, 0, 0, 2, 1);
+
+        int row = 1;
+
+        //Add lables
+        //loops though all attributes (aka fields) in the object
+        for (Field field : operatingLanguage.getClass().getDeclaredFields()) {
             field.setAccessible(true); // to access private fields
             try {
-                Label lSwedish = new Label(field.get(movieOperatingLanguage)+":");
-                gridPane.add(lSwedish, 0,row++);
+                Label lSwedish = new Label(field.get(operatingLanguage) + ":"); //Get value of field
+                gridPane.add(lSwedish, 0, row++);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                createErrorPopup("Kunde inte hämta information från movieOperatingLanguage");
+                createErrorPopup("Kunde inte hämta information från operatingLanguage");
             }
         }
+
         //Reset row-count
-        row = 0;
+        row = 1;
         //Add text from parameters in MovieInfo object
-        for (Field field : movieInfo.getClass().getDeclaredFields()) {
+        for (Field field : info.getClass().getDeclaredFields()) {
             field.setAccessible(true); // to access private fields
             try {
-                Text tInfo= new Text();
-                if (field.get(movieInfo) != null) {
-                    tInfo.setText(field.get(movieInfo).toString());
+                Text tInfo = new Text();
+                if (field.get(info) != null) {
+                    tInfo.setText(field.get(info).toString());
                 }
-                gridPane.add(tInfo, 1,row++);
+                gridPane.add(tInfo, 1, row++);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                createErrorPopup("Kunde inte hämta information från movieInfo");
+                createErrorPopup("Kunde inte hämta information från " + title + "info");
             }
         }
-
 
         createPopUp(gridPane);
 

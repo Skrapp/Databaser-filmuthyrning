@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class test {
@@ -46,6 +47,7 @@ public class test {
         for (Field field : obj.getClass().getDeclaredFields()) {
             field.setAccessible(true); // if you want to modify private fields
             try {
+                if (field.getType().isInstance(new ArrayList()))
                 System.out.println(field.getName()
                         + " - " + field.getType()
                         + " - " + field.get(obj));

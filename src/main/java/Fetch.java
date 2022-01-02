@@ -1,4 +1,5 @@
 
+import attributes.CustomerInfo;
 import attributes.CustomerSearch;
 import attributes.MovieInfo;
 import attributes.MovieSearch;
@@ -7,9 +8,11 @@ import db.*;
 
 import javafx.scene.control.*;
 
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -279,8 +282,51 @@ public class Fetch {
         return customerId;
     }
 
-    //On going
-    //Funktion för varje datadel (film base data, actor, inventory, inStore)
+    /**Get data from customer
+     * @param selectedId What customer to get data from
+     * @return return an array of all data (different datatypes)
+     */
+    public Object [] findBaseDataForCustomer(int selectedId){
+        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
+        EntityTransaction transaction = null;
+        Object[] result = null;
+
+        try{
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            Query query = entityManager.createNativeQuery(
+
+                    "SELECT c.first_name, c.last_name, c.customer_id,c.store_id, c.active, c.email, a.phone, " +
+                            "ci.city, a.address, a.address2, c.create_date, c.last_update" +
+                            " FROM customer c" +
+                            " LEFT JOIN address a ON c.address_id = a.address_id" +
+                            " LEFT JOIN city ci ON ci.city_id = a.city_id" +
+                            " WHERE c.customer_id = " + selectedId +
+                            " GROUP BY c.customer_id;"
+            );
+
+            List <Object[]> list = query.getResultList();
+
+            result = list.get(0);
+
+            transaction.commit();
+        }catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            controller.callError("Kunde inte hitta informationen om kunden.");
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+            return result;
+        }
+    }
+
+    /** Get simple data from movie
+     * @param selectedId What movie to get data from
+     * @return return an array of all data (different datatypes)
+     */
     public Object [] findBaseDataForFilm(int selectedId){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -291,10 +337,10 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-            "SELECT film.title,film.description,film.rating,ol.name ol_name,l.name l_name," +
-                    "c.name c_name,film.special_features, film.length, film.replacement_cost, film.rental_duration, " +
-                    "film.rental_rate, film.last_update, film.film_id, film.release_year" +
-                    "/*INVENTORY*/ /*IN STORE*//*ACTORS*/"  +
+
+            "SELECT film.title,film.film_id, film.description,film.rating,c.name c_name,ol.name ol_name,l.name l_name," +
+                    "film.special_features,film.rental_rate, film.replacement_cost, film.rental_duration, film.length, " +
+                    " film.release_year,film.last_update" +
                     " FROM film" +
                     " LEFT JOIN language l ON film.language_id = l.language_id" +
                     " LEFT JOIN language ol ON film.original_language_id = ol.language_id" +
@@ -324,14 +370,65 @@ public class Fetch {
             return result;
         }
     }
-//Byt så detta är funktionen som anropas från View
+
+    /**Sets all the info oa a specified customer in a CustomerInfo object
+     * @param selectedId What customer to get data from
+     * @return object containing all data
+     */
+    public CustomerInfo setCustomerInfo(int selectedId) {
+        CustomerInfo customerInfo = new CustomerInfo();
+
+        Object[] infoArray = findBaseDataForCustomer(selectedId);
+
+        int i = 0;
+        //Add all data from infoArray to customerInfo
+        for (Field field : customerInfo.getClass().getDeclaredFields()) {
+            field.setAccessible(true); // to access private fields
+            try {
+                //Attributes with data from two columns in mySQL
+                if (field.getName().equals("fullName") || field.getName().equals("address")) {
+                    field.set(customerInfo,infoArray[i++].toString().concat(" ").concat(infoArray[i++].toString()));
+                    continue;
+                }
+                field.set(customerInfo,infoArray[i++]);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                controller.callError("Kunde inte hämta information från customerInfo");
+            }
+        }
+        return customerInfo;
+    }
+
+    /**Sets all info of a movie in a MovieInfo object
+     * @param selectedId What film id to get data from
+     * @return Object containing all info of movie
+     */
     public MovieInfo setMovieInfo(int selectedId) {
         MovieInfo movieInfo = new MovieInfo();
 
         Object[] infoArray = findBaseDataForFilm(selectedId);
 
-        //Gör till forLoop som FXBuilder.createInfoPopUp
-        // If type is List, continue
+        movieInfo.setActorList(getMovieActorInfo(selectedId));
+        //Koppla samman så man ser inventoryID, StoreID och Om filmen finns i butik i en och samma "tabell"
+        movieInfo.setInventoryList(getMovieInventoryInfo(selectedId));
+        movieInfo.setStoreIdList(getMovieStoreIDInfo(selectedId));
+
+        int i = 0;
+        //Add all data from infoArray to movieInfo
+        for (Field field : movieInfo.getClass().getDeclaredFields()) {
+            field.setAccessible(true); // to access private fields
+            try {
+                //List attributes gets data from separate functions
+                if (field.getType().isInstance(new ArrayList<>())) {
+                    continue;
+                }
+                field.set(movieInfo,infoArray[i++]);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                controller.callError("Kunde inte hämta information från movieInfo");
+            }
+        }
+        /*
         movieInfo.setTitle((String)infoArray[0]);
         movieInfo.setDescription((String)infoArray[1]);
         movieInfo.setRating((String)infoArray[2]);
@@ -345,16 +442,15 @@ public class Fetch {
         movieInfo.setRentalRate((BigDecimal)infoArray[10]);
         movieInfo.setLastUpdate((Timestamp)infoArray[11]);
         movieInfo.setFilmId((Short)infoArray[12]);
-        movieInfo.setReleaseYear((Date)infoArray[13]);
-
-        movieInfo.setActorList(getMovieActorInfo(movieInfo.getFilmId()));
-        //Koppla samman så man ser inventoryID, StoreID och Om filmen finns i butik i en och samma "tabell"
-        movieInfo.setInventoryList(getMovieInventoryInfo(movieInfo.getFilmId()));
-        movieInfo.setStoreIdList(getMovieStoreIDInfo(movieInfo.getFilmId()));
+        movieInfo.setReleaseYear((Date)infoArray[13]);*/
 
         return movieInfo;
     }
 
+    /**Get all the inventory ID:s where movie is
+     * @param selectedId What movie to get data from
+     * @return List of inventory ID:s
+     */
     private List<Integer> getMovieInventoryInfo(int selectedId) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -388,6 +484,10 @@ public class Fetch {
         }
     }
 
+    /** Gets all the store ID:S where movie is registered
+     * @param selectedId What movie to get data from
+     * @return List of store ID:s
+     */
     private List<Short> getMovieStoreIDInfo(int selectedId) {
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -420,6 +520,10 @@ public class Fetch {
     }
 
 
+    /** Gets all actors (full name) listed in movie
+     * @param selectedId What movie to get data from
+     * @return list of actor names
+     */
     private List<String> getMovieActorInfo(int selectedId){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -456,7 +560,7 @@ public class Fetch {
         }
     }
 
-    //To add: if more than a single film_id is found, user should be able to choose what ID to look at
+/*    //To add: if more than a single film_id is found, user should be able to choose what ID to look at
     public int findFilmId (String sTitle){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
@@ -482,8 +586,9 @@ public class Fetch {
         }
         System.out.println(filmID);
         return filmID;
-    }
+    }*/
 
+    //Gör om så den tar emot ID
     /**Checks if film is in any store
      * @param movieTitle Title of movie //Change to ID
      * @param join String of what other tables should be joined

@@ -5,33 +5,36 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-public class MovieInfo {
-    //If changed, remember to change in MovieOperatingLanguage
-    private String title,
-            description,
-            rating,
-            originalLanguage,
-            language,
-            category,
-            specialFeatures;
+public class MovieInfo implements Info {
+    //If changed (either order or number of parameters) remember to also change in MovieOperatingLanguage and Fetch.findBaseDataForFilm
+    // Hur ska man göra det mer automatiskt? Map?
+    private String title;
+    private Short filmId;
+    private String description;
+    private String rating;
+    private String category;
+    private String originalLanguage;
+    private String language;
+    private String specialFeatures;
 
     private List<String> ActorList;
 
-    private BigDecimal replacementCost,
-            rentalRate;
-
-    private Short length,
-            filmId;
+    private BigDecimal rentalRate;
+    private BigDecimal replacementCost;
 
     private Byte rentalDuration;
 
+    private Short length;
+
     private Date releaseYear;
-        private Timestamp lastUpdate;
 
     private List<Integer> inventoryList;
 
     private List<Short> StoreIdList;
 
+    private Timestamp lastUpdate;
+
+    //Constructors
     public MovieInfo(String title, String description, String rating, String originalLanguage, String language, String category, String specialFeatures) {
         this.title = title;
         this.description = description;
@@ -41,8 +44,6 @@ public class MovieInfo {
         this.category = category;
         this.specialFeatures = specialFeatures;
     }
-
-
 
     public String getTitle() {
         return title;

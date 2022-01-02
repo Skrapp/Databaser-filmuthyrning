@@ -1,7 +1,4 @@
-import attributes.CustomerSearch;
-import attributes.MovieInfo;
-import attributes.MovieSearch;
-import attributes.MovieOperatingLanguage;
+import attributes.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -30,8 +27,8 @@ public class View {
         Controller controller = new Controller(fxBuilder);
         Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY,controller);
 
-        MovieOperatingLanguage movieSwedish = new MovieOperatingLanguage("Titel", "Beskrivning", "Betyg", "Originalspråk","Språk", "Kategori", "Extramaterial", "Skådespelare", "Ersättningskostnad", "Hyreskostnad", "Filmlängd", "Film ID", "Hyreslängd", "Släpptes år", "Senast uppdaterad", "Lager", "Finns i butik");
-
+        MovieOperatingLanguage movieSwedish = new MovieOperatingLanguage("Titel", "Beskrivning", "Betyg", "Originalspråk","Språk", "Kategori", "Extramaterial", "Skådespelare", "Ersättningskostnad", "Hyreskostnad", "Filmlängd", "Film ID", "Hyreslängd", "Släpptes år", "Senast uppdaterad", "Lager", "Registrerad i butik");
+        CustomerOperatingLanguage customerSwedish = new CustomerOperatingLanguage("Namn", "Kund ID", "Butik ID", "Aktiv", "Email", "Telefon", "Stad", "Adress", "Registrerades", "Uppdaterades");
         //Observable list
         final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
@@ -183,12 +180,26 @@ public class View {
                         int movieId = filmSearchResults.getId();
                         MovieInfo movieInfo = fetch.setMovieInfo(movieId);
 
-                        fxBuilder.createInfoPopUp(movieInfo, movieSwedish);
+                        fxBuilder.createInfoPopUp(movieInfo, movieSwedish, "Film - Info");
 
                 }
                 else
                         fxBuilder.createErrorPopup("Välj en film för att kunna visa information om den.");
         }
+
+        public void executeCustomerInfo(){
+                CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
+                if (customerSearchResults != null){
+                        int customerId = customerSearchResults.getId();
+                        CustomerInfo customerInfo = fetch.setCustomerInfo(customerId);
+
+                        fxBuilder.createInfoPopUp(customerInfo, customerSwedish, "Kund - Info");
+
+                }
+                else
+                        fxBuilder.createErrorPopup("Välj en kund för att kunna visa information om den.");
+        }
+
 
         public Boolean getDataCheckBox(CheckBox checkBox){
                 return checkBox.isSelected();
@@ -466,7 +477,6 @@ public class View {
                 Label lCustomerSearchAddress = new Label("Adress");
                 Label lCustomerSearchPhone = new Label("Telefonnummer");
                 Label lCustomerSearchRegistered = new Label("Registrerad");
-                Label lCustomerSearchActive = new Label("Aktiv");
                 Label lCustomerSearchUpdate = new Label("Uppdaterad");
 
                 //Customer add
@@ -806,6 +816,10 @@ public class View {
 
                 bInfoMovie.setOnAction(event -> {
                         executeMovieInfo();
+                });
+
+                bInfoCustomer.setOnAction(event -> {
+                        executeCustomerInfo();
                 });
 
                 //Log out
