@@ -165,6 +165,10 @@ public class Main extends Application {
                 olStores.add(0,null);
 
                 Stage loginStage = new Stage(); //To login
+                loginStage.setTitle("Logga in");
+                BorderPane borderPaneLogin = new BorderPane();
+                Scene loginScen = new Scene(borderPaneLogin,400,400);
+                borderPaneLogin.setPadding(new Insets(20));
 
                 primaryStage.setTitle("Uthyrning");
                 BorderPane borderPane = new BorderPane();
@@ -252,6 +256,17 @@ public class Main extends Application {
                 hBoxExit.setSpacing(10);
                 hBoxExit.setPadding(new Insets(10, 0, 0, 0));
 
+                //Login
+                VBox vBoxtfLogin = new VBox();
+                VBox vBoxLLogin = new VBox();
+                vBoxLLogin.setPadding(new Insets(10));
+                vBoxtfLogin.setPadding(new Insets(10));
+                HBox hBoxButtons = new HBox();
+                hBoxButtons.setSpacing(10);
+                hBoxButtons.setPadding(new Insets(10, 0, 0, 95));
+                HBox hBoxLogin = new HBox();
+                VBox vBoxAllOfLogin = new VBox();
+
                 //Renting popup
                 VBox vBoxRentMovie = new VBox();
                 vBoxRentMovie.setPadding(new Insets(10));
@@ -285,6 +300,11 @@ public class Main extends Application {
 
                 Button bRentMovieAccept = new Button("Ja");
                 Button bRentMovieDecline = new Button("Nej");
+
+                //Login
+
+                Button bLogin = new Button("Logga in");
+                Button bCancel = new Button("Avbryt");
 
                 //Logout buttons
                 Button bConfirmLogout = new Button("Logga ut");
@@ -368,6 +388,15 @@ public class Main extends Application {
                 Label lMovieAddSpecialFeatures = new Label("Extramaterial");
                 Label lMovieAddRentalDuration = new Label("Hyrestid");
                 Label lMovieAddLastUpdate = new Label("Senast uppdaterad");
+
+                //Login
+                Label lWelcome = new Label("Välkommen");
+                lWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
+                lWelcome.setPadding(new Insets(0, 0, 30, 0));
+                Label lUsername = new Label("Användarnamn");
+                lUsername.setFont(Font.font(18));
+                Label lPassword = new Label("Lösenord");
+                lPassword.setFont(Font.font(18));
 
                 //Customer
                 Label lCustomerHeader = new Label("Kundsektion");
@@ -516,6 +545,12 @@ public class Main extends Application {
                 TextField tfMovieAddRentalDuration = new TextField();
                 TextField tfMovieAddLastUpdate = new TextField();
 
+                //Login
+                TextField tfUsername = new TextField();
+                tfUsername.setPromptText("Användarnamn");
+                TextField tfPassword = new PasswordField();
+                tfPassword.setPromptText("Lösenord");
+
                 //Customer
                 TextField tfCustomerSearchName = new TextField();
                 tfCustomerSearchName.setPromptText("Kundnamn");
@@ -662,6 +697,22 @@ public class Main extends Application {
                                 " LEFT JOIN city ci ON ci.city_id = a.city_id";
 
                 //Popup
+
+                //Buttons action
+                bCancel.setOnAction(event -> {
+                        tfUsername.clear();
+                        tfPassword.clear();
+                });
+                bLogin.setOnAction(event -> {
+                        fetch.login(tfUsername,tfPassword,primaryStage,loginStage);
+                        tfPassword.clear();
+                        tfUsername.clear();
+                });
+                bCreateMovie.setOnAction(event -> {
+                        addToDatabase.addMovie(vBoxMovieAdd, ENTITY_MANAGER_FACTORY);
+                });
+
+
                 //Movie - Add
                 miFilmAdd.setOnAction(event -> {
                         fxBuilder.createPopUp(vBoxMovieAdd);
@@ -927,73 +978,30 @@ public class Main extends Application {
                 //Delete staff
                 vBoxDeleteStaff.getChildren().addAll(lDeleteStaff,tfDeleteStaff,bDeleteStaff);
 
+                //Login
+                vBoxtfLogin.getChildren().addAll(tfUsername,tfPassword);
+                vBoxLLogin.getChildren().addAll(lUsername,lPassword);
+                hBoxButtons.getChildren().addAll(bLogin,bCancel);
+                hBoxLogin.getChildren().addAll(vBoxLLogin,vBoxtfLogin);
+                vBoxAllOfLogin.getChildren().addAll(lWelcome,hBoxLogin,hBoxButtons);
+
+
+
+                //Position of loginboxes
+                hBoxButtons.setAlignment(Pos.CENTER_LEFT);
+                hBoxButtons.setAlignment(Pos.BOTTOM_CENTER);
+                borderPaneLogin.setCenter(vBoxAllOfLogin);
+                vBoxAllOfLogin.setAlignment(Pos.CENTER);
+
                 //Add to borderPane
                 borderPane.setTop(menuBar);
                 borderPane.setLeft(vBoxLeft);
                 borderPane.setRight(vBoxRight);
                 borderPane.setCenter(vBoxCenter);
 
-                //Test Login--------------------------------------------------------------------
-                //Flyttas om
-                loginStage.setTitle("Logga in");
-                BorderPane borderPaneLogin = new BorderPane();
-                Scene loginScen = new Scene(borderPaneLogin,400,400);
-                borderPaneLogin.setPadding(new Insets(20));
-
-                //TextFields
-                TextField tfUsername = new TextField();
-                tfUsername.setPromptText("Användarnamn");
-                TextField tfPassword = new PasswordField();
-                tfPassword.setPromptText("Lösenord");
-
-                //Labels
-                Label lWelcome = new Label("Välkommen");
-                lWelcome.setFont(Font.font("Tahoma", FontWeight.LIGHT,30));
-                lWelcome.setPadding(new Insets(0, 0, 30, 0));
-                Label lUsername = new Label("Användarnamn");
-                lUsername.setFont(Font.font(18));
-                Label lPassword = new Label("Lösenord");
-                lPassword.setFont(Font.font(18));
-
-                //Button
-                Button bLogin = new Button("Logga in");
-                Button bCancel = new Button("Avbryt");
-
-                //Boxes
-                VBox vBoxtfLogin = new VBox(tfUsername,tfPassword);
-                VBox vBoxLLogin = new VBox(lUsername,lPassword);
-                vBoxLLogin.setPadding(new Insets(10));
-                vBoxtfLogin.setPadding(new Insets(10));
-                HBox hBoxButtons = new HBox(bLogin,bCancel);
-                hBoxButtons.setSpacing(10);
-                hBoxButtons.setPadding(new Insets(10, 0, 0, 95));
-                HBox hBoxLogin = new HBox(vBoxLLogin,vBoxtfLogin);
-                VBox vBoxAllOfLogin = new VBox(lWelcome,hBoxLogin,hBoxButtons);
-
-                //Buttons action
-                bCancel.setOnAction(event -> {
-                        tfUsername.clear();
-                        tfPassword.clear();
-                });
-                bLogin.setOnAction(event -> {
-                        fetch.login(tfUsername,tfPassword,primaryStage,loginStage);
-                        tfPassword.clear();
-                        tfUsername.clear();
-                });
-                bCreateMovie.setOnAction(event -> {
-                        addToDatabase.addMovie(vBoxMovieAdd, ENTITY_MANAGER_FACTORY);
-                });
-
-                //Position of boxes
-                hBoxButtons.setAlignment(Pos.CENTER_LEFT);
-                hBoxButtons.setAlignment(Pos.BOTTOM_CENTER);
-                borderPaneLogin.setCenter(vBoxAllOfLogin);
-                vBoxAllOfLogin.setAlignment(Pos.CENTER);
-
                 loginStage.setScene(loginScen);
                 loginStage.show();
 
-                ///---------------------------------------------------------------------------------------
 
                 Scene scene = new Scene(borderPane, 1200, 900);
                 primaryStage.setScene(scene);

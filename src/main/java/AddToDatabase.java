@@ -43,15 +43,13 @@ public class AddToDatabase {
             transaction.begin();
             Customer customer = new Customer();
 
-            Instant instant = Instant.now();
-
             customer.setFirst_name(tfAddCustomerFirstName.getText());
             customer.setLast_name(tfAddCustomerLastName.getText());
             customer.setAddress_id(addressID);
             customer.setStore_id(Integer.parseInt(tfAddCustomerStoreId.getText()));
             customer.setActive(Integer.parseInt(tfAddCustomerActive.getText()));
             customer.setEmail(tfAddCustomerEmail.getText());
-            customer.setLast_update(instant);
+            customer.setLast_update(Instant.now());
 
             entityManager.persist(customer);
             transaction.commit();
@@ -85,7 +83,6 @@ public class AddToDatabase {
             Address address= new Address();
 
             //Geometry Factory (Coordinates have a constant value)
-            Instant instant = Instant.now();
             GeometryFactory geometryFactory = new GeometryFactory();
             Coordinate coord = new Coordinate(1, 2);
             Geometry geometry = null;
@@ -98,7 +95,7 @@ public class AddToDatabase {
             address.setPostal_code(tfAddCustomerPostalCode.getText());
             address.setPhone(tfAddCustomerPhone.getText());
             address.setLocation(geometry);
-            address.setLast_update(instant);
+            address.setLast_update(Instant.now());
 
 
             entityManager.persist(address);
@@ -109,8 +106,6 @@ public class AddToDatabase {
                     "AND postal_code= '"+tfAddCustomerPostalCode.getText()+"'");
             List<Short> chosenID = queryAdressID.getResultList();
             addressID = chosenID.get(0);
-
-            System.out.println(addressID); //Debug
 
             transaction.commit();
         }catch (Exception e){
@@ -279,7 +274,6 @@ public class AddToDatabase {
             transaction.begin();
 
             Country country = new Country();
-            Instant instant = Instant.now();
 
             String Country = tfAddCountryName.getText();
 
@@ -288,7 +282,7 @@ public class AddToDatabase {
             //If list is empty add country
             if (query.getResultList().isEmpty()) {
                 country.setCountry(Country);
-                country.setLast_update(instant);
+                country.setLast_update(Instant.now());
                 entityManager.persist(country);
                 Query query1 = entityManager.createNativeQuery("SELECT country_id FROM country WHERE country = '" + Country + "'");
                 List<Short> chosenCountry1 = query1.getResultList();
@@ -325,8 +319,6 @@ public class AddToDatabase {
 
             City city = new City();
 
-            Instant instant = Instant.now();
-
             String City = tfAddCityName.getText();
 
             Query query = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
@@ -335,7 +327,7 @@ public class AddToDatabase {
             if (query.getResultList().isEmpty()) {
                 city.setCity(City);
                 city.setCountry_id(countryID);
-                city.setLast_update(instant);
+                city.setLast_update(Instant.now());
                 entityManager.persist(city);
                 Query query1 = entityManager.createNativeQuery("SELECT city_id FROM city WHERE country_id = '" + countryID + "' AND city = '"+City+"'");
                 List<Short> chosenCountry1 = query1.getResultList();
@@ -438,7 +430,6 @@ public class AddToDatabase {
             customer.setActive(Integer.parseInt(tfUpdateCustomerActive.getText()));
             customer.setStore_id(Integer.parseInt(tfUpdateCustomerStoreId.getText()));
             customer.setLast_update(Instant.now());
-            customer.setAddress(0);
             customer.setAddress_id(addressId);
 
             Address address = entityManager.find(Address.class, addressId);

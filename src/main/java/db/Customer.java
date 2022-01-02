@@ -38,7 +38,7 @@ public class Customer {
     private Instant last_update;
 
     @Column(name = "address")
-    private int address;
+    private Integer address;
 
     public Customer() {
     }
