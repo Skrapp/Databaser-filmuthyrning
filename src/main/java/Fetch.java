@@ -8,15 +8,11 @@ import db.*;
 
 import javafx.scene.control.*;
 
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Fetch {
@@ -88,7 +84,7 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-                    "SELECT film.title" +
+                    "SELECT film.film_id" +
                             " FROM film" +
                             " LEFT JOIN language l ON film.language_id = l.language_id" +
                             " LEFT JOIN language ol ON film.original_language_id = ol.language_id" +
@@ -103,10 +99,10 @@ public class Fetch {
                             " ORDER BY film.title;"
             );
 
-            List<String> list = query.getResultList();
+            List<Short> list = query.getResultList();
 
-            for (String s : list) {
-                Film film = entityManager.find(Film.class, getFilmIdFromTitle(s));
+            for (Short id : list) {
+                Film film = entityManager.find(Film.class, Integer.valueOf(id));
                 FilmSearchResults srFilm = new FilmSearchResults(film.getId(), film.getTitle(), film.getDescription());
                 result.add(srFilm);
             }
@@ -132,7 +128,7 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-                    "SELECT customer.first_name" +
+                    "SELECT customer.customer_id" +
                             " FROM customer" +
                             " LEFT JOIN address a ON customer.address_id = a.address_id"+
                             " LEFT JOIN city ci ON ci.city_id = a.city_id" +
@@ -141,11 +137,11 @@ public class Fetch {
                             " ORDER BY customer.first_name;"
             );
 
-            List<String> list = query.getResultList();
+            List<Short> list = query.getResultList();
 
-            for(String s : list){
-                    Customer customer = entityManager.find(Customer.class, getCustomerIdFromName(s));
-                    CustomerSearchResults srCustomer = new CustomerSearchResults(customer.getId(), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), em);
+            for(Short id : list){
+                    Customer customer = entityManager.find(Customer.class, Integer.valueOf(id));
+                    CustomerSearchResults srCustomer = new CustomerSearchResults(Integer.valueOf(id), customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(), em);
                     result.add(srCustomer);
             }
             transaction.commit();
@@ -428,21 +424,6 @@ public class Fetch {
                 controller.callError("Kunde inte hämta information från movieInfo");
             }
         }
-        /*
-        movieInfo.setTitle((String)infoArray[0]);
-        movieInfo.setDescription((String)infoArray[1]);
-        movieInfo.setRating((String)infoArray[2]);
-        movieInfo.setOriginalLanguage((String)infoArray[3]);
-        movieInfo.setLanguage((String)infoArray[4]);
-        movieInfo.setCategory((String)infoArray[5]);
-        movieInfo.setSpecialFeatures((String)infoArray[6]);
-        movieInfo.setLength((Short)infoArray[7]);
-        movieInfo.setReplacementCost((BigDecimal)infoArray[8]);
-        movieInfo.setRentalDuration((Byte)infoArray[9]);
-        movieInfo.setRentalRate((BigDecimal)infoArray[10]);
-        movieInfo.setLastUpdate((Timestamp)infoArray[11]);
-        movieInfo.setFilmId((Short)infoArray[12]);
-        movieInfo.setReleaseYear((Date)infoArray[13]);*/
 
         return movieInfo;
     }
@@ -560,41 +541,13 @@ public class Fetch {
         }
     }
 
-/*    //To add: if more than a single film_id is found, user should be able to choose what ID to look at
-    public int findFilmId (String sTitle){
-        EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
-        EntityTransaction transaction = null;
-        int filmID = -1;
-
-        try{
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            Query queryFilmID = entityManager.createNativeQuery("SELECT film_id FROM film " +
-                            "WHERE title = '" + sTitle + "';");
-            List<Short> chosenID = queryFilmID.getResultList();
-            filmID = chosenID.get(0);
-
-            transaction.commit();
-        }catch (Exception e){
-            if(transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }finally {
-            entityManager.close();
-        }
-        System.out.println(filmID);
-        return filmID;
-    }*/
-
     //Gör om så den tar emot ID
     /**Checks if film is in any store
-     * @param movieTitle Title of movie //Change to ID
+     * @param movieId Title of movie //Change to ID
      * @param join String of what other tables should be joined
      * @return
      */
-    public boolean isInStore(String movieTitle, String join){
+    public boolean isInStore(int movieId, String join){
         EntityManager entityManager = em.createEntityManager(); // Så här bör man nog egentligen inte göra, men vafan gör de en regnig dag.
         EntityTransaction transaction = null;
         Boolean isInStore = false;
@@ -604,11 +557,11 @@ public class Fetch {
             transaction.begin();
 
             Query query = entityManager.createNativeQuery(
-                    "SELECT title"+
+                    "SELECT film.film_id"+
                         " FROM film"+
                         join +
-                        " WHERE title = '" + movieTitle +
-                        "' AND (r.return_date IS NOT NULL OR r.rental_date IS NULL)" +
+                        " WHERE film.film_id = " + movieId +
+                        " AND (r.return_date IS NOT NULL OR r.rental_date IS NULL) AND i.inventory_id IS NOT NULL" +
                         " GROUP BY film.film_id" +
                         " ORDER BY film.title;"
             );

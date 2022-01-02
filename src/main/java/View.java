@@ -27,8 +27,10 @@ public class View {
         Controller controller = new Controller(fxBuilder);
         Fetch fetch = new Fetch(ENTITY_MANAGER_FACTORY,controller);
 
+        //Operating Language
         MovieOperatingLanguage movieSwedish = new MovieOperatingLanguage("Titel", "Beskrivning", "Betyg", "Originalspråk","Språk", "Kategori", "Extramaterial", "Skådespelare", "Ersättningskostnad", "Hyreskostnad", "Filmlängd", "Film ID", "Hyreslängd", "Släpptes år", "Senast uppdaterad", "Lager", "Registrerad i butik");
         CustomerOperatingLanguage customerSwedish = new CustomerOperatingLanguage("Namn", "Kund ID", "Butik ID", "Aktiv", "Email", "Telefon", "Stad", "Adress", "Registrerades", "Uppdaterades");
+
         //Observable list
         final ObservableList olCategory = FXCollections.observableArrayList();
         final ObservableList olLanguages = FXCollections.observableArrayList();
@@ -54,10 +56,7 @@ public class View {
         //Table view
         TableView<CustomerSearchResults> tvSearchResultsCustomer = new TableView<>();
         TableView<FilmSearchResults> tvSearchResultsMovie = new TableView<FilmSearchResults>();
-        /*// Lists
-        ListView lvSearchResultsMovie = new ListView(olSearchResultsMovie);
-        ListView lvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
-*/
+
         //Text fields
         // add customer
         TextField tfAddCustomerFirstName = new TextField();
@@ -112,6 +111,8 @@ public class View {
 
         /**
          * Search in table for written search criteria
+         * @param list List containing data
+         * @param ol The observable list to add data to
          */
         public void addResultToOL(List<Object> list, ObservableList ol){
                 ol.clear();
@@ -249,10 +250,6 @@ public class View {
                 olRating.add(0,null);
                 olStores.add(0,null);
 
-                // Lists
-                // ListView tvSearchResultsMovie = new ListView(olSearchResultsMovie);
-                // ListView tvSearchResultsCustomer = new ListView(olSearchResultsCustomer);
-
                 //Table View
                 //Customer
                 TableColumn colCustomerId = new TableColumn("Id");
@@ -360,9 +357,6 @@ public class View {
                 hBoxRentMovieButtons.setAlignment(Pos.CENTER);
                 hBoxRentMovieButtons.setSpacing(20);
 
-                //Info popup
-                VBox vBoxInfoMovie = new VBox();
-
                 //Buttons
                 Button bSearchMovie = new Button("Sök");
                 Button bSearchCustomer = new Button("Sök");
@@ -370,8 +364,6 @@ public class View {
                 Button bAdvancedSearchCustomer = new Button("Avancerad sökning");
                 Button bCreateMovie = new Button("Lägg till");
                 Button bCreateCustomer = new Button("Lägg till");
-                Button bUpdateCustomer = new Button("Redigera");
-                Button bUpdateMovie = new Button("Redigera");
                 Button bRentMovie = new Button("Hyra");
                 Button bReturnMovie = new Button("Lämna tillbaka");
                 Button bInfoMovie = new Button("Info om filmen");
@@ -543,7 +535,6 @@ public class View {
                 TextField tfDeleteCustomer = new TextField();
                 tfDeleteCustomer.setPromptText("Ange IDnummer");
 
-
                 //Movie search
                 tfMovieSearchTitle.setPromptText("Sök");
                 tfMovieSearchReleaseYear.setPromptText("yyyy");
@@ -559,9 +550,6 @@ public class View {
                 tfMovieSearchRentalDurationMin.setPromptText("Kortaste hyrestiden");
                 tfMovieSearchRentalDurationMax.setPromptText("Längsta hyrestiden");
                 tfMovieSearchLastUpdate.setPromptText("yyyy-mm-dd");
-
-                TextField tfTest = new TextField();
-
 
                 //Movie add
                 TextField tfMovieAddTitle = new TextField();
@@ -647,8 +635,6 @@ public class View {
                 chbMovieSearchSFDeletedScenes.setId("film.special_features,deleted scenes");
                 chbMovieSearchInStore.setId("InStore"); //Hur ska denna utformas
 
-                tfTest.setId("test");
-
                 //Customer
                 tfCustomerSearchFirstName.setId("customer.first_name");
                 tfCustomerSearchId.setId("customer.customer_id");
@@ -662,9 +648,6 @@ public class View {
                 cbCustomerSearchStoreId.setId("customer.store_id");
 
                 chbCustomerSearchActive.setId("customer.active,1");
-
-                HBox hboxTest = new HBox();
-                hboxTest.getChildren().addAll(tfTest);
 
                 //Join text for mySQL for search
                 String sMovieJoin =
@@ -777,24 +760,22 @@ public class View {
 
                 //Rent movie
                 bRentMovie.setOnAction(event -> {
-                        //Funktion?
                         FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
                         CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         if(filmSearchResults != null && customerSearchResults != null){
-                                String sMovie = filmSearchResults.getTitle();
-                                String sCustomer = customerSearchResults.getFullName();
+                                int movieId = filmSearchResults.getId();
+                                int customerId = customerSearchResults.getId();
+                                String customerName = customerSearchResults.getFullName();
+                                String movieTitle = filmSearchResults.getTitle();
 
-                                //Borde ha en funktion här så att den hämtar kundens ID snarare än bara förnamnet,
-                                // annars blir det strul nånstans pga flera likadana förnamn?
-                                // Håller helt med
-                                if(fetch.isInStore(sMovie,sMovieJoin)) {
+                                if(fetch.isInStore(movieId,sMovieJoin)) {
                                         //Popup for renting movie
-                                        tRentMovie.setText("Vill " + sCustomer + " hyra " + sMovie);
+                                        tRentMovie.setText("Vill " + customerName + " hyra " + movieTitle);
                                         fxBuilder.createPopUp(vBoxRentMovie);
                                 }
                                 else
                                         //Create popup for informing it is not in stock
-                                        fxBuilder.createErrorPopup(sMovie + " är redan uthyrd.");
+                                        fxBuilder.createErrorPopup(movieTitle + " är redan uthyrd.");
                         }
                         else
                                 //Create popup for error

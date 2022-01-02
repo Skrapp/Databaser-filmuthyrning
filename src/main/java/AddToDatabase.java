@@ -2,11 +2,9 @@ import db.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.hibernate.Criteria;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,8 +12,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class AddToDatabase {
@@ -44,7 +40,7 @@ public class AddToDatabase {
             transaction.begin();
             Customer customer = new Customer();
             Address address = entityManager.find(Address.class, addressID);
-            Store store = entityManager.find(Store.class, tfAddCustomerStoreId);
+            Store store = entityManager.find(Store.class, Integer.valueOf(tfAddCustomerStoreId.getText()));
             Instant instant = Instant.now();
 
             customer.setFirstName(tfAddCustomerFirstName.getText());
@@ -54,8 +50,9 @@ public class AddToDatabase {
             customer.setActive(true);
             customer.setEmail(tfAddCustomerEmail.getText());
             customer.setLastUpdate(instant);
-
+            customer.setCreateDate(instant);
             entityManager.persist(customer);
+            entityManager.flush();
             transaction.commit();
         }catch (Exception e){
             if(transaction != null){
@@ -205,9 +202,10 @@ public class AddToDatabase {
             newFilm.setDescription(sInfoField[6]);
             newFilm.setLanguage(language);
             newFilm.setLastUpdate(Instant.now()); // set last update to current time, obviously. Removed the textbox.
-            newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sInfoField[8])));
-            newFilm.setRentalRate(BigDecimal.valueOf(Long.parseLong(sInfoField[3])));
-            newFilm.setReplacementCost(BigDecimal.valueOf(Long.parseLong(sInfoField[21])));
+            newFilm.setRentalDuration(Integer.valueOf((int) Long.parseLong(sInfoField[19])));
+            newFilm.setLength(Integer.valueOf((int) Long.parseLong(sInfoField[8])));
+            newFilm.setRentalRate(BigDecimal.valueOf(Double.parseDouble(sInfoField[3])));
+            newFilm.setReplacementCost(BigDecimal.valueOf(Double.parseDouble(sInfoField[21])));
             newFilm.setRating(sInfoField[10]);
             newFilm.setOriginalLanguage(language);
             newFilm.setReleaseYear(2002); //Ska lägga till textbox
