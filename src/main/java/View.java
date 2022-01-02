@@ -201,7 +201,6 @@ public class View {
                         fxBuilder.createErrorPopup("Välj en kund för att kunna visa information om den.");
         }
 
-
         public Boolean getDataCheckBox(CheckBox checkBox){
                 return checkBox.isSelected();
         }
@@ -764,7 +763,6 @@ public class View {
                         CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
                         if(filmSearchResults != null && customerSearchResults != null){
                                 int movieId = filmSearchResults.getId();
-                                int customerId = customerSearchResults.getId();
                                 String customerName = customerSearchResults.getFullName();
                                 String movieTitle = filmSearchResults.getTitle();
 
@@ -784,10 +782,10 @@ public class View {
 
                 bRentMovieAccept.setOnAction(e -> {
                         FilmSearchResults filmSearchResults = tvSearchResultsMovie.getSelectionModel().getSelectedItem();
-                        String sMovie = filmSearchResults.getTitle();
+                        int movieId = filmSearchResults.getId();
                         CustomerSearchResults customerSearchResults = tvSearchResultsCustomer.getSelectionModel().getSelectedItem();
-                        String sCustomer = customerSearchResults.getFullName();
-                        addToDatabase.rentMovie(sMovie, sCustomer);
+                        int customerId = customerSearchResults.getId();
+                        addToDatabase.rentMovie(movieId, customerId);
                         ((Stage)(((Button)e.getSource()).getScene().getWindow())).close();
                 });
 

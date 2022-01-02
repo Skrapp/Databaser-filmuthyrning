@@ -455,7 +455,7 @@ public class AddToDatabase {
         }
     }
 
-    public void rentMovie(String sMovie, String sCustomer) {
+    public void rentMovie(int movieId, int customerId) {
         EntityManager entityManager = em.createEntityManager();
         EntityTransaction transaction = null;
         try{
@@ -464,12 +464,11 @@ public class AddToDatabase {
             Rental rental = new Rental();
         Instant instant = Instant.now();
         //Get the correct customer and film objects based on ID
-        Integer customerID = getCustomerIdFromName(sCustomer);
-        Customer customer = entityManager.find(Customer.class, customerID);
-        Integer movieID = getMovieIdFromTitle(sMovie);
+        Customer customer = entityManager.find(Customer.class, customerId);
         Staff staff = entityManager.find(Staff.class, 1);
-        Inventory inventory = entityManager.find(Inventory.class, inventoryIdFromMovieId(movieID));
+        Inventory inventory = entityManager.find(Inventory.class, inventoryIdFromMovieId(movieId));
 
+        //Rents and returns directly
         rental.setInventory(inventory);
         rental.setCustomer(customer);
         rental.setReturnDate(instant.plus(3, ChronoUnit.DAYS)); //Return date three days from now.
